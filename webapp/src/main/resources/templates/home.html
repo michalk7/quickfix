@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>QuickFix - Home</title>
+	
+	<!--  <div th:replace="fragments/header :: header-css"/>  -->
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+
+</head>
+<body>
+
+	<div th:replace="fragments/header :: header"></div>
+	
+	<div class="container">
+		
+		<div class="jumbotron">
+		  <h1 class="display-4">Z nami naprawisz usterki w swoim domu!</h1>
+		  <p class="lead">Oferujemy możliwość zamówienia profesjonalnych, sprawdzonych usług serwisowych do twojego domu.</p>
+		  <hr class="my-4">
+		  <p>Wyszukaj i umów fachowca już teraz</p>
+		  <a class="btn btn-primary btn-lg" th:href="@{/search}" role="button">Dowiedz się więcej</a>
+		</div>
+		
+		<hr>
+	</div>
+
+	
+
+	<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+footer {
+	margin-top: 60px;
+}
+
+#loggedAs {
+	margin-right: 10px;
+}
+
+/*.jumbotron {
+	background-image: url("../images/klucz_960_380.jpg");
+	background-size: cover;
+}*/

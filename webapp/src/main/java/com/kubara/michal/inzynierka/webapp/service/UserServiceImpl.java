@@ -9,6 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kubara.michal.inzynierka.webapp.dao.RoleRepository;
@@ -16,6 +18,7 @@ import com.kubara.michal.inzynierka.webapp.dao.UserRepository;
 import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
 import com.kubara.michal.inzynierka.webapp.entity.User;
 
+@Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired
@@ -24,10 +27,14 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private RoleRepository roleRepository;
 	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
 	
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
 		User user = userRepository.findByUserName(username);
 		if(user == null) {
 			throw new UsernameNotFoundException("Niepoprawna nazwa użytkownika lub hasło.");
@@ -52,7 +59,7 @@ public class UserServiceImpl implements UserService {
 	public void save(UserDTO userDTO, String roleName) {
 		User user = new User();
 		user.setUserName(userDTO.getUserName());
-		user.setPassword(userDTO.getPassword());
+		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setFirstName(userDTO.getFirstName());
 		user.setLastName(userDTO.getLastName());
 		user.setEmail(userDTO.getEmail());

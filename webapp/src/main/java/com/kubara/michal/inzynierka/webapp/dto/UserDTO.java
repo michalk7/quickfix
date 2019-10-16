@@ -21,6 +21,10 @@ public class UserDTO {
 	
 	@NotNull(message = "is required")
 	@Size(min = 1, message = "is required")
+	private String matchingPassword;
+	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
 	private String firstName;
 	
 	@NotNull(message = "is required")
@@ -75,6 +79,15 @@ public class UserDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public String getMatchingPassword() {
+		return matchingPassword;
+	}
+
+	public void setMatchingPassword(String matchingPassword) {
+		this.matchingPassword = matchingPassword;
+	}
+	
 	
 	
 	

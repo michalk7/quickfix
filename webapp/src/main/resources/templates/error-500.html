@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>QuickFix - Błąd</title>
+	
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+</head>
+<body>
+
+	<div class="container">
+		<div class=jumbotron>
+			<h1 class="text-center"><i class="fa fa-frown-o"></i> Przepraszamy, wewnętrzy błąd serwera</h1>
+			<p class="text-center"><a class="btn btn-primary" th:href="@{/}"><i class="fa fa-home"></i> Powrót do strony głównej</a></p>
+		</div>
+	</div>
+
+</body>
+</html>

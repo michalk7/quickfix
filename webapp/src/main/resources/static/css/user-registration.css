@@ -102,3 +102,7 @@ body {
     color: #777;
   }
 }
+
+#postCodeLine {
+	margin-bottom: 0;
+}

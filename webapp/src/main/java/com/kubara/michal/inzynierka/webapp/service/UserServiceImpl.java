@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kubara.michal.inzynierka.core.dao.RoleRepository;
 import com.kubara.michal.inzynierka.core.dao.UserRepository;
+import com.kubara.michal.inzynierka.core.entity.Address;
 import com.kubara.michal.inzynierka.core.entity.Role;
 import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
@@ -64,6 +65,18 @@ public class UserServiceImpl implements UserService {
 		user.setFirstName(userDTO.getFirstName());
 		user.setLastName(userDTO.getLastName());
 		user.setEmail(userDTO.getEmail());
+		
+		Address address = new Address();
+		address.setCity(userDTO.getCity());
+		address.setPostCode(userDTO.getPostCode());
+		address.setPostCity(userDTO.getPostCity());
+		address.setStreet(userDTO.getStreet());
+		address.setHouseNumber(userDTO.getHouseNumber());
+		address.setApartmentNumber(userDTO.getApartmentNumber());
+		address.setPhoneNumber(userDTO.getPhoneNumber());
+		
+		address.setUser(user);
+		user.setAddress(address);
 		
 		user.setRoles(Arrays.asList(roleRepository.findByName(roleName)));
 		

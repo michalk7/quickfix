@@ -4,11 +4,15 @@ footer {
 	margin-top: 60px;
 }
 
-#loggedAs {
-	margin-right: 10px;
-}
+/* #loggedAs { */
+/* 	margin-right: 10px; */
+/* } */
 
-#register {
+/* #register { */
+/* 	margin-right: 10px; */
+/* } */
+
+.add-margin-right {
 	margin-right: 10px;
 }
 

@@ -36,6 +36,33 @@ public class UserDTO {
 	@Size(min = 1, message = "is required")
 	private String email;
 	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String city;
+	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String postCode;
+	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String postCity;
+	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String street;
+	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String houseNumber;
+	
+	
+	private String apartmentNumber;
+	
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String phoneNumber;
+	
 	public UserDTO() {
 	
 	}
@@ -86,6 +113,62 @@ public class UserDTO {
 
 	public void setMatchingPassword(String matchingPassword) {
 		this.matchingPassword = matchingPassword;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getPostCode() {
+		return postCode;
+	}
+
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
+	}
+
+	public String getPostCity() {
+		return postCity;
+	}
+
+	public void setPostCity(String postCity) {
+		this.postCity = postCity;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getHouseNumber() {
+		return houseNumber;
+	}
+
+	public void setHouseNumber(String houseNumber) {
+		this.houseNumber = houseNumber;
+	}
+
+	public String getApartmentNumber() {
+		return apartmentNumber;
+	}
+
+	public void setApartmentNumber(String apartmentNumber) {
+		this.apartmentNumber = apartmentNumber;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 	
 	

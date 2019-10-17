@@ -36,7 +36,7 @@
 		<!-- User name -->
 		<div class="form-label-group">
 			<input id="inputUserName" type="text" th:field="*{userName}" placeholder="Nazwa użytkownika (*)" class="form-control" th:errorclass="fieldError" autofocus/>
-			<label for="inputUserName">Nazwa użytkownika</label>
+			<label for="inputUserName">Nazwa użytkownika (*)</label>
 		</div>
 
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('userName')}">
@@ -49,7 +49,7 @@
 		<!-- Password -->
 		<div class="form-label-group">
 			<input id="inputPassword" type="password" th:field="*{password}" placeholder="Hasło (*)" class="form-control" th:errorclass="fieldError" />
-			<label for="inputPassword">Hasło</label>
+			<label for="inputPassword">Hasło (*)</label>
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('password')}">
 			<ul>
@@ -60,7 +60,7 @@
 		<!-- Confirm Password -->
 		<div class="form-label-group">
 			<input id="inputPasswordConfirmation" type="password" th:field="*{matchingPassword}" placeholder="Potwierdź hasło (*)" class="form-control" th:errorclass="fieldError" />
-			<label for="inputPasswordConfirmation">Potwierdź hasło</label>
+			<label for="inputPasswordConfirmation">Potwierdź hasło (*)</label>
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('matchingPassword')}">
 			<ul>
@@ -72,7 +72,7 @@
 		<!-- First name -->
 		<div class="form-label-group">
 			<input id="inputFirstName" type="text" th:field="*{firstName}" placeholder="Imię (*)" class="form-control" th:errorclass="fieldError" />
-			<label for="inputFirstName">Imię</label>
+			<label for="inputFirstName">Imię (*)</label>
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('firstName')}">
 			<ul>
@@ -83,7 +83,7 @@
 		<!-- Last name -->
 		<div class="form-label-group">
 			<input id="inputLastName" type="text" th:field="*{lastName}" placeholder="Nazwisko (*)" class="form-control" th:errorclass="fieldError" />
-			<label for="inputLastName">Nazwisko</label>
+			<label for="inputLastName">Nazwisko (*)</label>
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('lastName')}">
 			<ul>
@@ -94,11 +94,95 @@
 		<!-- Email -->
 		<div class="form-label-group">
 			<input id="inputEmail" type="text" th:field="*{email}" placeholder="Email (*)" class="form-control" th:errorclass="fieldError" />
-			<label for="inputEmail">Email</label>
+			<label for="inputEmail">Email (*)</label>
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('email')}">
 			<ul>
 			  <li th:each="err : ${#fields.errors('email')}" th:text="'Email ' + ${err}" />
+			</ul>						
+		</div>
+		
+		<!-- city -->
+		<div class="form-label-group">
+			<input id="inputCity" type="text" th:field="*{city}" placeholder="Miasto (*)" class="form-control" th:errorclass="fieldError" />
+			<label for="inputCity">Miasto (*)</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('city')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('city')}" th:text="'Miasto ' + ${err}" />
+			</ul>						
+		</div>
+		
+		<div id="postCodeLine" class="form-label-group form-row">
+			<div class="col-6">
+				<!-- postCode -->
+				<div class="form-label-group">
+					<input id="inputPostCode" type="text" th:field="*{postCode}" placeholder="Kod pocztowy (*)" class="form-control" th:errorclass="fieldError" />
+					<label for="inputPostCode">Kod pocztowy (*)</label>
+				</div>
+				<div class="form-label-group text-danger" th:if="${#fields.hasErrors('postCode')}">
+					<ul>
+					  <li th:each="err : ${#fields.errors('postCode')}" th:text="'Kod pocztowy ' + ${err}" />
+					</ul>						
+				</div>
+			</div>
+			
+			<div class="col-6">
+				<!-- postCity -->
+				<div class="form-label-group">
+					<input id="inputPostCity" type="text" th:field="*{postCity}" placeholder="Miejscowość (*)" class="form-control" th:errorclass="fieldError" />
+					<label for="inputPostCity">Miejscowość (*)</label>
+				</div>
+				<div class="form-label-group text-danger" th:if="${#fields.hasErrors('postCity')}">
+					<ul>
+					  <li th:each="err : ${#fields.errors('postCity')}" th:text="'Miejscowość ' + ${err}" />
+					</ul>						
+				</div>		
+			</div>
+		
+		</div>
+		
+		<!-- street -->
+		<div class="form-label-group">
+			<input id="inputStreet" type="text" th:field="*{street}" placeholder="Ulica (*)" class="form-control" th:errorclass="fieldError" />
+			<label for="inputStreet">Ulica (*)</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('street')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('street')}" th:text="'Ulica ' + ${err}" />
+			</ul>						
+		</div>
+		
+		<!-- houseNumber -->
+		<div class="form-label-group">
+			<input id="inputHouseNumber" type="text" th:field="*{houseNumber}" placeholder="Numer domu (*)" class="form-control" th:errorclass="fieldError" />
+			<label for="inputHouseNumber">Numer domu (*)</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('houseNumber')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('houseNumber')}" th:text="'Numer domu ' + ${err}" />
+			</ul>						
+		</div>
+		
+		<!-- apartmentNumber -->
+		<div class="form-label-group">
+			<input id="inputApartmentNumber" type="text" th:field="*{apartmentNumber}" placeholder="Numer mieszkania" class="form-control" th:errorclass="fieldError" />
+			<label for="inputApartmentNumber">Numer mieszkania</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('apartmentNumber')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('apartmentNumber')}" th:text="'Numer mieszkania ' + ${err}" />
+			</ul>						
+		</div>
+		
+		<!-- phoneNumber -->
+		<div class="form-label-group">
+			<input id="inputPhoneNumber" type="text" th:field="*{phoneNumber}" placeholder="Numer telefonu (*)" class="form-control" th:errorclass="fieldError" />
+			<label for="inputPhoneNumber">Numer telefonu (*)</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('phoneNumber')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('phoneNumber')}" th:text="'Numer telefonu ' + ${err}" />
 			</ul>						
 		</div>
 		

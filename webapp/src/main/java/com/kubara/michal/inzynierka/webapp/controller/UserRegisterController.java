@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
-import com.kubara.michal.inzynierka.webapp.entity.User;
 import com.kubara.michal.inzynierka.webapp.service.UserService;
 
 @Controller

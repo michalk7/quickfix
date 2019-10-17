@@ -1,4 +1,4 @@
-package com.kubara.michal.inzynierka.webapp.entity;
+package com.kubara.michal.inzynierka.core.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

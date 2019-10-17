@@ -1,8 +1,9 @@
-package com.kubara.michal.inzynierka.webapp.dao;
+package com.kubara.michal.inzynierka.core.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.kubara.michal.inzynierka.webapp.entity.Role;
+import com.kubara.michal.inzynierka.core.entity.Role;
+
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
 

@@ -13,10 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kubara.michal.inzynierka.webapp.dao.RoleRepository;
-import com.kubara.michal.inzynierka.webapp.dao.UserRepository;
+import com.kubara.michal.inzynierka.core.dao.RoleRepository;
+import com.kubara.michal.inzynierka.core.dao.UserRepository;
+import com.kubara.michal.inzynierka.core.entity.Role;
+import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
-import com.kubara.michal.inzynierka.webapp.entity.User;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
 				mapRolesToAuthorities(user.getRoles()));
 	}
 	
-	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<com.kubara.michal.inzynierka.webapp.entity.Role> roles) {
+	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
 		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
 	}
 

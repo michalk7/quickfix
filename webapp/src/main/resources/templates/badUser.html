@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>QuickFix - Błąd</title>
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+</head>
+<body>
+
+	<div class="container">
+		<h1 th:text="${param.message[0]">Error Message</h1>
+	
+		<a th:href="@{/register/showRegisterPage}">Zarejestruj się</a>
+	</div>
+
+</body>
+</html>

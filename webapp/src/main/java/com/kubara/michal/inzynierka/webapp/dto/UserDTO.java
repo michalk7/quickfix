@@ -7,60 +7,60 @@ import com.kubara.michal.inzynierka.webapp.validation.FieldMatch;
 import com.kubara.michal.inzynierka.webapp.validation.ValidEmail;
 
 @FieldMatch.List({
-    @FieldMatch(first = "password", second = "matchingPassword", message = "The password fields must match")
+    @FieldMatch(first = "password", second = "matchingPassword", message = "Hasła muszą być zgodne.")
 })
 public class UserDTO {
 
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String userName;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String password;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String matchingPassword;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String firstName;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String lastName;
 	
 	@ValidEmail
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String email;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String city;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String postCode;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String postCity;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String street;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String houseNumber;
 	
 	
 	private String apartmentNumber;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String phoneNumber;
 	
 	public UserDTO() {

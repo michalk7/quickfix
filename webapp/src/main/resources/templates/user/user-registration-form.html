@@ -25,8 +25,8 @@
 	            <div>
 				
 					<!-- Check for registration error -->
-					<div th:if="${registrationError}" class="alert alert-danger col-xs-offset-1 col-xs-10">
-						${registrationError}
+					<div th:if="${registrationError}" class="alert alert-danger col-xs-offset-1 col-xs-10"
+						th:text=${registrationError} >error
 					</div>
 																							
 	            </div>
@@ -41,7 +41,7 @@
 
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('userName')}">
 			<ul>
-			  <li th:each="err : ${#fields.errors('userName')}" th:text="'User name ' + ${err}" />
+			  <li th:each="err : ${#fields.errors('userName')}" th:text="${err}" />
 			</ul>						
 		</div>
 		
@@ -53,7 +53,7 @@
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('password')}">
 			<ul>
-			  <li th:each="err : ${#fields.errors('password')}" th:text="'Password ' + ${err}" />
+			  <li th:each="err : ${#fields.errors('password')}" th:text="${err}" />
 			</ul>						
 		</div>
 		
@@ -64,7 +64,7 @@
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('matchingPassword')}">
 			<ul>
-			  <li th:each="err : ${#fields.errors('matchingPassword')}" th:text="'Password ' + ${err}" />
+			  <li th:each="err : ${#fields.errors('matchingPassword')}" th:text="${err}" />
 			</ul>						
 		</div>
 	
@@ -76,7 +76,7 @@
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('firstName')}">
 			<ul>
-			  <li th:each="err : ${#fields.errors('firstName')}" th:text="'First name ' + ${err}" />
+			  <li th:each="err : ${#fields.errors('firstName')}" th:text="${err}" />
 			</ul>						
 		</div>
 		
@@ -87,7 +87,7 @@
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('lastName')}">
 			<ul>
-			  <li th:each="err : ${#fields.errors('lastName')}" th:text="'Last name ' + ${err}" />
+			  <li th:each="err : ${#fields.errors('lastName')}" th:text="${err}" />
 			</ul>						
 		</div>
 		
@@ -98,7 +98,7 @@
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('email')}">
 			<ul>
-			  <li th:each="err : ${#fields.errors('email')}" th:text="'Email ' + ${err}" />
+			  <li th:each="err : ${#fields.errors('email')}" th:text="${err}" />
 			</ul>						
 		</div>
 		
@@ -109,7 +109,7 @@
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('city')}">
 			<ul>
-			  <li th:each="err : ${#fields.errors('city')}" th:text="'Miasto ' + ${err}" />
+			  <li th:each="err : ${#fields.errors('city')}" th:text="${err}" />
 			</ul>						
 		</div>
 		
@@ -122,7 +122,7 @@
 				</div>
 				<div class="form-label-group text-danger" th:if="${#fields.hasErrors('postCode')}">
 					<ul>
-					  <li th:each="err : ${#fields.errors('postCode')}" th:text="'Kod pocztowy ' + ${err}" />
+					  <li th:each="err : ${#fields.errors('postCode')}" th:text="${err}" />
 					</ul>						
 				</div>
 			</div>
@@ -135,7 +135,7 @@
 				</div>
 				<div class="form-label-group text-danger" th:if="${#fields.hasErrors('postCity')}">
 					<ul>
-					  <li th:each="err : ${#fields.errors('postCity')}" th:text="'Miejscowość ' + ${err}" />
+					  <li th:each="err : ${#fields.errors('postCity')}" th:text="${err}" />
 					</ul>						
 				</div>		
 			</div>
@@ -149,7 +149,7 @@
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('street')}">
 			<ul>
-			  <li th:each="err : ${#fields.errors('street')}" th:text="'Ulica ' + ${err}" />
+			  <li th:each="err : ${#fields.errors('street')}" th:text="${err}" />
 			</ul>						
 		</div>
 		
@@ -160,7 +160,7 @@
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('houseNumber')}">
 			<ul>
-			  <li th:each="err : ${#fields.errors('houseNumber')}" th:text="'Numer domu ' + ${err}" />
+			  <li th:each="err : ${#fields.errors('houseNumber')}" th:text="${err}" />
 			</ul>						
 		</div>
 		
@@ -171,7 +171,7 @@
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('apartmentNumber')}">
 			<ul>
-			  <li th:each="err : ${#fields.errors('apartmentNumber')}" th:text="'Numer mieszkania ' + ${err}" />
+			  <li th:each="err : ${#fields.errors('apartmentNumber')}" th:text="${err}" />
 			</ul>						
 		</div>
 		
@@ -182,13 +182,13 @@
 		</div>
 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('phoneNumber')}">
 			<ul>
-			  <li th:each="err : ${#fields.errors('phoneNumber')}" th:text="'Numer telefonu ' + ${err}" />
+			  <li th:each="err : ${#fields.errors('phoneNumber')}" th:text="${err}" />
 			</ul>						
 		</div>
 		
 		<div class="checkbox mb-3">
 	    	<label>
-	      	<input type="checkbox" value="rodo" required> Potwierdzam regulamin i politykę prywatności
+	      	<input type="checkbox" value="rodo" required> Potwierdzam regulamin i politykę prywatności (*)
 	    	</label>
 	  	</div>
 		

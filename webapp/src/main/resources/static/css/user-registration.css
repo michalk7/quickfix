@@ -106,3 +106,7 @@ body {
 #postCodeLine {
 	margin-bottom: 0;
 }
+
+ul {
+	list-style-type: none;
+}

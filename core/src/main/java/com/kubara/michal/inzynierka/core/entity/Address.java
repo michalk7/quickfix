@@ -1,5 +1,6 @@
 package com.kubara.michal.inzynierka.core.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -101,7 +102,7 @@ public class Address {
 		this.phoneNumber = phoneNumber;
 	}
 
-	@OneToOne(mappedBy = "address")
+	@OneToOne(mappedBy = "address", cascade={ CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	public User getUser() {
 		return user;
 	}

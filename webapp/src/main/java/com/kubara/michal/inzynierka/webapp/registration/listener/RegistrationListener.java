@@ -41,18 +41,20 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 		service.createVerificationToken(user, token);
 		
 		String recipientAddress = user.getEmail();
-		String subject = "Potwierdzenie Rejestracji";
+		String subject = "QuickFix - Potwierdzenie Rejestracji";
 		String confirmationUrl = event.getAppUrl() + "/register/registrationConfirm?token=" + token;
-        String message = messages.getMessage("message.regSucc", null, event.getLocale());
+        String message = messages.getMessage("message.confirmMailText", null, event.getLocale());
+        String signature = messages.getMessage("message.confirmMailSignature", null, event.getLocale());
          
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
-        email.setText(message + " rn" + "http://localhost:8080" + confirmationUrl);
+        email.setText(message + "http://localhost:8080" + confirmationUrl + signature);
         email.setFrom("jankwtest@wp.pl");
+        //email.setFrom(new InternetAddress("jankwtest@wp.pl", "no-reply@quickfix.com"));
         mailSender.send(email);
 
-		System.out.println("Mail wysłany");
+		//System.out.println("Mail wysłany");
 		
 	}
 

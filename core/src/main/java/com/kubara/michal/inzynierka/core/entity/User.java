@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.UniqueConstraint;
 
 @Entity
 public class User {
@@ -26,6 +27,7 @@ public class User {
 	
 	private Collection<Role> roles;
 	private Address address;
+	private VerificationToken verificationToken;
 	
 	public User() {
 	
@@ -109,10 +111,12 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@ManyToMany(fetch=FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinTable(name="users_roles",
-	joinColumns = @JoinColumn(name="user_id"),
-	inverseJoinColumns = @JoinColumn(name="role_id"))
+		joinColumns = @JoinColumn(name="user_id"),
+		inverseJoinColumns = @JoinColumn(name="role_id"),
+		uniqueConstraints = @UniqueConstraint(columnNames = { "role_id", "user_id" })
+	)
 	public Collection<Role> getRoles() {
 		return roles;
 	}
@@ -130,6 +134,17 @@ public class User {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	public VerificationToken getVerificationToken() {
+		return verificationToken;
+	}
+
+	public void setVerificationToken(VerificationToken verificationToken) {
+		this.verificationToken = verificationToken;
+	}
+	
+	
 	
 	
 	

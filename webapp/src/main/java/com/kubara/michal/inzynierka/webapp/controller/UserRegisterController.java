@@ -83,10 +83,13 @@ public class UserRegisterController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("registrationError", "Niepowodzenie wysyłania linku aktywacyjnego");
+			
+			userService.delete(registered);
+			
 			return "/user/user-registration-form";
 		}
-		System.out.println("poszło");
-		return "home";
+		//System.out.println("poszło");
+		return "redirect:/showLoginPage?registrationSuccess";
 	}
 	
 	private User createNewUserAccount(UserDTO dtoUser, BindingResult result) {
@@ -123,10 +126,16 @@ public class UserRegisterController {
 	        return "redirect:/badUser";
 	    } 
 	     
-	    user.setEnabled(true); 
-	    userService.saveOrUpdateRegisteredUser(user);
-		
-	    return "redirect:/showLoginPage";
+	    if(user.isEnabled()) {
+	    	return "redirect:/showLoginPage?showAccountWasActive";
+	    } else {
+	    	user.setEnabled(true); 
+		    userService.saveOrUpdateRegisteredUser(user);
+			
+		    return "redirect:/showLoginPage?showActivateMsg";
+	    }
+	    
+	    
 	    
 	}
 	

@@ -2,6 +2,7 @@ package com.kubara.michal.inzynierka.webapp.service;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -161,6 +162,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);
+	}
+
+	@Override
+	public VerificationToken generateNewVerificationToken(String existingToken) {
+		String newToken = UUID.randomUUID().toString();
+		VerificationToken token = tokenRepository.findByToken(existingToken);
+		token.updateToken(newToken);
+		tokenRepository.save(token);
+		return token;
 	}
 	
 	

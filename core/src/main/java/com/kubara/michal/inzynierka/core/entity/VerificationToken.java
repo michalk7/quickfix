@@ -85,5 +85,9 @@ public class VerificationToken {
 		return new Date(cal.getTime().getTime());
 	}
 	
+	public void updateToken(final String token) {
+        this.token = token;
+        this.expirationDate = calculateExpirationDate(EXPIRATION);
+    }
 	
 }

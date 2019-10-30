@@ -3,12 +3,17 @@ package com.kubara.michal.inzynierka.webapp.controller;
 import java.util.Calendar;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
+import org.springframework.core.env.Environment;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,13 +24,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.core.entity.VerificationToken;
 import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
 import com.kubara.michal.inzynierka.webapp.registration.OnRegistrationCompleteEvent;
+import com.kubara.michal.inzynierka.webapp.registration.OnTokenResendEvent;
 import com.kubara.michal.inzynierka.webapp.service.UserService;
+import com.kubara.michal.inzynierka.webapp.util.GenericResponse;
 import com.kubara.michal.inzynierka.webapp.validation.UserAlreadyExistsException;
 
 @Controller
@@ -40,6 +48,11 @@ public class UserRegisterController {
 	
 	@Autowired
 	private MessageSource messages;
+	
+	@Autowired
+	Environment env;
+	
+	Logger logger = LoggerFactory.getLogger(UserRegisterController.class);
 	
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
@@ -79,7 +92,9 @@ public class UserRegisterController {
 		
 		try {
 			String appUrl = request.getContextPath();
+			logger.info("Przed odpaleniem listenera");
 			eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
+			logger.info("Po odpaleniu listenera");
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("registrationError", "Niepowodzenie wysyłania linku aktywacyjnego");
@@ -89,6 +104,8 @@ public class UserRegisterController {
 			return "/user/user-registration-form";
 		}
 		//System.out.println("poszło");
+		logger.info("Teraz redirect");
+		
 		return "redirect:/showLoginPage?registrationSuccess";
 	}
 	
@@ -112,9 +129,9 @@ public class UserRegisterController {
 		VerificationToken verificationToken = userService.getVerificationToken(token);
 		
 		if(verificationToken == null) {
-			String message = messages.getMessage("auth.message,invalidToken", null, locale);
+			String message = messages.getMessage("auth.message.invalidToken", null, locale);
 			model.addAttribute("message", message);
-			return "redirect:/badUser";
+			return "badUser";
 		}
 		
 		  
@@ -123,7 +140,9 @@ public class UserRegisterController {
 	    if ((verificationToken.getExpirationDate().getTime() - cal.getTime().getTime()) <= 0) {
 	        String messageValue = messages.getMessage("auth.message.expired", null, locale);
 	        model.addAttribute("message", messageValue);
-	        return "redirect:/badUser";
+	        model.addAttribute("expired", true);
+	        model.addAttribute("token", token);
+	        return "badUser";
 	    } 
 	     
 	    if(user.isEnabled()) {
@@ -135,8 +154,44 @@ public class UserRegisterController {
 		    return "redirect:/showLoginPage?showActivateMsg";
 	    }
 	    
-	    
-	    
 	}
+	
+	
+	@GetMapping("/resendRegistrationToken")
+	@ResponseBody
+	public GenericResponse resendRegistrationToken(@RequestParam("token") String existingToken, HttpServletRequest request) {
+		
+		VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
+		
+		User user = userService.getUser(newToken.getToken());
+		String appUrl = "http://" + request.getServerName() + 
+			      ":" + request.getServerPort() + 
+			      request.getContextPath();
+		
+		Locale locale = request.getLocale();
+		SimpleMailMessage mail = constructResendVerificationTokenEmail(appUrl, locale, newToken, user);
+		
+		eventPublisher.publishEvent(new OnTokenResendEvent(user, request.getLocale(), appUrl, newToken, mail));
+		
+		return new GenericResponse(messages.getMessage("message.resendToken", null, locale));
+		
+	}
+	
+	private SimpleMailMessage constructResendVerificationTokenEmail(String appUrl, Locale locale, VerificationToken verificationToken, User user) {
+		String url = appUrl + "/register/registrationConfirm?token=" + verificationToken.getToken();
+		String message = messages.getMessage("message.resendTokenMailText", null, locale);
+        String signature = messages.getMessage("message.confirmMailSignature", null, locale);
+        String recipientAddress = user.getEmail();
+		String subject = "QuickFix - Ponowne wysłanie linku aktywującego.";
+        
+        SimpleMailMessage email = new SimpleMailMessage();
+        email.setTo(recipientAddress);
+        email.setSubject(subject);
+        email.setText(message + url + signature);
+        email.setFrom(env.getProperty("spring.mail.username"));
+        return email;
+	}
+	
+	
 	
 }

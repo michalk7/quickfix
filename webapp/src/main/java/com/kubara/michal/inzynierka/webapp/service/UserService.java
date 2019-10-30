@@ -26,5 +26,7 @@ public interface UserService extends UserDetailsService {
     void deleteById(long id);
     
     public User findByEmail(String email);
+
+	public VerificationToken generateNewVerificationToken(String existingToken);
     
 }

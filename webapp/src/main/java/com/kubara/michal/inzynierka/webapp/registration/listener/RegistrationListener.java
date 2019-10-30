@@ -50,7 +50,8 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         email.setTo(recipientAddress);
         email.setSubject(subject);
         email.setText(message + "http://localhost:8080" + confirmationUrl + signature);
-        email.setFrom("jankwtest@wp.pl");
+        //email.setFrom("jankwtest@wp.pl");
+        email.setFrom(env.getProperty("spring.mail.username"));
         //email.setFrom(new InternetAddress("jankwtest@wp.pl", "no-reply@quickfix.com"));
         mailSender.send(email);
 

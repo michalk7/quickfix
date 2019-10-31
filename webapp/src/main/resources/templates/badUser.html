@@ -4,43 +4,47 @@
 	<meta charset="UTF-8">
 	<title>QuickFix - Błąd</title>
 	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+	
+	<link rel="stylesheet" th:href="@{/css/badUser.css}" href="../../css/badUser.css" />
 </head>
 <body>
 
 	<div th:replace="fragments/header :: header"></div>
 
 	<div class="container">
-		<h1 th:text="${message}">Error Message</h1>
-	
-		<a th:href="@{/register/showRegisterPage}">Zarejestruj się</a>
+<!-- 		<div class="d-flex flex-column justify-content-center align-content-center"> -->
+			<h1 th:text="${message}">Error Message</h1>
 		
-		<div th:if="${expired}">
-			<h1 th:text="#{label.form.resendRegistrationToken}">resend</h1>
-			<button onclick="resendToken()">Wyślij link</button>
+			<a class="btn btn-outline-primary" th:href="@{/register/showRegisterPage}">Zarejestruj się</a>
 			
-			<script th:inline="javascript">
-		 
-		var serverContext = /*[[@{/}]]*/;
-		var token = /*[[${param.token}]]*/;
-		 
-		function resendToken() {
-		    $.get(serverContext + "register/resendRegistrationToken?token=" +  token,
-		      function(data){
-		            window.location.href = 
-		              serverContext +"showLoginPage?message=" + data.message;
-		    })
-		    .fail(function(data) {
-		        if(data.responseJSON.error.indexOf("MailError") > -1) {
-		            window.location.href = serverContext + "emailError.html";
-		        }
-		        else {
-		            window.location.href = 
-		              serverContext + "showLoginPage?message=" + data.responseJSON.message;
-		        }
-		    });
-		}
-	</script>
-		</div>
+			<div th:if="${expired}">
+				<h2 th:text="#{label.form.resendRegistrationToken}">resend</h2>
+				<button class="btn btn-primary btn-lg" onclick="resendToken()">Wyślij link</button>
+				
+				<script th:inline="javascript">
+			 
+			var serverContext = /*[[@{/}]]*/;
+			var token = /*[[${param.token}]]*/;
+			 
+			function resendToken() {
+			    $.get(serverContext + "register/resendRegistrationToken?token=" +  token,
+			      function(data){
+			            window.location.href = 
+			              serverContext +"showLoginPage?message=" + data.message;
+			    })
+			    .fail(function(data) {
+			        if(data.responseJSON.error.indexOf("MailError") > -1) {
+			            window.location.href = serverContext + "emailError.html";
+			        }
+			        else {
+			            window.location.href = 
+			              serverContext + "showLoginPage?message=" + data.responseJSON.message;
+			        }
+			    });
+			}
+				</script>
+			</div>
+<!-- 		</div> -->
 	</div>
 
 	

@@ -1,5 +1,7 @@
 package com.kubara.michal.inzynierka.webapp.config;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,8 +10,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import com.kubara.michal.inzynierka.webapp.service.UserService;
 
@@ -22,6 +27,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private AuthenticationFailureHandler authenticationFailureHandler;
+	
+	@Autowired
+	DataSource dataSource;
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
+	private final static int TOKEN_EXPIRATION = 24 * 60 * 60;
+	
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService);
+	}
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -36,15 +54,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/search/**").hasAnyRole("USER", "EXPERT")
 			.antMatchers("/myAccount/**").hasAnyRole("USER", "EXPERT")
 			.and()
-			.formLogin()
-				.loginPage("/showLoginPage")
-				.loginProcessingUrl("/authenticateTheUser")
-				.failureHandler(authenticationFailureHandler)
+				.formLogin()
+					.loginPage("/showLoginPage")
+					.loginProcessingUrl("/authenticateTheUser")
+					.failureHandler(authenticationFailureHandler)
+					.permitAll()
+			.and()
+				.rememberMe()
+					.rememberMeCookieName("quickfix-remember-me")
+					.tokenValiditySeconds(TOKEN_EXPIRATION)
+					.tokenRepository(persistentTokenRepository())
+			.and()
+				.logout()
 				.permitAll()
 			.and()
-			.logout().permitAll()
-			.and()
-			.exceptionHandling().accessDeniedPage("/access-denied");
+				.exceptionHandling().accessDeniedPage("/access-denied");
 		
 	}
 
@@ -63,6 +87,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.setUserDetailsService(userService); //set the custom user details service
 		auth.setPasswordEncoder(passwordEncoder()); //set the password encoder - bcrypt
 		return auth;
+	}
+	
+	@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+		tokenRepository.setDataSource(dataSource);
+		return tokenRepository;
 	}
 	
 	

@@ -115,6 +115,17 @@
 			</ul>						
 		</div>
 		
+		<!-- Dzielnica -->
+		<div class="form-label-group">
+			<input id="inputDistrict" type="text" th:field="*{district}" placeholder="Dzielnica" class="form-control" th:errorclass="fieldError" />
+			<label for="inputDistrict">Dzielnica</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('district')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('district')}" th:text="${err}" />
+			</ul>						
+		</div>
+		
 		<div id="postCodeLine" class="form-label-group form-row">
 			<div class="col-6">
 				<!-- postCode -->

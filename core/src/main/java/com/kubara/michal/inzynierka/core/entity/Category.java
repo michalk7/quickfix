@@ -10,22 +10,22 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 @Entity
-public class Role {
+public class Category {
 
 	private long id;
 	private String name;
 	private Collection<User> users;
 	
-	public Role() {
+	public Category() {
 	
 	}
 
-	public Role(String name) {
+	public Category(String name) {
 		this.name = name;
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public long getId() {
 		return id;
 	}
@@ -43,7 +43,7 @@ public class Role {
 		this.name = name;
 	}
 
-	@ManyToMany(mappedBy = "roles")
+	@ManyToMany(mappedBy = "categories")
 	public Collection<User> getUsers() {
 		return users;
 	}
@@ -51,7 +51,6 @@ public class Role {
 	public void setUsers(Collection<User> users) {
 		this.users = users;
 	}
-	
 	
 	
 	

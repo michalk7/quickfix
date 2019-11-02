@@ -53,10 +53,19 @@ public class UserServiceImpl implements UserService {
 			throw new UsernameNotFoundException("Niepoprawna nazwa użytkownika lub hasło.");
 		}
 		
+		boolean enabled = user.isEnabled();
+		if(user.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_EXPERT"))) {
+			if(!user.isVerified()) {
+				//ustawiamy enabled, żeby pod kodem błędu dla credentials expired dać komunikat o braku weryfikacji konta
+				enabled = true;
+				credentialsNonExpired = false;
+			}
+		}
+		
 		return new org.springframework.security.core.userdetails.User(
 				user.getUserName(), 
 				user.getPassword(), 
-				user.isEnabled(), 
+				enabled, 
 				accountNonExpired, 
 		        credentialsNonExpired, 
 		        accountNonLocked, 
@@ -94,6 +103,7 @@ public class UserServiceImpl implements UserService {
 		
 		Address address = new Address();
 		address.setCity(userDTO.getCity());
+		address.setDistrict(userDTO.getDistrict());
 		address.setPostCode(userDTO.getPostCode());
 		address.setPostCity(userDTO.getPostCity());
 		address.setStreet(userDTO.getStreet());

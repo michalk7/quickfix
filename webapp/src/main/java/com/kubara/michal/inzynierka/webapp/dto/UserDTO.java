@@ -40,6 +40,8 @@ public class UserDTO {
 	@Size(min = 1, message = "Wymagane")
 	private String city;
 	
+	private String district;
+	
 	@NotNull(message = "Wymagane")
 	@Size(min = 1, message = "Wymagane")
 	private String postCode;
@@ -121,6 +123,14 @@ public class UserDTO {
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
 	}
 
 	public String getPostCode() {

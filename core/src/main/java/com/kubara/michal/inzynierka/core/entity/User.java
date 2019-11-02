@@ -3,6 +3,7 @@ package com.kubara.michal.inzynierka.core.entity;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,10 +25,12 @@ public class User {
 	private String lastName;
 	private String email;
 	private boolean enabled;
+	private boolean verified;
 	
 	private Collection<Role> roles;
 	private Address address;
 	private VerificationToken verificationToken;
+	private Collection<Category> categories;
 	
 	public User() {
 	
@@ -40,6 +43,7 @@ public class User {
 		this.lastName = lastName;
 		this.email = email;
 		enabled = false;
+		verified = false;
 	}
 
 	public User(String userName, String password, String firstName, String lastName, String email,
@@ -50,6 +54,7 @@ public class User {
 		this.lastName = lastName;
 		this.email = email;
 		enabled = false;
+		verified = false;
 		this.roles = roles;
 	}
 
@@ -63,6 +68,7 @@ public class User {
 		this.id = id;
 	}
 
+	@Column(nullable = false)
 	public String getUserName() {
 		return userName;
 	}
@@ -71,6 +77,7 @@ public class User {
 		this.userName = userName;
 	}
 
+	@Column(nullable = false)
 	public String getPassword() {
 		return password;
 	}
@@ -79,6 +86,7 @@ public class User {
 		this.password = password;
 	}
 
+	@Column(nullable = false)
 	public String getFirstName() {
 		return firstName;
 	}
@@ -87,6 +95,7 @@ public class User {
 		this.firstName = firstName;
 	}
 
+	@Column(nullable = false)
 	public String getLastName() {
 		return lastName;
 	}
@@ -95,6 +104,7 @@ public class User {
 		this.lastName = lastName;
 	}
 
+	@Column(nullable = false)
 	public String getEmail() {
 		return email;
 	}
@@ -103,6 +113,7 @@ public class User {
 		this.email = email;
 	}
 	
+	@Column(nullable = false)
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -143,9 +154,28 @@ public class User {
 	public void setVerificationToken(VerificationToken verificationToken) {
 		this.verificationToken = verificationToken;
 	}
-	
-	
-	
+
+	public boolean isVerified() {
+		return verified;
+	}
+
+	public void setVerified(boolean verified) {
+		this.verified = verified;
+	}
+
+	@ManyToMany(fetch=FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+	@JoinTable(name="users_categories",
+		joinColumns = @JoinColumn(name="user_id"),
+		inverseJoinColumns = @JoinColumn(name="category_id"),
+		uniqueConstraints = @UniqueConstraint(columnNames = { "category_id", "user_id" })
+	)
+	public Collection<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Collection<Category> categories) {
+		this.categories = categories;
+	}
 	
 	
 }

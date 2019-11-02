@@ -1,6 +1,7 @@
 package com.kubara.michal.inzynierka.core.entity;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +13,7 @@ public class Address {
 
 	private long id;
 	private String city;
+	private String district;
 	private String postCode;
 	private String postCity;
 	private String street;
@@ -25,9 +27,10 @@ public class Address {
 	
 	}
 
-	public Address(String city, String postCode, String postCity, String street, String houseNumber,
+	public Address(String city, String district, String postCode, String postCity, String street, String houseNumber,
 			String apartmentNumber, String phoneNumber) {
 		this.city = city;
+		this.district = district;
 		this.postCode = postCode;
 		this.postCity = postCity;
 		this.street = street;
@@ -46,6 +49,7 @@ public class Address {
 		this.id = id;
 	}
 
+	@Column(nullable = false)
 	public String getCity() {
 		return city;
 	}
@@ -54,6 +58,16 @@ public class Address {
 		this.city = city;
 	}
 
+	@Column(nullable = true)
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+
+	@Column(nullable = false)
 	public String getPostCode() {
 		return postCode;
 	}
@@ -62,6 +76,7 @@ public class Address {
 		this.postCode = postCode;
 	}
 
+	@Column(nullable = false)
 	public String getPostCity() {
 		return postCity;
 	}
@@ -70,6 +85,7 @@ public class Address {
 		this.postCity = postCity;
 	}
 
+	@Column(nullable = false)
 	public String getStreet() {
 		return street;
 	}
@@ -78,6 +94,7 @@ public class Address {
 		this.street = street;
 	}
 
+	@Column(nullable = false)
 	public String getHouseNumber() {
 		return houseNumber;
 	}
@@ -86,6 +103,7 @@ public class Address {
 		this.houseNumber = houseNumber;
 	}
 
+	@Column(nullable = true)
 	public String getApartmentNumber() {
 		return apartmentNumber;
 	}
@@ -94,6 +112,7 @@ public class Address {
 		this.apartmentNumber = apartmentNumber;
 	}
 
+	@Column(nullable = false)
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}

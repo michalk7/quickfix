@@ -64,13 +64,27 @@ public class UserRegisterController {
 	@GetMapping("/showRegisterPage")
 	public String showUserRegisterPage(Model model) {
 		model.addAttribute("user", new UserDTO());
+		model.addAttribute("validated", false);
 		
 		return "/user/user-registration-form";
 	}
 	
-	@PostMapping("/processRegistrationForm")
-	public String proccessRegistrationForm(@Valid @ModelAttribute("user") UserDTO dtoUser,
+	@PostMapping("/processExpertRegistrationForm")
+	public String proccessExpertRegistrationForm(@Valid @ModelAttribute("expert") UserDTO dtoUser, 
 			BindingResult bindingResult, Model model, WebRequest request) {
+		
+		if(bindingResult.hasErrors()) {
+			return "/expert/expert-registration-form";
+		}
+		
+		return "redirect:/showLoginPage?registrationSuccess";
+	}
+	
+	@PostMapping("/processRegistrationForm")
+	public String proccessRegistrationForm(@Valid @ModelAttribute("user") UserDTO dtoUser, BindingResult bindingResult,
+			Model model, WebRequest request) {
+		
+		//validated = true;
 		
 		if(bindingResult.hasErrors()) {
 			return "/user/user-registration-form";

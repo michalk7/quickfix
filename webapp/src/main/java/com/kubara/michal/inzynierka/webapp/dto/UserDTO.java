@@ -4,7 +4,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.kubara.michal.inzynierka.webapp.validation.FieldMatch;
+import com.kubara.michal.inzynierka.webapp.validation.IsCheckboxCheck;
 import com.kubara.michal.inzynierka.webapp.validation.ValidEmail;
+import com.kubara.michal.inzynierka.webapp.validation.ValidPolishPhoneNumber;
 
 @FieldMatch.List({
     @FieldMatch(first = "password", second = "matchingPassword", message = "Hasła muszą być zgodne.")
@@ -31,7 +33,7 @@ public class UserDTO {
 	@Size(min = 1, message = "Wymagane")
 	private String lastName;
 	
-	@ValidEmail
+	@ValidEmail(message = "Niepoprawny email")
 	@NotNull(message = "Wymagane")
 	@Size(min = 1, message = "Wymagane")
 	private String email;
@@ -63,7 +65,12 @@ public class UserDTO {
 	
 	@NotNull(message = "Wymagane")
 	@Size(min = 1, message = "Wymagane")
+	@ValidPolishPhoneNumber
 	private String phoneNumber;
+	
+	@NotNull(message = "Wymagane")
+	@IsCheckboxCheck(message = "Żeby kontynuować należy zaakceptować regulamin")
+	private Boolean conditions;
 	
 	public UserDTO() {
 	
@@ -179,6 +186,14 @@ public class UserDTO {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public Boolean getConditions() {
+		return conditions;
+	}
+
+	public void setConditions(Boolean conditions) {
+		this.conditions = conditions;
 	}
 	
 	

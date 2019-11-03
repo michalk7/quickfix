@@ -110,3 +110,7 @@ body {
 ul {
 	list-style-type: none;
 }
+
+#returnHomeLink {
+	margin-top: 0.5rem;	
+}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>QuickFix - Rejestracja fachowca</title>
+	
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+	
+	<link rel="stylesheet" th:href="@{/css/user-registration.css}" href="../../css/user-registration.css" />
+	
+</head>
+<body>
+	<!-- Registration Form -->
+	<form th:action="@{/register/processExpertRegistrationForm}" 
+		  	   th:object="${expert}" method="POST"
+		  	   class="form-signin">
+		  	   
+		<div class="text-center mb-4">
+			<h1 class="h3 mb-3 font-weight-normal">Rejestracja dla fachowców</h1>
+		</div>
+
+	    <!-- Place for messages: error, alert etc ... -->
+	    <div class="form-group">
+	        <div class="col-xs-15">
+	            <div>
+				
+					<!-- Check for registration error -->
+					<div th:if="${registrationError}" class="alert alert-danger col-xs-offset-1 col-xs-10"
+						th:text=${registrationError} >error
+					</div>
+																							
+	            </div>
+	        </div>
+	    </div>
+	    
+	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+		<!-- User name -->
+		<div class="form-label-group">
+			<input id="inputUserName" type="text" th:field="*{userName}" placeholder="Nazwa użytkownika (*)" class="form-control" th:errorclass="fieldError" autofocus/>
+			<label for="inputUserName">Nazwa użytkownika (*)</label>
+		</div>
+
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('userName')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('userName')}" th:text="${err}" />
+			</ul>						
+		</div>
+		
+
+		<!-- Password -->
+		<div class="form-label-group">
+			<input id="inputPassword" type="password" th:field="*{password}" placeholder="Hasło (*)" class="form-control" th:errorclass="fieldError" />
+			<label for="inputPassword">Hasło (*)</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('password')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('password')}" th:text="${err}" />
+			</ul>						
+		</div>
+		
+		<!-- Confirm Password -->
+		<div class="form-label-group">
+			<input id="inputPasswordConfirmation" type="password" th:field="*{matchingPassword}" placeholder="Potwierdź hasło (*)" class="form-control" th:errorclass="fieldError" />
+			<label for="inputPasswordConfirmation">Potwierdź hasło (*)</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('matchingPassword')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('matchingPassword')}" th:text="${err}" />
+			</ul>						
+		</div>
+	
+		
+		<!-- First name -->
+		<div class="form-label-group">
+			<input id="inputFirstName" type="text" th:field="*{firstName}" placeholder="Imię (*)" class="form-control" th:errorclass="fieldError" />
+			<label for="inputFirstName">Imię (*)</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('firstName')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('firstName')}" th:text="${err}" />
+			</ul>						
+		</div>
+		
+		<!-- Last name -->
+		<div class="form-label-group">
+			<input id="inputLastName" type="text" th:field="*{lastName}" placeholder="Nazwisko (*)" class="form-control" th:errorclass="fieldError" />
+			<label for="inputLastName">Nazwisko (*)</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('lastName')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('lastName')}" th:text="${err}" />
+			</ul>						
+		</div>
+		
+		<!-- Email -->
+		<div class="form-label-group">
+			<input id="inputEmail" type="text" th:field="*{email}" placeholder="Email (*)" class="form-control" th:errorclass="fieldError" />
+			<label for="inputEmail">Email (*)</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('email')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('email')}" th:text="${err}" />
+			</ul>						
+		</div>
+		
+		<!-- city -->
+		<div class="form-label-group">
+			<input id="inputCity" type="text" th:field="*{city}" placeholder="Miasto (*)" class="form-control" th:errorclass="fieldError" />
+			<label for="inputCity">Miasto (*)</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('city')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('city')}" th:text="${err}" />
+			</ul>						
+		</div>
+		
+		<!-- Dzielnica -->
+		<div class="form-label-group">
+			<input id="inputDistrict" type="text" th:field="*{district}" placeholder="Dzielnica" class="form-control" th:errorclass="fieldError" />
+			<label for="inputDistrict">Dzielnica</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('district')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('district')}" th:text="${err}" />
+			</ul>						
+		</div>
+		
+		<div id="postCodeLine" class="form-label-group form-row">
+			<div class="col-6">
+				<!-- postCode -->
+				<div class="form-label-group">
+					<input id="inputPostCode" type="text" th:field="*{postCode}" placeholder="Kod pocztowy (*)" class="form-control" th:errorclass="fieldError" />
+					<label for="inputPostCode">Kod pocztowy (*)</label>
+				</div>
+				<div class="form-label-group text-danger" th:if="${#fields.hasErrors('postCode')}">
+					<ul>
+					  <li th:each="err : ${#fields.errors('postCode')}" th:text="${err}" />
+					</ul>						
+				</div>
+			</div>
+			
+			<div class="col-6">
+				<!-- postCity -->
+				<div class="form-label-group">
+					<input id="inputPostCity" type="text" th:field="*{postCity}" placeholder="Miejscowość (*)" class="form-control" th:errorclass="fieldError" />
+					<label for="inputPostCity">Miejscowość (*)</label>
+				</div>
+				<div class="form-label-group text-danger" th:if="${#fields.hasErrors('postCity')}">
+					<ul>
+					  <li th:each="err : ${#fields.errors('postCity')}" th:text="${err}" />
+					</ul>						
+				</div>		
+			</div>
+		
+		</div>
+		
+		<!-- street -->
+		<div class="form-label-group">
+			<input id="inputStreet" type="text" th:field="*{street}" placeholder="Ulica (*)" class="form-control" th:errorclass="fieldError" />
+			<label for="inputStreet">Ulica (*)</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('street')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('street')}" th:text="${err}" />
+			</ul>						
+		</div>
+		
+		<!-- houseNumber -->
+		<div class="form-label-group">
+			<input id="inputHouseNumber" type="text" th:field="*{houseNumber}" placeholder="Numer domu (*)" class="form-control" th:errorclass="fieldError" />
+			<label for="inputHouseNumber">Numer domu (*)</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('houseNumber')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('houseNumber')}" th:text="${err}" />
+			</ul>						
+		</div>
+		
+		<!-- apartmentNumber -->
+		<div class="form-label-group">
+			<input id="inputApartmentNumber" type="text" th:field="*{apartmentNumber}" placeholder="Numer mieszkania" class="form-control" th:errorclass="fieldError" />
+			<label for="inputApartmentNumber">Numer mieszkania</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('apartmentNumber')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('apartmentNumber')}" th:text="${err}" />
+			</ul>						
+		</div>
+		
+		<!-- phoneNumber -->
+		<div class="form-label-group">
+			<input id="inputPhoneNumber" type="text" th:field="*{phoneNumber}" placeholder="Numer telefonu (*)" class="form-control" th:errorclass="fieldError" />
+			<label for="inputPhoneNumber">Numer telefonu (*)</label>
+		</div>
+		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('phoneNumber')}">
+			<ul>
+			  <li th:each="err : ${#fields.errors('phoneNumber')}" th:text="${err}" />
+			</ul>						
+		</div>
+		
+		<div class="checkbox mb-3">
+	    	<label>
+	      	<input type="checkbox" value="rodo" required> Potwierdzam regulamin i politykę prywatności (*)
+	    	</label>
+	  	</div>
+		
+		<div class="form-label-group">
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Zarejestruj</button>
+		</div>
+		
+		<div>
+			<a th:href="@{/register/showRegisterPage}" role="button">Rejestracja dla użytkowników</a>
+		</div>
+		
+		<div id="returnHomeLink">
+			<a th:href="@{/}" role="button">Powrót do strony głównej</a>
+		</div>
+		
+		<p class="mt-5 mb-3 text-muted text-center">&copy; 2019 Michał Kubara</p>
+	</form>
+
+</body>
+</html>

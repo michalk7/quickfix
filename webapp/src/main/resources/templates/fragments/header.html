@@ -55,8 +55,10 @@
 					</li>
 				  
 					<li class="add-margin-right nav-item" sec:authorize="!isAuthenticated()">
-			  			<a th:if="${ !#strings.contains(#httpServletRequest.requestURI, '/expert') }" class="nav-link btn btn-outline-success my-2 my-sm-0" th:href="@{/register/showRegisterPage}">Rejestracja</a>
-			  			<a th:if="${ #strings.contains(#httpServletRequest.requestURI, '/expert') }" class="nav-link btn btn-outline-success my-2 my-sm-0" th:href="@{/expert/register/showRegisterPage}">Rejestracja</a>
+			  			<a th:if="${ !#strings.contains(#httpServletRequest.requestURI, '/expert') }" 
+			  				class="nav-link btn btn-outline-success my-2 my-sm-0" th:href="@{/register/showRegisterPage}">Rejestracja</a>
+			  			<a th:if="${ #strings.contains(#httpServletRequest.requestURI, '/expert') }" 
+			  				class="nav-link btn btn-outline-success my-2 my-sm-0" th:href="@{/expert/showRegisterPage}">Rejestracja</a>
 			  		</li>
 				  
 				  	<li class="nav-item" sec:authorize="!isAuthenticated()">

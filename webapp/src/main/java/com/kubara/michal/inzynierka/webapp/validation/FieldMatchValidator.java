@@ -42,6 +42,11 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
 				.addPropertyNode(firstFieldName)
 				.addConstraintViolation()
 				.disableDefaultConstraintViolation();
+		
+			context.buildConstraintViolationWithTemplate(message)
+				.addPropertyNode(secondFieldName)
+				.addConstraintViolation()
+				.disableDefaultConstraintViolation();
 		}
 		
 		return valid;

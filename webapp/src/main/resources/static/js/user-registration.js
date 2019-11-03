@@ -106,4 +106,33 @@ $(document).ready(function() {
 		}
 	});
 
+	let counter = 0;
+	$("#categoriesGroup").children("div").children("input").each(function() {
+		if( $(this).length > 0 && $(this)[0].checked ) {
+			counter++;
+		}
+	})
+
+	if(counter > 4) {
+		$("#categoriesError").show();
+		$("#categoryTitle").addClass("text-danger");
+	}
+	
+	$("input[type=checkbox]").on('change', function() {
+		let counter1 = 0;
+		$("#categoriesGroup").children("div").children("input").each(function() {
+			if( $(this).length > 0 && $(this)[0].checked ) {
+				counter1++;
+			}
+		})
+
+		if(counter1 > 4) {
+			$("#categoriesError").toggle(true);
+			$("#categoryTitle").addClass("text-danger");
+		} else {
+			$("#categoriesError").toggle(false);
+			$("#categoryTitle").removeClass("text-danger");
+		}
+	});
+
 });

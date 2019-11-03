@@ -4,6 +4,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.core.entity.VerificationToken;
+import com.kubara.michal.inzynierka.webapp.dto.ExpertDTO;
 import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
 import com.kubara.michal.inzynierka.webapp.validation.UserAlreadyExistsException;
 
@@ -28,5 +29,7 @@ public interface UserService extends UserDetailsService {
     public User findByEmail(String email);
 
 	public VerificationToken generateNewVerificationToken(String existingToken);
+
+	public User saveExpert(ExpertDTO dtoExpert, String roleName) throws UserAlreadyExistsException;
     
 }

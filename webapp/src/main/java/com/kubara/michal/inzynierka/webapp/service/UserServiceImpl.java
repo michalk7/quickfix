@@ -21,6 +21,7 @@ import com.kubara.michal.inzynierka.core.entity.Address;
 import com.kubara.michal.inzynierka.core.entity.Role;
 import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.core.entity.VerificationToken;
+import com.kubara.michal.inzynierka.webapp.dto.ExpertDTO;
 import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
 import com.kubara.michal.inzynierka.webapp.validation.UserAlreadyExistsException;
 
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		boolean enabled = user.isEnabled();
-		if(user.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_EXPERT"))) {
+		if(enabled && user.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_EXPERT"))) {
 			if(!user.isVerified()) {
 				//ustawiamy enabled, żeby pod kodem błędu dla credentials expired dać komunikat o braku weryfikacji konta
 				enabled = true;
@@ -91,7 +92,7 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		if(userNameExists(userDTO.getUserName())) {
-			throw new UserAlreadyExistsException("Podana nazwa użytkowanika jest już zajęta.", false);
+			throw new UserAlreadyExistsException("Podana nazwa użytkownika jest już zajęta.", false);
 		}
 		
 		User user = new User();
@@ -181,6 +182,51 @@ public class UserServiceImpl implements UserService {
 		token.updateToken(newToken);
 		tokenRepository.save(token);
 		return token;
+	}
+
+	@Override
+	public User saveExpert(ExpertDTO dtoExpert, String roleName) throws UserAlreadyExistsException {
+		if(emailExists(dtoExpert.getEmail())) {
+			throw new UserAlreadyExistsException("Podany adres email jest już zajęty.", true);
+		}
+		
+		if(userNameExists(dtoExpert.getUserName())) {
+			throw new UserAlreadyExistsException("Podana nazwa użytkownika jest już zajęta.", false);
+		}
+		
+		User user = new User();
+		user.setUserName(dtoExpert.getUserName());
+		user.setPassword(passwordEncoder.encode(dtoExpert.getPassword()));
+		user.setFirstName(dtoExpert.getFirstName());
+		user.setLastName(dtoExpert.getLastName());
+		user.setEmail(dtoExpert.getEmail());
+		
+		Address address = new Address();
+		address.setCity(dtoExpert.getCity());
+		address.setDistrict(dtoExpert.getDistrict());
+		address.setPostCode(dtoExpert.getPostCode());
+		address.setPostCity(dtoExpert.getPostCity());
+		address.setStreet(dtoExpert.getStreet());
+		address.setHouseNumber(dtoExpert.getHouseNumber());
+		address.setApartmentNumber(dtoExpert.getApartmentNumber());
+		address.setPhoneNumber(dtoExpert.getPhoneNumber());
+		
+		address.setUser(user);
+		user.setAddress(address);
+		
+		user.setRoles(Arrays.asList(roleRepository.findByName(roleName)));
+		
+//		List<Category> categories = new ArrayList<>();
+//		for( String categoryName : dtoExpert.getSelectedCategoriesFromCheckboxes()) {
+//			Category category = categoryRepository.findByName(categoryName);
+//			categories.add(category);
+//		}
+		
+		user.setCategories(dtoExpert.getSelectedCategoriesFromCheckboxes());
+		
+		User result = userRepository.save(user);
+
+		return result;
 	}
 	
 	

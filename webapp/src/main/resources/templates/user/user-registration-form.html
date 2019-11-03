@@ -254,7 +254,7 @@
 		
 		<div class="checkbox mb-3 form-group">
 			<div class="form-check">
-			      <input id="" type="checkbox" value="true" th:field="*{conditions}" required class="form-check-input"
+			      <input id="conditionCheck" type="checkbox" value="true" th:field="*{conditions}" required class="form-check-input"
 			      		th:classappend="${ #fields.hasErrors('conditions')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" > 
 			     <label class="form-check-label" for="conditionCheck">Potwierdzam regulamin i politykę prywatności (*)</label>
 		    	<div class="invalid-feedback">

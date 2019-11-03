@@ -11,9 +11,10 @@
 </head>
 <body>
 	<!-- Registration Form -->
-	<form th:action="@{/register/processExpertRegistrationForm}" 
+	<form id="main" th:action="@{/register/processExpertRegistrationForm}" 
 		  	   th:object="${expert}" method="POST"
-		  	   class="form-signin">
+		  	   class="form-signin" novalidate
+		  	   th:classappend="${ not #ctx.containsVariable('validated') } ? was-validated : needs-validation">
 		  	   
 		<div class="text-center mb-4">
 			<h1 class="h3 mb-3 font-weight-normal">Rejestracja dla fachowców</h1>
@@ -37,177 +38,248 @@
 
 		<!-- User name -->
 		<div class="form-label-group">
-			<input id="inputUserName" type="text" th:field="*{userName}" placeholder="Nazwa użytkownika (*)" class="form-control" th:errorclass="fieldError" autofocus/>
+			<input id="inputUserName" type="text" th:field="*{userName}" placeholder="Nazwa użytkownika (*)" 
+				class="form-control" autofocus required
+				th:classappend="${ #fields.hasErrors('userName') } ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"/>
 			<label for="inputUserName">Nazwa użytkownika (*)</label>
+			<div class="invalid-feedback">
+				<div th:if="${ not #fields.hasErrors('userName')  }">
+					<p>Wymagane</p>
+				</div>
+				<p th:each="err : ${#fields.errors('userName')}" th:text="${err}"><p/>
+			</div>
 		</div>
 
-		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('userName')}">
-			<ul>
-			  <li th:each="err : ${#fields.errors('userName')}" th:text="${err}" />
-			</ul>						
-		</div>
+<!-- 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('userName')}"> -->
+<!-- 			<ul> -->
+<!-- 			  <li th:each="err : ${#fields.errors('userName')}" th:text="${err}" /> -->
+<!-- 			</ul>						 -->
+<!-- 		</div> -->
 		
 
 		<!-- Password -->
 		<div class="form-label-group">
-			<input id="inputPassword" type="password" th:field="*{password}" placeholder="Hasło (*)" class="form-control" th:errorclass="fieldError" />
+			<input id="inputPassword" type="password" th:field="*{password}" placeholder="Hasło (*)" 
+				class="form-control" required 
+				th:classappend="${ #fields.hasErrors('password') } ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"/>
 			<label for="inputPassword">Hasło (*)</label>
+			<div class="invalid-feedback">
+				<div th:if="${ not #fields.hasErrors('password')  }">
+					<p>Wymagane</p>
+				</div>
+				<p th:each="err : ${#fields.errors('password')}" th:text="${err}"><p/>
+			</div>
 		</div>
-		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('password')}">
-			<ul>
-			  <li th:each="err : ${#fields.errors('password')}" th:text="${err}" />
-			</ul>						
-		</div>
+<!-- 		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('password')}"> -->
+<!-- 			<ul> -->
+<!-- 			  <li th:each="err : ${#fields.errors('password')}" th:text="${err}" /> -->
+<!-- 			</ul>						 -->
+<!-- 		</div> -->
 		
 		<!-- Confirm Password -->
 		<div class="form-label-group">
-			<input id="inputPasswordConfirmation" type="password" th:field="*{matchingPassword}" placeholder="Potwierdź hasło (*)" class="form-control" th:errorclass="fieldError" />
+			<input id="inputPasswordConfirmation" type="password" th:field="*{matchingPassword}" placeholder="Potwierdź hasło (*)" 
+				class="form-control" required
+				th:classappend="${ #fields.hasErrors('matchingPassword')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"/>
 			<label for="inputPasswordConfirmation">Potwierdź hasło (*)</label>
-		</div>
-		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('matchingPassword')}">
-			<ul>
-			  <li th:each="err : ${#fields.errors('matchingPassword')}" th:text="${err}" />
-			</ul>						
+			<div class="invalid-feedback">
+				<div th:if="${ not #fields.hasErrors('matchingPassword')  }">
+					<p>Wymagane</p>
+				</div>
+				<p th:each="err : ${#fields.errors('matchingPassword')}" th:text="${err}"><p/>
+			</div>
 		</div>
 	
 		
 		<!-- First name -->
 		<div class="form-label-group">
-			<input id="inputFirstName" type="text" th:field="*{firstName}" placeholder="Imię (*)" class="form-control" th:errorclass="fieldError" />
+			<input id="inputFirstName" type="text" th:field="*{firstName}" placeholder="Imię (*)" 
+				class="form-control" required
+				th:classappend="${ #fields.hasErrors('firstName')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"/>
 			<label for="inputFirstName">Imię (*)</label>
-		</div>
-		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('firstName')}">
-			<ul>
-			  <li th:each="err : ${#fields.errors('firstName')}" th:text="${err}" />
-			</ul>						
+			<div class="invalid-feedback">
+				<div th:if="${ not #fields.hasErrors('firstName')  }">
+					<p>Wymagane</p>
+				</div>
+				<p th:each="err : ${#fields.errors('firstName')}" th:text="${err}"><p/>
+			</div>
 		</div>
 		
 		<!-- Last name -->
 		<div class="form-label-group">
-			<input id="inputLastName" type="text" th:field="*{lastName}" placeholder="Nazwisko (*)" class="form-control" th:errorclass="fieldError" />
+			<input id="inputLastName" type="text" th:field="*{lastName}" 
+				placeholder="Nazwisko (*)" class="form-control" required
+				th:classappend="${ #fields.hasErrors('lastName')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" />
 			<label for="inputLastName">Nazwisko (*)</label>
+			<div class="invalid-feedback">
+				<div th:if="${ not #fields.hasErrors('lastName')  }">
+					<p>Wymagane</p>
+				</div>
+				<p th:each="err : ${#fields.errors('lastName')}" th:text="${err}"><p/>
+			</div>
 		</div>
-		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('lastName')}">
-			<ul>
-			  <li th:each="err : ${#fields.errors('lastName')}" th:text="${err}" />
-			</ul>						
-		</div>
+		
 		
 		<!-- Email -->
 		<div class="form-label-group">
-			<input id="inputEmail" type="text" th:field="*{email}" placeholder="Email (*)" class="form-control" th:errorclass="fieldError" />
+			<input id="inputEmail" type="text" th:field="*{email}" 
+				placeholder="Email (*)" class="form-control" required 
+				th:classappend="${ #fields.hasErrors('email')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"
+				pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?" 
+				/>
 			<label for="inputEmail">Email (*)</label>
-		</div>
-		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('email')}">
-			<ul>
-			  <li th:each="err : ${#fields.errors('email')}" th:text="${err}" />
-			</ul>						
+			<div class="invalid-feedback">
+				<div th:if="${ not #fields.hasErrors('email')  }">
+					<p>Wymagane</p>
+				</div>
+				<p th:each="err : ${#fields.errors('email')}" th:text="${err}"><p/>
+			</div>
 		</div>
 		
 		<!-- city -->
 		<div class="form-label-group">
-			<input id="inputCity" type="text" th:field="*{city}" placeholder="Miasto (*)" class="form-control" th:errorclass="fieldError" />
+			<input id="inputCity" type="text" th:field="*{city}" 
+				placeholder="Miasto (*)" class="form-control" required
+				th:classappend="${ #fields.hasErrors('city')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" />
 			<label for="inputCity">Miasto (*)</label>
-		</div>
-		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('city')}">
-			<ul>
-			  <li th:each="err : ${#fields.errors('city')}" th:text="${err}" />
-			</ul>						
+			<div class="invalid-feedback">
+				<div th:if="${ not #fields.hasErrors('city')  }">
+					<p>Wymagane</p>
+				</div>
+				<p th:each="err : ${#fields.errors('city')}" th:text="${err}"><p/>
+			</div>
 		</div>
 		
 		<!-- Dzielnica -->
 		<div class="form-label-group">
-			<input id="inputDistrict" type="text" th:field="*{district}" placeholder="Dzielnica" class="form-control" th:errorclass="fieldError" />
-			<label for="inputDistrict">Dzielnica</label>
-		</div>
-		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('district')}">
-			<ul>
-			  <li th:each="err : ${#fields.errors('district')}" th:text="${err}" />
-			</ul>						
+			<input id="inputDistrict" type="text" th:field="*{district}" 
+				placeholder="Dzielnica" class="form-control"
+				th:classappend="${ #fields.hasErrors('district')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" />
+			<label for="inputDistrict" >Dzielnica</label>
+			<div class="invalid-feedback">
+				<p th:each="err : ${#fields.errors('district')}" th:text="${err}"><p/>
+			</div>
 		</div>
 		
 		<div id="postCodeLine" class="form-label-group form-row">
 			<div class="col-6">
 				<!-- postCode -->
 				<div class="form-label-group">
-					<input id="inputPostCode" type="text" th:field="*{postCode}" placeholder="Kod pocztowy (*)" class="form-control" th:errorclass="fieldError" />
+					<input id="inputPostCode" type="text" th:field="*{postCode}" 
+						placeholder="Kod pocztowy (*)" class="form-control" required
+						th:classappend="${ #fields.hasErrors('postCode')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"
+						pattern="^\d{2}-\d{3}$"  />
 					<label for="inputPostCode">Kod pocztowy (*)</label>
-				</div>
-				<div class="form-label-group text-danger" th:if="${#fields.hasErrors('postCode')}">
-					<ul>
-					  <li th:each="err : ${#fields.errors('postCode')}" th:text="${err}" />
-					</ul>						
+					<div class="invalid-feedback">
+						<p th:if="${ not #fields.hasErrors('postCode')  }">Wymagane</p>
+						<p th:each="err : ${#fields.errors('postCode')}" th:text="${err}"><p/>
+					</div>
 				</div>
 			</div>
 			
 			<div class="col-6">
 				<!-- postCity -->
 				<div class="form-label-group">
-					<input id="inputPostCity" type="text" th:field="*{postCity}" placeholder="Miejscowość (*)" class="form-control" th:errorclass="fieldError" />
+					<input id="inputPostCity" type="text" th:field="*{postCity}" 
+						placeholder="Miejscowość (*)" class="form-control" required
+						th:classappend="${ #fields.hasErrors('postCity')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"  />
 					<label for="inputPostCity">Miejscowość (*)</label>
-				</div>
-				<div class="form-label-group text-danger" th:if="${#fields.hasErrors('postCity')}">
-					<ul>
-					  <li th:each="err : ${#fields.errors('postCity')}" th:text="${err}" />
-					</ul>						
-				</div>		
+					<div class="invalid-feedback">
+						<div th:if="${ not #fields.hasErrors('postCity')  }">
+							<p>Wymagane</p>
+						</div>
+						<p th:each="err : ${#fields.errors('postCity')}" th:text="${err}"><p/>
+					</div>
+				</div>	
 			</div>
 		
 		</div>
 		
 		<!-- street -->
 		<div class="form-label-group">
-			<input id="inputStreet" type="text" th:field="*{street}" placeholder="Ulica (*)" class="form-control" th:errorclass="fieldError" />
+			<input id="inputStreet" type="text" th:field="*{street}" 
+				placeholder="Ulica (*)" class="form-control" required
+				th:classappend="${ #fields.hasErrors('street')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"  />
 			<label for="inputStreet">Ulica (*)</label>
-		</div>
-		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('street')}">
-			<ul>
-			  <li th:each="err : ${#fields.errors('street')}" th:text="${err}" />
-			</ul>						
+			<div class="invalid-feedback">
+				<div th:if="${ not #fields.hasErrors('street')  }">
+					<p>Wymagane</p>
+				</div>
+				<p th:each="err : ${#fields.errors('street')}" th:text="${err}"><p/>
+			</div>
 		</div>
 		
 		<!-- houseNumber -->
 		<div class="form-label-group">
-			<input id="inputHouseNumber" type="text" th:field="*{houseNumber}" placeholder="Numer domu (*)" class="form-control" th:errorclass="fieldError" />
+			<input id="inputHouseNumber" type="text" th:field="*{houseNumber}" 
+				placeholder="Numer domu (*)" class="form-control" required
+				th:classappend="${ #fields.hasErrors('houseNumber')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" />
 			<label for="inputHouseNumber">Numer domu (*)</label>
-		</div>
-		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('houseNumber')}">
-			<ul>
-			  <li th:each="err : ${#fields.errors('houseNumber')}" th:text="${err}" />
-			</ul>						
+			<div class="invalid-feedback">
+				<div th:if="${ not #fields.hasErrors('houseNumber')  }">
+					<p>Wymagane</p>
+				</div>
+				<p th:each="err : ${#fields.errors('houseNumber')}" th:text="${err}"><p/>
+			</div>
 		</div>
 		
 		<!-- apartmentNumber -->
 		<div class="form-label-group">
-			<input id="inputApartmentNumber" type="text" th:field="*{apartmentNumber}" placeholder="Numer mieszkania" class="form-control" th:errorclass="fieldError" />
+			<input id="inputApartmentNumber" type="text" th:field="*{apartmentNumber}" 
+				placeholder="Numer mieszkania" class="form-control"
+				th:classappend="${ #fields.hasErrors('apartmentNumber')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" />
 			<label for="inputApartmentNumber">Numer mieszkania</label>
-		</div>
-		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('apartmentNumber')}">
-			<ul>
-			  <li th:each="err : ${#fields.errors('apartmentNumber')}" th:text="${err}" />
-			</ul>						
+			<div class="invalid-feedback">
+				<p th:each="err : ${#fields.errors('apartmentNumber')}" th:text="${err}"><p/>
+			</div>
 		</div>
 		
 		<!-- phoneNumber -->
 		<div class="form-label-group">
-			<input id="inputPhoneNumber" type="text" th:field="*{phoneNumber}" placeholder="Numer telefonu (*)" class="form-control" th:errorclass="fieldError" />
+			<input id="inputPhoneNumber" type="text" th:field="*{phoneNumber}" 
+				placeholder="Numer telefonu (*)" class="form-control" required
+				th:classappend="${ #fields.hasErrors('phoneNumber')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"
+				pattern="(?<!\w)(\(?(\+|00)?48\)?)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}(?!\w)" />
 			<label for="inputPhoneNumber">Numer telefonu (*)</label>
-		</div>
-		<div class="form-label-group text-danger" th:if="${#fields.hasErrors('phoneNumber')}">
-			<ul>
-			  <li th:each="err : ${#fields.errors('phoneNumber')}" th:text="${err}" />
-			</ul>						
+			<div class="invalid-feedback">
+				<div th:if="${ not #fields.hasErrors('phoneNumber')  }">
+					<p>Wymagane</p>
+				</div>
+				<p th:each="err : ${#fields.errors('phoneNumber')}" th:text="${err}"><p/>
+			</div>
 		</div>
 		
-		<div class="checkbox mb-3">
-	    	<label>
-	      	<input type="checkbox" value="rodo" required> Potwierdzam regulamin i politykę prywatności (*)
-	    	</label>
+		<!-- Kategorie -->
+		<div id="categoriesGroup" class="form-group">
+			<p id="categoryTitle">Zaznacz czym się zajmujesz (max. 4 kategorie)</p>
+			<div th:each="category : ${allCategoriesMultiCheckbox}">
+				<input type="checkbox" th:field="*{selectedCategoriesFromCheckboxes}" th:value="${category.id}"/>
+				<label th:for="${#ids.prev('selectedCategoriesFromCheckboxes')}" th:text="${category.name}"></label>
+			</div>
+			<div id="categoriesError" class="form-label-group text-danger" style="display: none">
+			  	<p>Można wybrać maksymalnie 4 kategorie</p>
+			</div>
+		</div>
+		
+		<div class="checkbox mb-3 form-group">
+			<div class="form-check">
+			      <input id="conditionCheck" type="checkbox" value="true" th:field="*{conditions}" required class="form-check-input"
+			      		th:classappend="${ #fields.hasErrors('conditions')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" > 
+			     <label class="form-check-label" for="conditionCheck">Potwierdzam regulamin i politykę prywatności (*)</label>
+		    	<div class="invalid-feedback">
+		    		<div th:if="${ not #fields.hasErrors('conditions')  }">
+						<p>Żeby kontynuować należy zaakceptować regulamin</p>
+					</div>
+					<p th:each="err : ${#fields.errors('conditions')}" th:text="${err}"><p/>
+				</div>
+			</div>
+			
 	  	</div>
 		
 		<div class="form-label-group">
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Zarejestruj</button>
 		</div>
+		
 		
 		<div>
 			<a th:href="@{/register/showRegisterPage}" role="button">Rejestracja dla użytkowników</a>
@@ -217,7 +289,9 @@
 			<a th:href="@{/}" role="button">Powrót do strony głównej</a>
 		</div>
 		
-		<p class="mt-5 mb-3 text-muted text-center">&copy; 2019 Michał Kubara</p>
+		<div th:replace="fragments/footer :: footer"></div>
+		
+		<script th:src="@{/js/user-registration.js}"></script>
 	</form>
 
 </body>

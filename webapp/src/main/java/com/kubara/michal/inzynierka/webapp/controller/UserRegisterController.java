@@ -1,7 +1,9 @@
 package com.kubara.michal.inzynierka.webapp.controller;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -27,11 +29,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
+import com.kubara.michal.inzynierka.core.entity.Category;
 import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.core.entity.VerificationToken;
+import com.kubara.michal.inzynierka.webapp.dto.ExpertDTO;
 import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
 import com.kubara.michal.inzynierka.webapp.registration.OnRegistrationCompleteEvent;
 import com.kubara.michal.inzynierka.webapp.registration.OnTokenResendEvent;
+import com.kubara.michal.inzynierka.webapp.service.CategoryService;
 import com.kubara.michal.inzynierka.webapp.service.UserService;
 import com.kubara.michal.inzynierka.webapp.util.GenericResponse;
 import com.kubara.michal.inzynierka.webapp.validation.UserAlreadyExistsException;
@@ -42,6 +47,9 @@ public class UserRegisterController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private CategoryService categoryService;
 	
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
@@ -69,17 +77,62 @@ public class UserRegisterController {
 		return "/user/user-registration-form";
 	}
 	
+	
+	@ModelAttribute("allCategoriesMultiCheckbox")
+	public List<Category> getAllCategoriesMultiCheckboxValues() {
+		//return categoryService.findAll().stream().map(e -> e.getName()).collect(Collectors.toList());
+		return categoryService.findAll();
+	}
+	
+	
 	@PostMapping("/processExpertRegistrationForm")
-	public String proccessExpertRegistrationForm(@Valid @ModelAttribute("expert") UserDTO dtoUser, 
+	public String proccessExpertRegistrationForm(@Valid @ModelAttribute("expert") ExpertDTO dtoExpert, 
 			BindingResult bindingResult, Model model, WebRequest request) {
 		
 		if(bindingResult.hasErrors()) {
 			return "/expert/expert-registration-form";
 		}
 		
+		if(dtoExpert.getSelectedCategoriesFromCheckboxes().size() > 4) {
+			return "/expert/expert-registration-form";
+		}
+		
+
+		User registered = createNewExpertAccount(dtoExpert, bindingResult);
+		if(registered == null) {
+			return "/expert/expert-registration-form";
+		}
+		
+		try {
+			String appUrl = request.getContextPath();
+			logger.info("Przed odpaleniem listenera");
+			eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
+			logger.info("Po odpaleniu listenera");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("registrationError", "Niepowodzenie wysyłania linku aktywacyjnego");
+			
+			userService.delete(registered);
+			
+			return "/expert/expert-registration-form";
+		}
+		//System.out.println("poszło");
+		logger.info("Teraz redirect");
+		
 		return "redirect:/showLoginPage?registrationSuccess";
 	}
 	
+	private User createNewExpertAccount(ExpertDTO dtoExpert, BindingResult bindingResult) {
+		User registeredUser = null;
+		try {
+			registeredUser = userService.saveExpert(dtoExpert, "ROLE_EXPERT");
+		} catch (UserAlreadyExistsException e) {
+			bindingResult.rejectValue(e.isEmailException() ? "email" : "userName", e.isEmailException() ? "message.emailExists" : "message.userNameExists");
+			return null;
+		}
+		return registeredUser;
+	}
+
 	@PostMapping("/processRegistrationForm")
 	public String proccessRegistrationForm(@Valid @ModelAttribute("user") UserDTO dtoUser, BindingResult bindingResult,
 			Model model, WebRequest request) {

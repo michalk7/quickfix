@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>QuickFix - Znajdź fachowca</title>
+	
+	<!--  <div th:replace="fragments/header :: header-css"/>  -->
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+
+	<link rel="stylesheet" th:href="@{/css/search.css}" href="../../css/search.css" />
+
+</head>
+<body>
+
+	<div th:replace="fragments/header :: header"></div>
+	
+	<div class="container">
+		<h1 id="main-title">Lista fachowców w okolicy</h1>
+		
+		<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Elementów na stronie</button>
+	    <div class="dropdown-menu">
+	    	<a class="dropdown-item" th:href="@{ /search(size=5, page=1) }" th:classappend="${ expertPage.size == 5 } ? active">5</a>
+	    	<a class="dropdown-item" th:href="@{ /search(size=10, page=1) }" th:classappend="${ expertPage.size == 10 } ? active">10</a>
+	    	<a class="dropdown-item" th:href="@{ /search(size=25, page=1) }" th:classappend="${ expertPage.size == 25 } ? active">25</a>
+	    </div>
+		
+		<div class="card custom-item" th:each="expert, iStat : ${ expertPage.content }">
+			<h5 class="card-header" th:text="${expert.firstName + ' ' + expert.lastName}"></h5>
+			<div class="card-body">
+				<h5 class="card-title" th:text="${ expert.address.city }"></h5>
+				<h6 th:if="${expert.address.district}" class="card-subtitle mb-2 text-muted" th:text="${expert.address.district}"></h6>
+			</div>
+			<ul class="list-group list-group-flush" th:each="category : ${ expert.categories }">
+				<li class="list-group-item" th:text="${ category.name }"></li>
+			</ul>
+			<div class="card-body">
+				<a href="#" class="btn btn-primary">Zamów usługę</a>
+			</div>
+		</div>
+		
+<!-- 		var currentUrl = 'http://www.example.com/hello.png?w=100&h=100&bg=white'; -->
+<!-- var url = new URL(currentUrl); -->
+<!-- url.searchParams.set("w", "200"); // setting your param -->
+<!-- var newUrl = url.href;  -->
+<!-- console.log(newUrl); -->
+		
+		
+		<div th:if="${ expertPage.totalPages > 0 }">
+			<div class="d-inline-flex page-navigation">
+				<a th:href="@{ /search(size=${ expertPage.size }, page=${ pageNumbers.get(0) }) }"
+						th:text="'<<'" class="btn btn-outline-success btn-sm page-button"></a>
+				
+				<a th:href="@{ /search(size=${ expertPage.size }, page=${ expertPage.number }) }"
+						th:text="'<'" class="btn btn-outline-success btn-sm page-button"
+						th:classappend="${ expertPage.number == 0 } ? disabled"></a>
+				
+				<div th:each="pageNumber : ${ pageNumbers }">
+					<a th:href="@{ /search(size=${ expertPage.size }, page=${ pageNumber }) }"
+						th:text="${ pageNumber }"
+						th:classappend="${ pageNumber == expertPage.number + 1 } ? active" class="btn btn-outline-success btn-sm page-button"></a>
+				</div>
+				
+				<a th:href="@{ /search(size=${ expertPage.size }, page=${ expertPage.number + 2 }) }"
+						th:text="'>'" class="btn btn-outline-success btn-sm page-button"
+						th:classappend="${ expertPage.number == expertPage.totalPages - 1 } ? disabled"></a>
+			
+				<a th:href="@{ /search(size=${ expertPage.size }, page=${ pageNumbers.get(pageNumbers.size() - 1) }) }"
+						th:text="'>>'" class="btn btn-outline-success btn-sm"></a>
+			
+			</div>
+		</div>
+		
+		
+	</div>
+
+	
+
+	<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

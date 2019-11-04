@@ -256,6 +256,9 @@
 				<input type="checkbox" th:field="*{selectedCategoriesFromCheckboxes}" th:value="${category.id}"/>
 				<label th:for="${#ids.prev('selectedCategoriesFromCheckboxes')}" th:text="${category.name}"></label>
 			</div>
+			<div id="categoriesNotEnoughError" class="form-label-group text-danger" style="display: none">
+			  	<p>Należy wybrać co najmniej 1 kategorie</p>
+			</div>
 			<div id="categoriesError" class="form-label-group text-danger" style="display: none">
 			  	<p>Można wybrać maksymalnie 4 kategorie</p>
 			</div>

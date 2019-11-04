@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+.page-button {
+	margin-right: 0.25rem;
+}
+
+.page-navigation {
+	margin-top: 1rem;
+}
+
+#main-title {
+	margin-bottom: 1rem;
+}
+
+.custom-item {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}

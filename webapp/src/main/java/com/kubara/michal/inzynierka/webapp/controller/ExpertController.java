@@ -1,7 +1,6 @@
 package com.kubara.michal.inzynierka.webapp.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.kubara.michal.inzynierka.core.entity.Category;
 import com.kubara.michal.inzynierka.webapp.dto.ExpertDTO;
-import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
 import com.kubara.michal.inzynierka.webapp.service.CategoryService;
 
 @Controller

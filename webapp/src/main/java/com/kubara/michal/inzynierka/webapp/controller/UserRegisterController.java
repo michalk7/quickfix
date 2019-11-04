@@ -3,7 +3,6 @@ package com.kubara.michal.inzynierka.webapp.controller;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -93,7 +92,7 @@ public class UserRegisterController {
 			return "/expert/expert-registration-form";
 		}
 		
-		if(dtoExpert.getSelectedCategoriesFromCheckboxes().size() > 4) {
+		if(dtoExpert.getSelectedCategoriesFromCheckboxes().size() > 4 || dtoExpert.getSelectedCategoriesFromCheckboxes().size() < 1) {
 			return "/expert/expert-registration-form";
 		}
 		

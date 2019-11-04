@@ -66,11 +66,31 @@
 	// Loop over them and prevent submission
 	var validation = Array.prototype.filter.call(forms, function(form) {
 		form.addEventListener('submit', function(event) {
-		if (form.checkValidity() === false) {
-			event.preventDefault();
-			event.stopPropagation();
-		}
-		form.classList.add('was-validated');
+			let counterCheckbox = 0;
+			$("#categoriesGroup").children("div").children("input").each(function() {
+				if( $(this).length > 0 && $(this)[0].checked ) {
+					counterCheckbox++;
+				}
+			})
+			
+			let notEnoughChecked = false;
+			
+			if(counterCheckbox < 1) {
+				$("#categoriesNotEnoughError").toggle(true);
+				$("#categoryTitle").addClass("text-danger");
+				notEnoughChecked = true;
+			}
+			
+			let tooManyChecked = false;
+			if(counterCheckbox > 4) {
+				tooManyChecked = true;
+			}
+			
+			if (form.checkValidity() === false || notEnoughChecked || tooManyChecked) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
+			form.classList.add('was-validated');
 		}, false);
 	});
 	}, false);
@@ -112,8 +132,13 @@ $(document).ready(function() {
 			counter++;
 		}
 	})
+	
+	if(counter < 1 && $("#main").hasClass("was-validated")) {
+		$("#categoriesNotEnoughError").toggle(true);
+		$("#categoryTitle").addClass("text-danger");
+	}
 
-	if(counter > 4) {
+	if(counter > 4 && $("#main").hasClass("was-validated")) {
 		$("#categoriesError").show();
 		$("#categoryTitle").addClass("text-danger");
 	}
@@ -125,13 +150,23 @@ $(document).ready(function() {
 				counter1++;
 			}
 		})
+		
+		if(counter1 > 0) {
+			$("#categoriesNotEnoughError").toggle(false);
+			$("#categoryTitle").removeClass("text-danger");
+		} else {
+			$("#categoriesNotEnoughError").toggle(true);
+			$("#categoryTitle").addClass("text-danger");
+		}
 
 		if(counter1 > 4) {
 			$("#categoriesError").toggle(true);
 			$("#categoryTitle").addClass("text-danger");
 		} else {
 			$("#categoriesError").toggle(false);
-			$("#categoryTitle").removeClass("text-danger");
+			if(counter1 > 0) {
+				$("#categoryTitle").removeClass("text-danger");
+			}
 		}
 	});
 

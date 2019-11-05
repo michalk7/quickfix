@@ -1,6 +1,7 @@
 package com.kubara.michal.inzynierka.webapp.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -20,6 +21,11 @@ public class CategoryServiceImpl implements CategoryService {
 	@Transactional
 	public List<Category> findAll() {
 		return categoryRepository.findAll();
+	}
+
+	@Override
+	public Optional<Category> findById(long id) {
+		return categoryRepository.findById(id);
 	}
 
 	

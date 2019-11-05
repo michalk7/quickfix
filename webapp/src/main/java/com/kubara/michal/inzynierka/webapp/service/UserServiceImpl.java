@@ -2,6 +2,7 @@ package com.kubara.michal.inzynierka.webapp.service;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -15,10 +16,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kubara.michal.inzynierka.core.dao.RoleRepository;
+import com.kubara.michal.inzynierka.core.dao.StreetRepository;
 import com.kubara.michal.inzynierka.core.dao.UserRepository;
 import com.kubara.michal.inzynierka.core.dao.VerificationTokenRepository;
 import com.kubara.michal.inzynierka.core.entity.Address;
+import com.kubara.michal.inzynierka.core.entity.Estate;
 import com.kubara.michal.inzynierka.core.entity.Role;
+import com.kubara.michal.inzynierka.core.entity.Street;
 import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.core.entity.VerificationToken;
 import com.kubara.michal.inzynierka.webapp.dto.ExpertDTO;
@@ -36,6 +40,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
     private VerificationTokenRepository tokenRepository;
+	
+	@Autowired
+	private StreetRepository streetRepository;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -116,6 +123,12 @@ public class UserServiceImpl implements UserService {
 		user.setAddress(address);
 		
 		user.setRoles(Arrays.asList(roleRepository.findByName(roleName)));
+		
+		Optional<Street> estateStreet = streetRepository.findByStreetNameAndStreetNumber(address.getStreet(), address.getHouseNumber());
+		if(estateStreet.isPresent()) {
+			Estate estate = estateStreet.get().getEstate();
+			user.setUserEstate(estate);
+		}
 		
 		User result = userRepository.save(user);
 

@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -72,7 +73,7 @@ public class Estate {
 		this.users = users;
 	}
 
-	@OneToMany(mappedBy = "expertEstate")
+	@ManyToMany(mappedBy = "expertEstates")
 	public Set<User> getExperts() {
 		return experts;
 	}

@@ -15,6 +15,9 @@ public class Street {
 	private long id;
 	private String streetName;
 	private String streetNumber;
+	private String city;
+	private String district;
+	private String postCode;
 	
 	private Estate estate;
 	
@@ -22,9 +25,13 @@ public class Street {
 	
 	}
 
-	public Street(String streetName, String streetNumber) {
+	public Street(String streetName, String streetNumber, String city, String district, String postCode) {
+		super();
 		this.streetName = streetName;
 		this.streetNumber = streetNumber;
+		this.city = city;
+		this.district = district;
+		this.postCode = postCode;
 	}
 
 	@Id
@@ -53,6 +60,30 @@ public class Street {
 
 	public void setStreetNumber(String streetNumber) {
 		this.streetNumber = streetNumber;
+	}
+	
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+
+	public String getPostCode() {
+		return postCode;
+	}
+
+	public void setPostCode(String postCode) {
+		this.postCode = postCode;
 	}
 
 	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH } )

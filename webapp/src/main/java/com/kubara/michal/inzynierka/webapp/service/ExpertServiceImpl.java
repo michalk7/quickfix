@@ -32,7 +32,41 @@ public class ExpertServiceImpl implements ExpertService {
 
 	@Override
 	public Page<User> findAllByCategoryAndEstate(Category category, Estate estate, Pageable pageable) {
-		return userRepository.findAllByRolesAndEnabledAndVerifiedAndCategoriesAndExpertEstate(roleRepository.findByName("ROLE_EXPERT"), true, true, category, estate, pageable);
+		return userRepository.findAllByRolesAndEnabledAndVerifiedAndCategoriesAndExpertEstates(
+				roleRepository.findByName("ROLE_EXPERT"), true, true, category, estate, pageable);
 	}
 
+	@Override
+	public Page<User> findAllByCategoryAndEstateAndCity(Category category, Estate estate, String city,
+			Pageable pageable) {
+		return userRepository.findAllByRolesAndEnabledAndVerifiedAndCategoriesAndExpertEstatesAndAddressCity(
+				roleRepository.findByName("ROLE_EXPERT"), true, true, category, estate, city, pageable);
+	}
+
+	@Override
+	public Page<User> findAllByCategory(Category category, Pageable pageable) {
+		return userRepository.findAllByRolesAndEnabledAndVerifiedAndCategories(
+				roleRepository.findByName("ROLE_EXPERT"), true, true, category, pageable);
+	}
+
+	@Override
+	public Page<User> findAllByCategoryAndCity(Category category, String city, Pageable pageable) {
+		return userRepository.findAllByRolesAndEnabledAndVerifiedAndCategoriesAndAddressCity(
+				roleRepository.findByName("ROLE_EXPERT"), true, true, category, city, pageable);
+	}
+
+	@Override
+	public Page<User> findAllByEstate(Estate estate, Pageable pageable) {
+		return userRepository.findAllByRolesAndEnabledAndVerifiedAndExpertEstates(
+				roleRepository.findByName("ROLE_EXPERT"), true, true, estate, pageable);
+	}
+
+	@Override
+	public Page<User> findAllEstateAndCity(Estate estate, String city, Pageable pageable) {
+		return userRepository.findAllByRolesAndEnabledAndVerifiedAndExpertEstatesAndAddressCity(
+				roleRepository.findByName("ROLE_EXPERT"), true, true, estate, city, pageable);
+	}
+
+	
+	
 }

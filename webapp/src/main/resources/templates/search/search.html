@@ -64,6 +64,7 @@
 			<div class="card-body">
 				<h5 class="card-title" th:text="${ expert.address.city }"></h5>
 				<h6 th:if="${expert.address.district}" class="card-subtitle mb-2 text-muted" th:text="${expert.address.district}"></h6>
+				<p th:if="${ #lists.contains(expert.expertEstates, userEstate)}" th:text="'Obsługuje osiedle ' + ${userEstate.name}"></p>
 			</div>
 			<ul class="list-group list-group-flush" th:each="category : ${ expert.categories }">
 				<li class="list-group-item" th:text="${ category.name }"></li>
@@ -77,24 +78,24 @@
 		<div th:if="${ expertPage.totalPages > 0 }">
 			<div class="d-inline-flex page-navigation">
 				<a th:href="@{ /search(size=${ expertPage.size }, page=${ pageNumbers.get(0) }) }"
-						th:text="'<<'" class="btn btn-outline-success btn-sm page-button"></a>
+						th:text="'<<'" class="btn btn-outline-success btn-sm page-button page-navigation-buttons"></a>
 				
 				<a th:href="@{ /search(size=${ expertPage.size }, page=${ expertPage.number }) }"
-						th:text="'<'" class="btn btn-outline-success btn-sm page-button"
+						th:text="'<'" class="btn btn-outline-success btn-sm page-button page-navigation-buttons"
 						th:classappend="${ expertPage.number == 0 } ? disabled"></a>
 				
 				<div th:each="pageNumber : ${ pageNumbers }">
 					<a th:href="@{ /search(size=${ expertPage.size }, page=${ pageNumber }) }"
 						th:text="${ pageNumber }"
-						th:classappend="${ pageNumber == expertPage.number + 1 } ? active" class="btn btn-outline-success btn-sm page-button"></a>
+						th:classappend="${ pageNumber == expertPage.number + 1 } ? active" class="btn btn-outline-success btn-sm page-button page-navigation-buttons"></a>
 				</div>
 				
 				<a th:href="@{ /search(size=${ expertPage.size }, page=${ expertPage.number + 2 }) }"
-						th:text="'>'" class="btn btn-outline-success btn-sm page-button"
+						th:text="'>'" class="btn btn-outline-success btn-sm page-button page-navigation-buttons"
 						th:classappend="${ expertPage.number == expertPage.totalPages - 1 } ? disabled"></a>
 			
 				<a th:href="@{ /search(size=${ expertPage.size }, page=${ pageNumbers.get(pageNumbers.size() - 1) }) }"
-						th:text="'>>'" class="btn btn-outline-success btn-sm"></a>
+						th:text="'>>'" class="btn btn-outline-success btn-sm page-navigation-buttons"></a>
 			
 			</div>
 		</div>

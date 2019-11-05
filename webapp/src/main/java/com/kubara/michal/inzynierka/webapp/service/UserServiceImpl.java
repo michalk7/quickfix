@@ -124,7 +124,8 @@ public class UserServiceImpl implements UserService {
 		
 		user.setRoles(Arrays.asList(roleRepository.findByName(roleName)));
 		
-		Optional<Street> estateStreet = streetRepository.findByStreetNameAndStreetNumber(address.getStreet(), address.getHouseNumber());
+		Optional<Street> estateStreet = streetRepository.findByStreetNameAndStreetNumberAndCityAndDistrictAndPostCode(address.getStreet(), 
+											address.getHouseNumber(), address.getCity(), address.getDistrict(), address.getPostCode());
 		if(estateStreet.isPresent()) {
 			Estate estate = estateStreet.get().getEstate();
 			user.setUserEstate(estate);

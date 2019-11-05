@@ -8,6 +8,6 @@ import com.kubara.michal.inzynierka.core.entity.Street;
 
 public interface StreetRepository extends JpaRepository<Street, Long> {
 
-	Optional<Street> findByStreetNameAndStreetNumber(String streetName, String streetNumber);
+	Optional<Street> findByStreetNameAndStreetNumberAndCityAndDistrictAndPostCode(String streetName, String streetNumber, String city, String district, String postCode);
 	
 }

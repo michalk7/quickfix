@@ -33,7 +33,7 @@ public class User {
 	private VerificationToken verificationToken;
 	private Collection<Category> categories;
 	private Estate userEstate;
-	private Estate expertEstate;
+	private Collection<Estate> expertEstates;
 	
 	public User() {
 	
@@ -190,14 +190,28 @@ public class User {
 		this.userEstate = userEstate;
 	}
 
-	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH } )
-	@JoinColumn(name="expert_estate_id")
-	public Estate getExpertEstate() {
-		return expertEstate;
+//	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH } )
+//	@JoinColumn(name="expert_estate_id")
+//	public Estate getExpertEstate() {
+//		return expertEstate;
+//	}
+//
+//	public void setExpertEstate(Estate expertEstate) {
+//		this.expertEstate = expertEstate;
+//	}
+
+	@ManyToMany(fetch=FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+	@JoinTable(name="experts_estates",
+		joinColumns = @JoinColumn(name="expert_id"),
+		inverseJoinColumns = @JoinColumn(name="estate_id"),
+		uniqueConstraints = @UniqueConstraint(columnNames = { "estate_id", "expert_id" })
+	)
+	public Collection<Estate> getExpertEstates() {
+		return expertEstates;
 	}
 
-	public void setExpertEstate(Estate expertEstate) {
-		this.expertEstate = expertEstate;
+	public void setExpertEstates(Collection<Estate> expertEstates) {
+		this.expertEstates = expertEstates;
 	}
 	
 	

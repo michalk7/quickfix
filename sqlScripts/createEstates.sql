@@ -1,0 +1,1 @@
+INSERT INTO inzynierka_db.estate (name) VALUES ('Esperanto');

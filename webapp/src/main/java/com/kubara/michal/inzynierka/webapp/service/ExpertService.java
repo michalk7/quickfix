@@ -15,4 +15,14 @@ public interface ExpertService {
 	
 	Page<User> findAllByCategoryAndEstate(Category category, Estate estate, Pageable pageable);
 	
+	Page<User> findAllByCategoryAndEstateAndCity(Category category, Estate estate, String city, Pageable pageable);
+	
+	Page<User> findAllByCategory(Category category, Pageable pageable);
+	
+	Page<User> findAllByCategoryAndCity(Category category, String city, Pageable pageable);
+	
+	Page<User> findAllByEstate(Estate estate, Pageable pageable);
+	
+	Page<User> findAllEstateAndCity(Estate estate, String city, Pageable pageable);
+	
 }

@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.UniqueConstraint;
 
@@ -31,6 +32,8 @@ public class User {
 	private Address address;
 	private VerificationToken verificationToken;
 	private Collection<Category> categories;
+	private Estate userEstate;
+	private Estate expertEstate;
 	
 	public User() {
 	
@@ -176,6 +179,28 @@ public class User {
 	public void setCategories(Collection<Category> categories) {
 		this.categories = categories;
 	}
+
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH } )
+	@JoinColumn(name="user_estate_id")
+	public Estate getUserEstate() {
+		return userEstate;
+	}
+
+	public void setUserEstate(Estate userEstate) {
+		this.userEstate = userEstate;
+	}
+
+	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH } )
+	@JoinColumn(name="expert_estate_id")
+	public Estate getExpertEstate() {
+		return expertEstate;
+	}
+
+	public void setExpertEstate(Estate expertEstate) {
+		this.expertEstate = expertEstate;
+	}
+	
+	
 	
 	
 }

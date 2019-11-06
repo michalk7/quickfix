@@ -1,5 +1,7 @@
 package com.kubara.michal.inzynierka.webapp.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -65,6 +67,11 @@ public class ExpertServiceImpl implements ExpertService {
 	public Page<User> findAllEstateAndCity(Estate estate, String city, Pageable pageable) {
 		return userRepository.findAllByRolesAndEnabledAndVerifiedAndExpertEstatesAndAddressCity(
 				roleRepository.findByName("ROLE_EXPERT"), true, true, estate, city, pageable);
+	}
+
+	@Override
+	public Optional<User> findById(long id) {
+		return userRepository.findById(id);
 	}
 
 	

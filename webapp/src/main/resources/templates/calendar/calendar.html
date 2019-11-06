@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>QuickFix - Mój kalendarz</title>
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+	
+<!-- 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"  -->
+<!-- 		integrity="sha256-siyOpF/pBWUPgIcQi17TLBkjvNgNQArcmwJB8YvkAgg=" crossorigin="anonymous" /> -->
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" 
+		integrity="sha256-FAOaXTpl90/K8cXmSdsskbQN3nKYulhCpPbcFzGTWKI=" crossorigin="anonymous" />
+		
+		
+</head>
+<body>
+
+	<div th:replace="fragments/header :: header"></div>
+	
+	<div class="container">
+		
+		<form class=form-inline method="GET">
+			<div class="form-group">
+				<label for="chooseDate" class="mr-sm-1">Wybierz datę: </label>
+				<input id="chooseDate" class="picker form-control mr-sm-2" data-provide="datepicker" name="date">
+			</div>
+			<button class="btn btn-primary mb-2" type="submit">Pokaż</button>
+		</form>
+		
+	</div>
+	
+	<div th:replace="fragments/footer :: footer"></div>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" 
+		integrity="sha256-bqVeqGdJ7h/lYPq6xrPv/YGzMEb6dNxlfiTUHSgRCp8=" crossorigin="anonymous"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.pl.min.js" 
+		integrity="sha256-4bIIDtarwOQhShN6SE0Z587offTm5+rTVp3Nj15BzRE=" crossorigin="anonymous"></script>
+		
+	<script th:src="@{/js/calendar.js}"></script>
+
+</body>
+</html>

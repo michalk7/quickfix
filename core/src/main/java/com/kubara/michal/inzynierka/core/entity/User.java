@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.UniqueConstraint;
 
@@ -34,6 +35,8 @@ public class User {
 	private Collection<Category> categories;
 	private Estate userEstate;
 	private Collection<Estate> expertEstates;
+	private Collection<Event> userEvents;
+	private Collection<Event> expertEvents;
 	
 	public User() {
 	
@@ -212,6 +215,24 @@ public class User {
 
 	public void setExpertEstates(Collection<Estate> expertEstates) {
 		this.expertEstates = expertEstates;
+	}
+
+	@OneToMany(mappedBy = "user")
+	public Collection<Event> getUserEvents() {
+		return userEvents;
+	}
+
+	public void setUserEvents(Collection<Event> userEvents) {
+		this.userEvents = userEvents;
+	}
+
+	@OneToMany(mappedBy = "expert")
+	public Collection<Event> getExpertEvents() {
+		return expertEvents;
+	}
+
+	public void setExpertEvents(Collection<Event> expertEvents) {
+		this.expertEvents = expertEvents;
 	}
 	
 	

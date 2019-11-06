@@ -9,6 +9,7 @@
 
 	<link rel="stylesheet" th:href="@{/css/search.css}" href="../../css/search.css" />
 
+
 </head>
 <body>
 
@@ -70,7 +71,7 @@
 				<li class="list-group-item" th:text="${ category.name }"></li>
 			</ul>
 			<div class="card-body">
-				<a href="#" class="btn btn-primary">Zamów usługę</a>
+				<a th:href="@{/order/{expertId}(expertId=${expert.id})}" class="btn btn-primary">Zamów usługę</a>
 			</div>
 		</div>
 		

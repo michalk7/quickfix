@@ -1,5 +1,7 @@
 package com.kubara.michal.inzynierka.webapp.service;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -24,5 +26,7 @@ public interface ExpertService {
 	Page<User> findAllByEstate(Estate estate, Pageable pageable);
 	
 	Page<User> findAllEstateAndCity(Estate estate, String city, Pageable pageable);
+	
+	Optional<User> findById(long id);
 	
 }

@@ -1,5 +1,8 @@
 package com.kubara.michal.inzynierka.webapp.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.kubara.michal.inzynierka.core.entity.User;
@@ -31,5 +34,9 @@ public interface UserService extends UserDetailsService {
 	public VerificationToken generateNewVerificationToken(String existingToken);
 
 	public User saveExpert(ExpertDTO dtoExpert, String roleName) throws UserAlreadyExistsException;
+
+	Optional<User> findById(long userId);
+	
+	List<User> findAll();
     
 }

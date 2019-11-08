@@ -34,9 +34,11 @@
 			    })
 			    .fail(function(data) {
 			        if(data.responseJSON.error.indexOf("MailError") > -1) {
-			            window.location.href = serverContext + "emailError.html";
-			        }
-			        else {
+			            //window.location.href = serverContext + "emailError.html";
+			        	window.location.href = serverContext + "error";
+			        } else if(data.responseJSON.error) {
+			        	window.location.href = serverContext + "error";
+			        } else {
 			            window.location.href = 
 			              serverContext + "showLoginPage?message=" + data.responseJSON.message;
 			        }

@@ -1,6 +1,8 @@
 package com.kubara.michal.inzynierka.webapp.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,11 +44,14 @@ public class CalendarController {
 		
 		List<Event> events = null;
 		
+		LocalDateTime startDate = LocalDateTime.of(date, LocalTime.of(0, 0));
+		LocalDateTime endDate = LocalDateTime.of(date.plusDays(1), LocalTime.of(0, 0));
+		
 		if(user.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_EXPERT"))) {
-			events = calendarService.findAllByDateAndExpert(date, user);
+			events = calendarService.findAllByDateBetweenAndExpert(startDate, endDate, user);
 			model.addAttribute("userType", "expert");
 		} else if(user.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_USER"))) {
-			events = calendarService.findAllByDateAndUser(date, user);
+			events = calendarService.findAllByDateBetweenAndUser(startDate, endDate, user);
 			model.addAttribute("userType", "user");
 		} else {
 			events = new ArrayList<>();
@@ -59,5 +64,6 @@ public class CalendarController {
 		
 		return "/calendar/calendar";
 	}
+	
 	
 }

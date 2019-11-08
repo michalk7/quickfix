@@ -24,6 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
+	@Transactional
 	public Optional<Category> findById(long id) {
 		return categoryRepository.findById(id);
 	}

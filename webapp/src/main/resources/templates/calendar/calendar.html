@@ -14,6 +14,13 @@
 		integrity="sha256-FAOaXTpl90/K8cXmSdsskbQN3nKYulhCpPbcFzGTWKI=" crossorigin="anonymous" />
 		
 		
+	<link th:href='@{/lib/fullcalendar/core/main.css}' href='../../lib/fullcalendar/core/main.css' rel='stylesheet' />
+	<link th:href='@{/lib/fullcalendar/daygrid/main.css}' href='../../lib/fullcalendar/daygrid/main.css' rel='stylesheet' />
+	<link th:href='@{/lib/fullcalendar/timegrid/main.css}' href='../../lib/fullcalendar/timegrid/main.css' rel='stylesheet' />
+	<link th:href='@{/lib/fullcalendar/list/main.css}' href='../../lib/fullcalendar/list/main.css'  rel='stylesheet' />
+	
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+		
 </head>
 <body>
 
@@ -21,54 +28,72 @@
 	
 	<div class="container">
 	
-		<h2 id="tableTitle" th:text="'Dzień ' + ${#temporals.format(calendarDate, 'yyyy-MM-dd')}"></h2>
+<!-- 		<h2 id="tableTitle" th:text="'Dzień ' + ${#temporals.format(calendarDate, 'yyyy-MM-dd')}"></h2> -->
 		
-		<form id="dateForm" class=form-inline method="GET">
-			<div class="form-group">
-				<label for="chooseDate" class="mr-sm-1">Wybierz datę: </label>
-				<input id="chooseDate" class="picker form-control mr-sm-2" data-provide="datepicker" name="date">
-			</div>
-			<button class="btn btn-primary mb-2" type="submit">Pokaż</button>
-		</form>
+<!-- 		<form id="dateForm" class=form-inline method="GET"> -->
+<!-- 			<div class="form-group"> -->
+<!-- 				<label for="chooseDate" class="mr-sm-1">Wybierz datę: </label> -->
+<!-- 				<input id="chooseDate" class="picker form-control mr-sm-2" data-provide="datepicker" name="date"> -->
+<!-- 			</div> -->
+<!-- 			<button class="btn btn-primary mb-2" type="submit">Pokaż</button> -->
+<!-- 		</form> -->
 		
 		
-		<div th:if="${ #lists.isEmpty(eventsList) }">
-			<p>Brak wydarzeń w tym dniu.</p>
-		</div>
-		<div th:if="${ not #lists.isEmpty(eventsList) }">
-			<table class="table table-striped">
-				<thead class="thead-dark">
-					<tr>
-						<th>Godzina</th>
-						<th>Tytuł wydarzenia</th>
-						<th>Nazwa problemu</th>
-						<th>Opis problemu</th>
-						<th th:if="${ #strings.equals(userType, 'user') }" th:text="Fachowiec"></th>
-						<th th:if="${ #strings.equals(userType, 'expert') }" th:text="Zamawiający"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="${ event : eventsList }">
-						<td th:text="${ #temporals.format(event.date, 'HH:mm') }"></td>
-						<td th:text="${ event.eventName }"></td>
-						<td th:text="${ event.problemTitle }"></td>
-						<td th:text="${ event.problemDescription }"></td>
-						<td th:if="${ #strings.equals(userType, 'user') }" th:text="${event.expert.username}"></td>
-						<td th:if="${ #strings.equals(userType, 'expert') }" th:text="${event.user.username}"></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+<!-- 		<div th:if="${ #lists.isEmpty(eventsList) }"> -->
+<!-- 			<p>Brak wydarzeń w tym dniu.</p> -->
+<!-- 		</div> -->
+<!-- 		<div th:if="${ not #lists.isEmpty(eventsList) }"> -->
+<!-- 			<table class="table table-striped"> -->
+<!-- 				<thead class="thead-dark"> -->
+<!-- 					<tr> -->
+<!-- 						<th>Godzina</th> -->
+<!-- 						<th>Tytuł wydarzenia</th> -->
+<!-- 						<th>Nazwa problemu</th> -->
+<!-- 						<th>Opis problemu</th> -->
+<!-- 						<th th:if="${ #strings.equals(userType, 'user') }" th:text="Fachowiec"></th> -->
+<!-- 						<th th:if="${ #strings.equals(userType, 'expert') }" th:text="Zamawiający"></th> -->
+<!-- 					</tr> -->
+<!-- 				</thead> -->
+<!-- 				<tbody> -->
+<!-- 					<tr th:each="${ event : eventsList }"> -->
+<!-- 						<td th:text="${ #temporals.format(event.date, 'HH:mm') }"></td> -->
+<!-- 						<td th:text="${ event.eventName }"></td> -->
+<!-- 						<td th:text="${ event.problemTitle }"></td> -->
+<!-- 						<td th:text="${ event.problemDescription }"></td> -->
+<!-- 						<td th:if="${ #strings.equals(userType, 'user') }" th:text="${event.expert.username}"></td> -->
+<!-- 						<td th:if="${ #strings.equals(userType, 'expert') }" th:text="${event.user.username}"></td> -->
+<!-- 					</tr> -->
+<!-- 				</tbody> -->
+<!-- 			</table> -->
+<!-- 		</div> -->
+		
+		<h1 id="script-warning" style="display: none;">Błąd pobierania danych kalendarza</h1>
+		
+		<h1 id="loading" style="display: none;">Ładowanie kalendarza</h1>
+		
+		<div id="calendar"></div>
 		
 	</div>
 	
 	<div th:replace="fragments/footer :: footer"></div>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" 
+		integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/pl.js" 
+		integrity="sha256-prSi7A1V9ZxDIIGoYopovpFgGHQodz6JVZu5Aad7o8s=" crossorigin="anonymous"></script>
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" 
 		integrity="sha256-bqVeqGdJ7h/lYPq6xrPv/YGzMEb6dNxlfiTUHSgRCp8=" crossorigin="anonymous"></script>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.pl.min.js" 
 		integrity="sha256-4bIIDtarwOQhShN6SE0Z587offTm5+rTVp3Nj15BzRE=" crossorigin="anonymous"></script>
+		
+	<script th:src='@{/lib/fullcalendar/core/main.js}'></script>
+	<script th:src='@{/lib/fullcalendar/daygrid/main.js}'></script>
+	<script th:src='@{/lib/fullcalendar/timegrid/main.js}'></script>
+	<script th:src='@{/lib/fullcalendar/list/main.js}'></script>
+	<script th:src="@{/lib/fullcalendar/core/locales/pl.js}"></script>
 		
 	<script th:src="@{/js/calendar.js}"></script>
 

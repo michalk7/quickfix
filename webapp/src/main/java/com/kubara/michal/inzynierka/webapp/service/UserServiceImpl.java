@@ -2,6 +2,7 @@ package com.kubara.michal.inzynierka.webapp.service;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -159,37 +160,44 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public User getUser(String verificationToken) {
 		return tokenRepository.findByToken(verificationToken).getUser();
 	}
 
 	@Override
+	@Transactional
 	public void createVerificationToken(User user, String token) {
 		VerificationToken myToken = new VerificationToken(token, user);
         tokenRepository.save(myToken);
 	}
 
 	@Override
+	@Transactional
 	public VerificationToken getVerificationToken(String VerificationToken) {
 		return tokenRepository.findByToken(VerificationToken);
 	}
 
 	@Override
+	@Transactional
 	public void delete(User user) {
 		userRepository.delete(user);
 	}
 
 	@Override
+	@Transactional
 	public void deleteById(long id) {
 		userRepository.deleteById(id);
 	}
 
 	@Override
+	@Transactional
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
 
 	@Override
+	@Transactional
 	public VerificationToken generateNewVerificationToken(String existingToken) {
 		String newToken = UUID.randomUUID().toString();
 		VerificationToken token = tokenRepository.findByToken(existingToken);
@@ -199,6 +207,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public User saveExpert(ExpertDTO dtoExpert, String roleName) throws UserAlreadyExistsException {
 		if(emailExists(dtoExpert.getEmail())) {
 			throw new UserAlreadyExistsException("Podany adres email jest już zajęty.", true);
@@ -241,6 +250,18 @@ public class UserServiceImpl implements UserService {
 		User result = userRepository.save(user);
 
 		return result;
+	}
+
+	@Override
+	@Transactional
+	public Optional<User> findById(long userId) {
+		return userRepository.findById(userId);
+	}
+
+	@Override
+	@Transactional
+	public List<User> findAll() {
+		return userRepository.findAll();
 	}
 	
 	

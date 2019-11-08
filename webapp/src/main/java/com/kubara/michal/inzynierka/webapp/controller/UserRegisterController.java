@@ -227,6 +227,15 @@ public class UserRegisterController {
 	@ResponseBody
 	public GenericResponse resendRegistrationToken(@RequestParam("token") String existingToken, HttpServletRequest request) {
 		
+		if(existingToken == null || existingToken == "") {
+			return new GenericResponse("NoTokenFound", "NoTokenFound");
+		}
+		
+		VerificationToken oldToken = userService.getVerificationToken(existingToken);
+		if(oldToken == null) {
+			return new GenericResponse("NoTokenFound", "NoTokenFound");
+		}
+		
 		VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
 		
 		User user = userService.getUser(newToken.getToken());

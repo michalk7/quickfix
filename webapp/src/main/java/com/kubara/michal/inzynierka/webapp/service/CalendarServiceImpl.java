@@ -1,10 +1,11 @@
 package com.kubara.michal.inzynierka.webapp.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kubara.michal.inzynierka.core.dao.EventRepository;
 import com.kubara.michal.inzynierka.core.entity.Event;
@@ -17,13 +18,27 @@ public class CalendarServiceImpl implements CalendarService {
 	private EventRepository eventRepository;
 
 	@Override
-	public List<Event> findAllByDateAndExpert(LocalDate date, User expert) {
-		return eventRepository.findAllByDateAndExpert(date, expert);
+	@Transactional
+	public List<Event> findAllByExpert(User expert) {
+		return eventRepository.findAllByExpert(expert);
 	}
 
 	@Override
-	public List<Event> findAllByDateAndUser(LocalDate date, User user) {
-		return eventRepository.findAllByDateAndUser(date, user);
+	@Transactional
+	public List<Event> findAllByUser(User user) {
+		return eventRepository.findAllByUser(user);
+	}
+
+	@Override
+	@Transactional
+	public List<Event> findAllByDateBetweenAndExpert(LocalDateTime startDate, LocalDateTime endDate, User expert) {
+		return eventRepository.findAllByDateBetweenAndExpert(startDate, endDate, expert);
+	}
+
+	@Override
+	@Transactional
+	public List<Event> findAllByDateBetweenAndUser(LocalDateTime startDate, LocalDateTime endDate, User user) {
+		return eventRepository.findAllByDateBetweenAndUser(startDate, endDate, user);
 	}
 
 }

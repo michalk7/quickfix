@@ -1,7 +1,6 @@
 package com.kubara.michal.inzynierka.core.entity;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,9 +15,8 @@ import javax.persistence.ManyToOne;
 public class Event {
 
 	private long id;
-	private LocalDate date;
-	private LocalTime startTime;
-	private LocalTime endTime;
+	private LocalDateTime startDate;
+	private LocalDateTime endDate;
 	private String eventName;
 	private String problemTitle;
 	private String problemDescription;
@@ -32,11 +30,11 @@ public class Event {
 	}
 	
 	
-	public Event(LocalDate date, LocalTime startTime, LocalTime endTime, String eventName, String problemTitle,
+	public Event(LocalDateTime startDate, LocalDateTime endDate, String eventName, String problemTitle,
 			String problemDescription, boolean confirmed) {
-		this.date = date;
-		this.startTime = startTime;
-		this.endTime = endTime;
+		super();
+		this.startDate = startDate;
+		this.endDate = endDate;
 		this.eventName = eventName;
 		this.problemTitle = problemTitle;
 		this.problemDescription = problemDescription;
@@ -55,32 +53,23 @@ public class Event {
 	}
 
 	@Column(nullable=false)
-	public LocalDate getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
-
-	@Column(nullable=false)
-	public LocalTime getStartTime() {
-		return startTime;
+	public LocalDateTime getStartDate() {
+		return startDate;
 	}
 
 
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
+	public void setStartDate(LocalDateTime startDate) {
+		this.startDate = startDate;
 	}
 
 	@Column(nullable=false)
-	public LocalTime getEndTime() {
-		return endTime;
+	public LocalDateTime getEndDate() {
+		return endDate;
 	}
 
 
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
+	public void setEndDate(LocalDateTime endDate) {
+		this.endDate = endDate;
 	}
 
 

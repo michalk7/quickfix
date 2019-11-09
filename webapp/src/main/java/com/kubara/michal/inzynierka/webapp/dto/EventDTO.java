@@ -8,12 +8,14 @@ public class EventDTO {
 	private String end;
 	private String problemTitle;
 	private String problemDescription;
+	private String color;
+	private String textColor;
 	
 	public EventDTO() {
 	
 	}
 
-	public EventDTO(long id, String title, String start, String end, String problemTitle, String problemDescription) {
+	public EventDTO(long id, String title, String start, String end, String problemTitle, String problemDescription, String color, String textColor) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -21,6 +23,8 @@ public class EventDTO {
 		this.end = end;
 		this.problemTitle = problemTitle;
 		this.problemDescription = problemDescription;
+		this.color = color;
+		this.textColor = textColor;
 	}
 
 
@@ -73,11 +77,29 @@ public class EventDTO {
 		this.problemDescription = problemDescription;
 	}
 
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public String getTextColor() {
+		return textColor;
+	}
+
+	public void setTextColor(String textColor) {
+		this.textColor = textColor;
+	}
+
 	@Override
 	public String toString() {
-		return "EventDTO [id=" + id  + ", title=" + title + ", startDate=" + start + ", endDate=" + end + "]";
+		return "EventDTO [id=" + id + ", title=" + title + ", start=" + start + ", end=" + end + ", problemTitle="
+				+ problemTitle + ", problemDescription=" + problemDescription + ", color=" + color + ", textColor="
+				+ textColor + "]";
 	}
-	
+
 	
 	
 }

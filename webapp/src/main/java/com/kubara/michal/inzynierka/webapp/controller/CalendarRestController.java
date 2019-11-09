@@ -62,8 +62,11 @@ public class CalendarRestController {
 		}
 		
 		List<EventDTO> dtoEvents = events.stream().map(e -> {
+			String color = e.isConfirmed() ? "#2a67a3" : "#d3d3d3";
+			String textColor = e.isConfirmed() ? "white" : "black";
+			
 			EventDTO dtoEvent = new EventDTO(e.getId(), e.getEventName(), e.getStartDate().toString(), 
-									e.getEndDate().toString(), e.getProblemTitle(), e.getProblemDescription());
+									e.getEndDate().toString(), e.getProblemTitle(), e.getProblemDescription(), color, textColor);
 			return dtoEvent;
 		}).collect(Collectors.toList());
 		

@@ -26,6 +26,7 @@
 
 	<div th:replace="fragments/header :: header"></div>
 	
+	
 	<div class="container">
 	
 <!-- 		<h2 id="tableTitle" th:text="'Dzień ' + ${#temporals.format(calendarDate, 'yyyy-MM-dd')}"></h2> -->
@@ -66,13 +67,37 @@
 <!-- 				</tbody> -->
 <!-- 			</table> -->
 <!-- 		</div> -->
+
+		<h5 class="mb-4" th:if="${ #strings.equals(userType, 'expert') }" th:text="${'Liczba niepotwierdzonych zdarzeń: ' + notConfirmedCount}" ></h5>
+		
+		<div class="d-inline-flex form-group">
+			<label for="chooseDate" class="mr-sm-1">Wybierz datę: </label>
+			<input id="chooseDate" class="picker form-control mr-sm-2" data-provide="datepicker" name="date">
+		</div>
+	
 		
 		<h1 id="script-warning" style="display: none;">Błąd pobierania danych kalendarza</h1>
 		
 		<h1 id="loading" style="display: none;">Ładowanie kalendarza</h1>
 		
-		<div id="calendar"></div>
+		<div id="calendar" class="mb-4"></div>
 		
+		<table id="legend" class="w-25 mt-1 table table-bordered">
+			<thead>
+				<tr colspan="2">Legenda:</tr>
+			</thead>
+			<tbody>
+				<tr class="d-flex">
+					<td class="col-6" bgcolor="#d3d3d3"></td>
+					<td class="col-6">Niepotwierdzone</td>
+				</tr>
+				<tr class="d-flex">
+					<td class="col-6" bgcolor="#2a67a3"></td>
+					<td class="col-6" >Potwierdzone</td>
+				</tr>
+			</tbody>
+		</table>
+			
 	</div>
 	
 	<div th:replace="fragments/footer :: footer"></div>

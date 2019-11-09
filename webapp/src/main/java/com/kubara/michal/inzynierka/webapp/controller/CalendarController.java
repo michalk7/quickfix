@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -50,6 +51,11 @@ public class CalendarController {
 		if(user.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_EXPERT"))) {
 			events = calendarService.findAllByDateBetweenAndExpert(startDate, endDate, user);
 			model.addAttribute("userType", "expert");
+			
+			long notConfirmedCount = calendarService.findAllByExpert(user).stream().filter(e -> !e.isConfirmed()).count();
+			
+			model.addAttribute("notConfirmedCount", notConfirmedCount);
+			
 		} else if(user.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_USER"))) {
 			events = calendarService.findAllByDateBetweenAndUser(startDate, endDate, user);
 			model.addAttribute("userType", "user");
@@ -60,6 +66,7 @@ public class CalendarController {
 		
 		model.addAttribute("calendarDate", date);
 		model.addAttribute("eventsList", events);
+		
 		
 		
 		return "/calendar/calendar";

@@ -1,5 +1,5 @@
 
-$(document).ready(function() {
+/*$(document).ready(function() {
 	$('.picker').datepicker({
         format: "yyyy-mm-dd",
         todayBtn: "linked",
@@ -8,7 +8,7 @@ $(document).ready(function() {
         language: 'pl'
 	});
 });
-
+*/
 //document.addEventListener('DOMContentLoaded', function() {
 //	$.getJSON('/calendar/api/getList', function(data) {
 //		
@@ -60,14 +60,38 @@ $(document).ready(function() {
 
 document.addEventListener('DOMContentLoaded', function() {
 	var calendarEl = document.getElementById('calendar');
+	
+	if(window.innerWidth < 1256) {
+		$("#legend").removeClass("w-25");
+	}
+	
+	function mobileCheck() {
+        if (window.innerWidth >= 768 ) {
+            return false;
+        } else {
+            return true;
+        }
+    };
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: [ 'dayGrid', 'timeGrid', 'list' ],
-      defaultView: 'timeGridWeek',
+      defaultView: mobileCheck() ? 'timeGridDay' : 'timeGridWeek',
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        right: ''
+      },
+      footer: {
+    	  left: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+    	  center: '',
+    	  right: ''
+      },
+      windowResize: function(view) {
+          if (window.innerWidth >= 768 ) {
+              calendar.changeView('timeGridWeek');
+          } else {
+              calendar.changeView('timeGridDay');
+          }
       },
       locale: 'pl',
       navLinks: true, // can click day/week names to navigate views
@@ -93,6 +117,17 @@ document.addEventListener('DOMContentLoaded', function() {
     		});
       }
     });
+    
+    $('.picker').datepicker({
+        format: "yyyy-mm-dd",
+        todayBtn: "linked",
+        autoclose: true,
+        todayHighlight: true,
+        language: 'pl'
+	}).on('changeDate', function(selected) {
+		calendar.gotoDate(selected.date);
+		calendar.changeView('timeGridDay');
+	});
 
     calendar.render();
 });

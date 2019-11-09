@@ -41,4 +41,9 @@ public class CalendarServiceImpl implements CalendarService {
 		return eventRepository.findAllByDateBetweenAndUser(startDate, endDate, user);
 	}
 
+	@Override
+	public Event save(Event event) {
+		return eventRepository.save(event);
+	}
+
 }

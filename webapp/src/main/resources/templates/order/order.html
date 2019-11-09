@@ -2,12 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>QuickFix - Mój kalendarz</title>
+	<title>QuickFix - Zamówienie</title>
 	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+	
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 	
 <!-- 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"  -->
 <!-- 		integrity="sha256-siyOpF/pBWUPgIcQi17TLBkjvNgNQArcmwJB8YvkAgg=" crossorigin="anonymous" /> -->
-	<link rel="stylesheet" th:href="@{/css/calendar.css}" href="../../css/calendar.css" />
+	<link rel="stylesheet" th:href="@{/css/order.css}" href="../../css/order.css" />
 
 	
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" 
@@ -68,10 +71,14 @@
 <!-- 			</table> -->
 <!-- 		</div> -->
 
-		<h5 id="notConfirmedCount" class="mb-4" th:if="${ #strings.equals(userType, 'expert') }" th:text="${'Liczba niepotwierdzonych zdarzeń: ' + notConfirmedCount}" ></h5>
+		<h1 class="mb-4" th:text="${ 'Kalendarz fachowca: ' +  expert.firstName + ' ' + expert.lastName + ' (' + expert.userName + ')' }"></h1>
+		
+		<p class="mb-4">By umówić temin kliknij w termin na kalendarzu i przeciągnij, żeby ustawić czas spotkania.</p>
+		
+		<input id="expertIdHidden" type="hidden" th:value="${expert.id}">
 		
 		<div class="d-inline-flex form-group">
-			<label for="chooseDate" class="mr-sm-1">Wybierz datę: </label>
+			<label for="chooseDate" class="mr-sm-1">Przejdź do daty: </label>
 			<input id="chooseDate" class="picker form-control mr-sm-2" data-provide="datepicker" name="date">
 		</div>
 	
@@ -94,6 +101,10 @@
 				<tr class="d-flex">
 					<td class="col-6" bgcolor="#2a67a3"></td>
 					<td class="col-6" >Potwierdzone</td>
+				</tr>
+				<tr class="d-flex">
+					<td class="col-6" bgcolor="#ede007"></td>
+					<td class="col-6">Dodane przeze mnie</td>
 				</tr>
 			</tbody>
 		</table>
@@ -119,8 +130,9 @@
 	<script th:src='@{/lib/fullcalendar/timegrid/main.js}'></script>
 	<script th:src='@{/lib/fullcalendar/list/main.js}'></script>
 	<script th:src="@{/lib/fullcalendar/core/locales/pl.js}"></script>
+	<script th:src='@{/lib/fullcalendar/interaction/main.js}'></script>
 		
-	<script th:src="@{/js/calendar.js}"></script>
+	<script th:src="@{/js/order.js}"></script>
 
 </body>
 </html>

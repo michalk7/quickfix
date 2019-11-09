@@ -16,4 +16,6 @@ public interface CalendarService {
 
 	List<Event> findAllByUser(User user);
 	
+	Event save(Event event);
+	
 }

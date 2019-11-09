@@ -40,9 +40,9 @@ public class OrderController {
 			return "/order/orderError";
 		}
 		
-		model.addAttribute("expert", expert);
+		model.addAttribute("expert", expert.orElse(new User()));
 		
-		return null;
+		return "/order/order";
 		
 	}
 	

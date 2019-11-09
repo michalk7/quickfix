@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>QuickFix - Błąd</title>
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+	
+	<link rel="stylesheet" th:href="@{/css/badUser.css}" href="../../css/badUser.css" />
+</head>
+<body>
+
+	<div th:replace="fragments/header :: header"></div>
+
+	<div class="container">
+<!-- 		<div class="d-flex flex-column justify-content-center align-content-center"> -->
+			<h1 th:text="${errorMsg}">Error Message</h1>
+		
+			<a class="btn btn-outline-primary" th:href="@{/}">Powrót do strony głównej</a>
+			
+<!-- 		</div> -->
+	</div>
+	
+	<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

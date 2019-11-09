@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
           }
       },
       locale: 'pl',
+      allDaySlot: false,
       navLinks: true, // can click day/week names to navigate views
       editable: false,
       eventLimit: true, // allow "more" link when too many events
@@ -108,7 +109,6 @@ document.addEventListener('DOMContentLoaded', function() {
             bool ? 'block' : 'none';
       },
       eventClick: function(info) {
-    	  console.log(info.event);
     	  Swal.fire({
     		  title: info.event.extendedProps.problemTitle,
     		  text: info.event.extendedProps.problemDescription,
@@ -128,6 +128,20 @@ document.addEventListener('DOMContentLoaded', function() {
 		calendar.gotoDate(selected.date);
 		calendar.changeView('timeGridDay');
 	});
+    
+    function refreshCalendarData() {
+    	calendar.refetchEvents();
+    	if($('#notConfirmedCount').length() != 0) {
+    		$.getJSON('/calendar/api/getNotConfirmedCount', function(json) {
+        		if(!json.error) {
+        			$("#notConfirmedCount").text("Liczba niepotwierdzonych zdarzeń: " + json.count);
+        		}
+        			
+        	});
+    	}
+    }
 
+    setInterval(refreshCalendarData, 60000);
+    
     calendar.render();
 });

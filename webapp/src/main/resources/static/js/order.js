@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
     	  if(arg.start < moment()) {
     		  swalWithBootstrapButtons.fire(
     			  		'Błąd',
-    			  		'Nie zarezerwować terminu przeszłego',
+    			  		'Nie można zarezerwować terminu przeszłego',
     			  		'error');
       		  calendar.unselect()
     	  } else if(arg.end.getDate() != arg.start.getDate()){

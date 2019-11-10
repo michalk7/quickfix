@@ -60,7 +60,13 @@ document.addEventListener('DOMContentLoaded', function() {
     		  buttonsStyling: false
     		});
     	  
-    	  if(arg.end.getDate() != arg.start.getDate()){
+    	  if(arg.start < moment()) {
+    		  swalWithBootstrapButtons.fire(
+    			  		'Błąd',
+    			  		'Nie zarezerwować terminu przeszłego',
+    			  		'error');
+      		  calendar.unselect()
+    	  } else if(arg.end.getDate() != arg.start.getDate()){
     		  swalWithBootstrapButtons.fire(
   			  		'Błąd',
   			  		'Nie można wybrać więcej niż 1 dnia',
@@ -75,7 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
     	  } else {
         	  
         	  swalWithBootstrapButtons.mixin({
-        		  confirmButtonText: 'Next &rarr;',
+        		  confirmButtonText: 'Dalej &rarr;',
+        		  cancelButtonText: 'Anuluj',
         		  showCancelButton: true,
         		  progressSteps: ['1', '2'],
         		  reverseButtons: true
@@ -120,13 +127,21 @@ document.addEventListener('DOMContentLoaded', function() {
         					  [header]: token
         				  },
         				  data: JSON.stringify(eventToSend),
-        				  success: function() {
+        				  beforeSend: function() {
         					  swalWithBootstrapButtons.fire({
-        	    				  title: 'Gotowe!',
-        	    				  icon: 'success',
-        	    				  text: 'Wydarzenie zostało zapisane'
-        	    			  });
-        					  
+                				  title: 'Zapisywanie, proszę czekać',
+                        		  confirmButtonText: 'Zapisywanie',
+                        		  showCancelButton: false,
+                        		  showLoaderOnConfirm: true,
+                        		  onOpen: () => {
+                        			  swalWithBootstrapButtons.showLoading();
+                        		  },
+                        		  allowOutsideClick: false,
+                        		  allowEscapeKey: false
+                        		});
+        				  },
+        				  success: function() {
+        					  swalWithBootstrapButtons.close();
         					  
         					  calendar.addEvent({
         	    				  title: 'Niepotwierdzone',
@@ -138,6 +153,20 @@ document.addEventListener('DOMContentLoaded', function() {
         	    			  });
         					  
         					  calendar.unselect();
+        					  
+        					  swalWithBootstrapButtons.fire({
+        	    				  title: 'Gotowe!',
+        	    				  icon: 'success',
+        	    				  text: 'Wydarzenie zostało zapisane. W ciągu 5 sekund nastąpi przekierowanie do twojego kalendarza.',
+        	    				  timer: 5000,
+        	    				  allowOutsideClick: false,
+                        		  allowEscapeKey: false
+        	    			  }).then((resultT) => {
+        	    				  window.location.replace(window.location.origin + '/calendar');
+        	    			  });
+        					  
+        					  
+        					  
         				  },
         				  contentType: "application/json; charset=utf-8",
         				  error: function() {

@@ -79,7 +79,6 @@ public class UserRegisterController {
 	
 	@ModelAttribute("allCategoriesMultiCheckbox")
 	public List<Category> getAllCategoriesMultiCheckboxValues() {
-		//return categoryService.findAll().stream().map(e -> e.getName()).collect(Collectors.toList());
 		return categoryService.findAll();
 	}
 	
@@ -115,7 +114,6 @@ public class UserRegisterController {
 			
 			return "/expert/expert-registration-form";
 		}
-		//System.out.println("poszło");
 		logger.info("Teraz redirect");
 		
 		return "redirect:/showLoginPage?registrationSuccess";
@@ -136,20 +134,9 @@ public class UserRegisterController {
 	public String proccessRegistrationForm(@Valid @ModelAttribute("user") UserDTO dtoUser, BindingResult bindingResult,
 			Model model, WebRequest request) {
 		
-		//validated = true;
-		
 		if(bindingResult.hasErrors()) {
 			return "/user/user-registration-form";
 		}
-		
-//		User existingUser = userService.findByUserName(dtoUser.getUserName());
-		
-//		if(existingUser != null) {
-//			model.addAttribute("user", new UserDTO());
-//			model.addAttribute("registrationError", "Podana nazwa użytkownika jest już zajęta");
-//			
-//			return "/user/user-registration-form";
-//		}
 		
 		User registered = createNewUserAccount(dtoUser, bindingResult);
 		if(registered == null) {
@@ -169,7 +156,7 @@ public class UserRegisterController {
 			
 			return "/user/user-registration-form";
 		}
-		//System.out.println("poszło");
+
 		logger.info("Teraz redirect");
 		
 		return "redirect:/showLoginPage?registrationSuccess";

@@ -38,7 +38,6 @@ public class SearchController {
 	
 	@ModelAttribute("allCategoriesMultiCheckbox")
 	public List<Category> getAllCategoriesMultiCheckboxValues() {
-		//String[] categories = (String[])categoryService.findAll().stream().map(e -> e.getName()).toArray(String[]::new);
 		return categoryService.findAll();
 	}
 	
@@ -144,7 +143,6 @@ public class SearchController {
 			model.addAttribute("pageNumbers", pageNumbers);
 		}
 		
-		//expertService.findAll().stream().forEach(e -> System.out.println(e.getUserName()));
 		return "/search/search";
 	}
 	

@@ -239,12 +239,6 @@ public class UserServiceImpl implements UserService {
 		
 		user.setRoles(Arrays.asList(roleRepository.findByName(roleName)));
 		
-//		List<Category> categories = new ArrayList<>();
-//		for( String categoryName : dtoExpert.getSelectedCategoriesFromCheckboxes()) {
-//			Category category = categoryRepository.findByName(categoryName);
-//			categories.add(category);
-//		}
-		
 		user.setCategories(dtoExpert.getSelectedCategoriesFromCheckboxes());
 		
 		User result = userRepository.save(user);

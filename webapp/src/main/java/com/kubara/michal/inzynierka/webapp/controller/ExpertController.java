@@ -22,7 +22,6 @@ public class ExpertController {
 	
 	@ModelAttribute("allCategoriesMultiCheckbox")
 	public List<Category> getAllCategoriesMultiCheckboxValues() {
-		//String[] categories = (String[])categoryService.findAll().stream().map(e -> e.getName()).toArray(String[]::new);
 		return categoryService.findAll();
 	}
 

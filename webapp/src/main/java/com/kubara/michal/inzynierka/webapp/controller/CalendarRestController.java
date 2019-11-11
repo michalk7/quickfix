@@ -7,8 +7,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -151,7 +154,11 @@ public class CalendarRestController {
 	}
 	
 	@PostMapping("/saveEvent/{expertId}")
-	public GenericResponse saveEvent(@PathVariable("expertId") long expertId, @RequestBody EventSaveDTO eventToSave, Authentication authentication ) {
+	public GenericResponse saveEvent(@PathVariable("expertId") long expertId, @Valid @RequestBody EventSaveDTO eventToSave, BindingResult bindingResult, Authentication authentication ) {
+		
+		if(bindingResult.hasErrors()) {
+			return new GenericResponse("Dane niekompletne", "Incomplete data");
+		}
 		
 		Optional<User> expertOpt = userService.findById(expertId);
 		

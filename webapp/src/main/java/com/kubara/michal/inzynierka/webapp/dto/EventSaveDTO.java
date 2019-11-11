@@ -1,10 +1,24 @@
 package com.kubara.michal.inzynierka.webapp.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class EventSaveDTO {
 	
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String problemTitle;
+	
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String problemDescription;
+	
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String startDate;
+	
+	@NotNull(message = "Wymagane")
+	@Size(min = 1, message = "Wymagane")
 	private String endDate;
 
 	public EventSaveDTO() {

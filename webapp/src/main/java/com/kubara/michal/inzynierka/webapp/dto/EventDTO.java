@@ -10,12 +10,13 @@ public class EventDTO {
 	private String problemDescription;
 	private String color;
 	private String textColor;
+	private boolean confirmed;
 	
 	public EventDTO() {
 	
 	}
 
-	public EventDTO(long id, String title, String start, String end, String problemTitle, String problemDescription, String color, String textColor) {
+	public EventDTO(long id, String title, String start, String end, String problemTitle, String problemDescription, String color, String textColor, boolean confirmed) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -25,6 +26,7 @@ public class EventDTO {
 		this.problemDescription = problemDescription;
 		this.color = color;
 		this.textColor = textColor;
+		this.confirmed = confirmed;
 	}
 
 
@@ -91,6 +93,14 @@ public class EventDTO {
 
 	public void setTextColor(String textColor) {
 		this.textColor = textColor;
+	}
+
+	public boolean isConfirmed() {
+		return confirmed;
+	}
+
+	public void setConfirmed(boolean confirmed) {
+		this.confirmed = confirmed;
 	}
 
 	@Override

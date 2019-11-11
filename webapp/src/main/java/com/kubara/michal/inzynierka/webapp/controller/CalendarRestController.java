@@ -75,7 +75,7 @@ public class CalendarRestController {
 			String textColor = e.isConfirmed() ? "white" : "black";
 			
 			EventDTO dtoEvent = new EventDTO(e.getId(), e.getEventName(), e.getStartDate().toString(), 
-									e.getEndDate().toString(), e.getProblemTitle(), e.getProblemDescription(), color, textColor);
+									e.getEndDate().toString(), e.getProblemTitle(), e.getProblemDescription(), color, textColor, e.isConfirmed());
 			return dtoEvent;
 		}).collect(Collectors.toList());
 		
@@ -142,7 +142,7 @@ public class CalendarRestController {
 			}
 			
 			EventDTO dtoEvent = new EventDTO(e.getId(), titleText, e.getStartDate().toString(), 
-									e.getEndDate().toString(), "", "", color, textColor);
+									e.getEndDate().toString(), "", "", color, textColor, e.isConfirmed());
 			return dtoEvent;
 		}).collect(Collectors.toList());
 		

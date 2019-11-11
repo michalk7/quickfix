@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
     	  if($('#notConfirmedCount').length != 0) {
     		  
     		  
-    		  if(info.event.start < moment()) {
+    		  if(info.event.start < moment() || info.event.extendedProps.confirmed) {
     			  detailsSwal.fire({
         			  text: info.event.extendedProps.problemDescription,
         			  showConfirmButton: true

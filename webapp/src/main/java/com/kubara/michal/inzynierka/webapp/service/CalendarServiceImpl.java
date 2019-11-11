@@ -2,6 +2,7 @@ package com.kubara.michal.inzynierka.webapp.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,16 @@ public class CalendarServiceImpl implements CalendarService {
 	@Override
 	public Event save(Event event) {
 		return eventRepository.save(event);
+	}
+
+	@Override
+	public Optional<Event> findById(long id) {
+		return eventRepository.findById(id);
+	}
+
+	@Override
+	public void delete(Event event) {
+		eventRepository.delete(event);
 	}
 
 }

@@ -109,12 +109,190 @@ document.addEventListener('DOMContentLoaded', function() {
             bool ? 'block' : 'none';
       },
       eventClick: function(info) {
-    	  Swal.fire({
+    	  const detailsSwal = Swal.mixin({
     		  title: info.event.extendedProps.problemTitle,
-    		  text: info.event.extendedProps.problemDescription,
     		  icon: 'info',
-    		  confirmButtonText: 'Ok'
-    		});
+    		  showConfirmButton: false,
+    		  showCloseButton: true,
+    	  });
+    	  
+    	  
+    	  
+    	  if($('#notConfirmedCount').length != 0) {
+    		  
+    		  
+    		  if(info.event.start < moment()) {
+    			  detailsSwal.fire({
+        			  text: info.event.extendedProps.problemDescription,
+        			  showConfirmButton: true
+        		  });
+    		  } else {
+    			  
+    			  let buttons = $('<div>')
+	  	  			.append('<div class="swal2-content" style="display: block;">'+info.event.extendedProps.problemDescription+'</div>')
+	  	  			.append("<br>").append("<hr>")
+	  	  			.append('<button class="btn btn-danger mr-4" id="rejectButton">Odrzuć</button>')
+	  	  			.append('<button class="btn btn-success" id="confirmButton">Potwierdź</button>');
+	  	  
+	  			  detailsSwal.fire({
+	  				  html: buttons,
+	  				  onOpen: function(dObj) {
+	  					  
+	  					  const swalWithBootstrapButtons = Swal.mixin({
+	  			    		  customClass: {
+	  			    		    confirmButton: 'btn btn-success',
+	  			    		    cancelButton: 'btn btn-danger mr-4'
+	  			    		  },
+	  			    		  buttonsStyling: false
+	  			    		});
+	  					  
+	  					  $('#confirmButton').on('click', function() {
+	  						  detailsSwal.close(); 
+	  						  
+	  						  
+	  						  let dataToSend = {
+	  							  confirmed: true
+		  		  			  };
+		  		  			  
+		  		  			  let token = $("meta[name='_csrf']").attr("content");
+		  		  			  let header = $("meta[name='_csrf_header']").attr("content");
+		  		  			  
+		  		  			  $.ajax({
+		  		  				  type: 'PUT',
+		  		  				  url: '/calendar/api/setConfirmation/' + info.event.id + '/',
+		  		  				  headers: {
+		  		  					  [header]: token
+		  		  				  },
+		  		  				  data: JSON.stringify(dataToSend),
+		  		  				  beforeSend: function() {
+		  		  					  swalWithBootstrapButtons.fire({
+		  		          				  title: 'Zapisywanie, proszę czekać...',
+		  		                  		  confirmButtonText: 'Zapisywanie',
+		  		                  		  showCancelButton: false,
+		  		                  		  showLoaderOnConfirm: true,
+		  		                  		  onOpen: () => {
+		  		                  			  swalWithBootstrapButtons.showLoading();
+		  		                  		  },
+		  		                  		  allowOutsideClick: false,
+		  		                  		  allowEscapeKey: false
+		  		                  		});
+		  		  				  },
+		  		  				  success: function() {
+		  		  					  swalWithBootstrapButtons.close();
+		  		  					  
+		  		  					  refreshCalendarData();
+		  		  					  
+		  		  					  swalWithBootstrapButtons.fire({
+		  		  	    				  title: 'Gotowe!',
+		  		  	    				  icon: 'success',
+		  		  	    				  text: 'Wydarzenie zostało potwierdzone.',
+		  		  	    				  confirmButtonText: 'OK'
+		  		  	    			  });
+		  		  					  
+		  		  					  
+		  		  				  },
+		  		  				  contentType: "application/json; charset=utf-8",
+		  		  				  error: function() {
+		  		  					  swalWithBootstrapButtons.fire(
+		  		  		    			  		'Błąd',
+		  		  		    			  		'Zmiany nie zostały zapisane',
+		  		  		    			  		'error');
+		  		  				  },
+		  		  				  dataType: "json"
+		  		  			  });
+	  						  
+	  					  });
+	  					  
+	  					  $('#rejectButton').click(function() {
+	  						  
+	  						  //tu dać usuwanie
+	  						  
+	  						  detailsSwal.close();
+	  						  
+	  						  swalWithBootstrapButtons.fire({
+		  	    				  title: 'Czy na pewno chcesz odwołać to wydarzenie?',
+		  	    				  icon: 'question',
+		  	    				  text: 'Po odwołaniu wydarzenie zostanie usunięte.',
+		  	    				  confirmButtonText: 'Odwołaj',
+		  	    				  showCancelButton: true,
+		  	    				  showCloseButton: true,
+		  	    				  reverseButtons: true,
+		  	    				  cancelButtonText: 'Anuluj'
+		  	    			  }).then((result) => {
+		  	    				  if(result.value) {
+		  	    					  
+		  	    					let token = $("meta[name='_csrf']").attr("content");
+				  		  			  let header = $("meta[name='_csrf_header']").attr("content");
+				  		  			  
+				  		  			  $.ajax({
+				  		  				  type: 'DELETE',
+				  		  				  url: '/calendar/api/' + info.event.id + '/',
+				  		  				  headers: {
+				  		  					  [header]: token
+				  		  				  },
+				  		  				  beforeSend: function() {
+				  		  					  swalWithBootstrapButtons.fire({
+				  		          				  title: 'Usuwanie, proszę czekać...',
+				  		                  		  confirmButtonText: 'Usuwanie',
+				  		                  		  showCancelButton: false,
+				  		                  		  showLoaderOnConfirm: true,
+				  		                  		  onOpen: () => {
+				  		                  			  swalWithBootstrapButtons.showLoading();
+				  		                  		  },
+				  		                  		  allowOutsideClick: false,
+				  		                  		  allowEscapeKey: false
+				  		                  		});
+				  		  				  },
+				  		  				  success: function() {
+				  		  					  swalWithBootstrapButtons.close();
+				  		  					  
+				  		  					  refreshCalendarData();
+				  		  					  
+				  		  					  swalWithBootstrapButtons.fire({
+				  		  	    				  title: 'Gotowe!',
+				  		  	    				  icon: 'success',
+				  		  	    				  text: 'Wydarzenie zostało usunięte.',
+				  		  	    				  confirmButtonText: 'OK'
+				  		  	    			  });
+				  		  					  
+				  		  					  
+				  		  				  },
+				  		  				  contentType: "application/json; charset=utf-8",
+				  		  				  error: function() {
+				  		  					  swalWithBootstrapButtons.fire(
+				  		  		    			  		'Błąd',
+				  		  		    			  		'Zmiany nie zostały wprowadzone',
+				  		  		    			  		'error');
+				  		  				  },
+				  		  				  dataType: "json"
+				  		  			  });
+		  	    					  
+		  	    				  }
+		  	    			  });
+	  						  
+	  						  
+	  						  
+	  						  
+	  					  });
+	  					  
+	  					  
+	  				  }
+	  				});
+    			  
+    		  } //koniec ifa na daty
+    		  
+    		  
+    		  
+    	  } else { //if jesteśmy userem
+    		  
+    		  detailsSwal.fire({
+    			  text: info.event.extendedProps.problemDescription,
+    			  showConfirmButton: true
+    		  });
+    		  
+    	  }
+    	  
+    	  
       }
     });
     
@@ -131,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function refreshCalendarData() {
     	calendar.refetchEvents();
-    	if($('#notConfirmedCount').length() != 0) {
+    	if($('#notConfirmedCount').length != 0) {
     		$.getJSON('/calendar/api/getNotConfirmedCount', function(json) {
         		if(!json.error) {
         			$("#notConfirmedCount").text("Liczba niepotwierdzonych zdarzeń: " + json.count);

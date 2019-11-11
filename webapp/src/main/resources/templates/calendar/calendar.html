@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 	<meta charset="UTF-8">
 	<title>QuickFix - Mój kalendarz</title>
@@ -8,6 +9,9 @@
 <!-- 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"  -->
 <!-- 		integrity="sha256-siyOpF/pBWUPgIcQi17TLBkjvNgNQArcmwJB8YvkAgg=" crossorigin="anonymous" /> -->
 	<link rel="stylesheet" th:href="@{/css/calendar.css}" href="../../css/calendar.css" />
+	
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
 	
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" 
@@ -68,7 +72,7 @@
 <!-- 			</table> -->
 <!-- 		</div> -->
 
-		<h5 id="notConfirmedCount" class="mb-4" th:if="${ #strings.equals(userType, 'expert') }" th:text="${'Liczba niepotwierdzonych zdarzeń: ' + notConfirmedCount}" ></h5>
+		<h5 id="notConfirmedCount" class="mb-4" sec:authorize="hasRole('ROLE_EXPERT')" th:text="${'Liczba niepotwierdzonych zdarzeń: ' + notConfirmedCount}" ></h5>
 		
 		<div class="d-inline-flex form-group">
 			<label for="chooseDate" class="mr-sm-1">Wybierz datę: </label>

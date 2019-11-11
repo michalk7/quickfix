@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
         				  data: JSON.stringify(eventToSend),
         				  beforeSend: function() {
         					  swalWithBootstrapButtons.fire({
-                				  title: 'Zapisywanie, proszę czekać',
+                				  title: 'Zapisywanie, proszę czekać...',
                         		  confirmButtonText: 'Zapisywanie',
                         		  showCancelButton: false,
                         		  showLoaderOnConfirm: true,

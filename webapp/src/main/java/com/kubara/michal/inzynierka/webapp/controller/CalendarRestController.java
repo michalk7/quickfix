@@ -9,9 +9,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kubara.michal.inzynierka.core.entity.Event;
 import com.kubara.michal.inzynierka.core.entity.User;
+import com.kubara.michal.inzynierka.webapp.dto.EventConfirmationDTO;
 import com.kubara.michal.inzynierka.webapp.dto.EventDTO;
 import com.kubara.michal.inzynierka.webapp.dto.EventSaveDTO;
 import com.kubara.michal.inzynierka.webapp.service.CalendarService;
@@ -182,5 +185,64 @@ public class CalendarRestController {
 		return new GenericResponse("Saved");
 		
 	}
+	
+	@PutMapping("/setConfirmation/{eventId}")
+	public GenericResponse setEventConfirmed(@PathVariable("eventId") long eventId, @RequestBody EventConfirmationDTO eventConfirmation, Authentication authentication) {
+		
+		if(authentication.getAuthorities().stream().noneMatch(e -> e.getAuthority().equals("ROLE_EXPERT"))) {
+			return new GenericResponse("You don't have permission to execute this operation", "You don't have permission to execute this operation");
+		}
+		
+		Optional<Event> eventOpt = calendarService.findById(eventId);
+		
+		if(!eventOpt.isPresent()) {
+			return new GenericResponse("Wrong event id", "Wrong event id");
+		}
+		
+		Event event = eventOpt.get();
+		
+		User user = event.getUser();
+		User expert = event.getExpert();
+		
+		event.setConfirmed(true);
+		
+		Event savedEvent = calendarService.save(event);
+		
+		if(savedEvent == null) {
+			return new GenericResponse("Save Error", "Save Error");
+		}
+		
+		//wysłać maile
+		
+		return new GenericResponse("Updated");
+	}
+	
+	
+	@DeleteMapping("/{eventId}")
+	public GenericResponse deleteEvent(@PathVariable("eventId") long eventId, Authentication authentication) {
+		
+		if(authentication.getAuthorities().stream().noneMatch(e -> e.getAuthority().equals("ROLE_EXPERT"))) {
+			return new GenericResponse("You don't have permission to execute this operation", "You don't have permission to execute this operation");
+		}
+		
+		Optional<Event> eventOpt = calendarService.findById(eventId);
+		
+		if(!eventOpt.isPresent()) {
+			return new GenericResponse("Wrong event id", "Wrong event id");
+		}
+		
+		Event event = eventOpt.get();
+		
+		User user = event.getUser();
+		User expert = event.getExpert();
+		
+		calendarService.delete(event);
+		
+		//wysłać maile
+		
+		return new GenericResponse("Deleted");
+		
+	}
+	
 	
 }

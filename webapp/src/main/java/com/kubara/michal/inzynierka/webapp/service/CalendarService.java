@@ -22,5 +22,11 @@ public interface CalendarService {
 	Optional<Event> findById(long id);
 	
 	void delete(Event event);
+
+	List<Event> findAllByStartDateBetweenAndExpert(LocalDateTime dateStart, LocalDateTime dateEnd, User expert);
+
+	List<Event> findAllByEndDateBetweenAndExpert(LocalDateTime dateStart, LocalDateTime dateEnd, User expert);
+	
+	List<Event> findAllByNewEventBetweenAndExpert(LocalDateTime dateStart, LocalDateTime dateEnd, User expert);
 	
 }

@@ -32,46 +32,9 @@
 	
 	<div class="container">
 	
-<!-- 		<h2 id="tableTitle" th:text="'Dzień ' + ${#temporals.format(calendarDate, 'yyyy-MM-dd')}"></h2> -->
-		
-<!-- 		<form id="dateForm" class=form-inline method="GET"> -->
-<!-- 			<div class="form-group"> -->
-<!-- 				<label for="chooseDate" class="mr-sm-1">Wybierz datę: </label> -->
-<!-- 				<input id="chooseDate" class="picker form-control mr-sm-2" data-provide="datepicker" name="date"> -->
-<!-- 			</div> -->
-<!-- 			<button class="btn btn-primary mb-2" type="submit">Pokaż</button> -->
-<!-- 		</form> -->
-		
-		
-<!-- 		<div th:if="${ #lists.isEmpty(eventsList) }"> -->
-<!-- 			<p>Brak wydarzeń w tym dniu.</p> -->
-<!-- 		</div> -->
-<!-- 		<div th:if="${ not #lists.isEmpty(eventsList) }"> -->
-<!-- 			<table class="table table-striped"> -->
-<!-- 				<thead class="thead-dark"> -->
-<!-- 					<tr> -->
-<!-- 						<th>Godzina</th> -->
-<!-- 						<th>Tytuł wydarzenia</th> -->
-<!-- 						<th>Nazwa problemu</th> -->
-<!-- 						<th>Opis problemu</th> -->
-<!-- 						<th th:if="${ #strings.equals(userType, 'user') }" th:text="Fachowiec"></th> -->
-<!-- 						<th th:if="${ #strings.equals(userType, 'expert') }" th:text="Zamawiający"></th> -->
-<!-- 					</tr> -->
-<!-- 				</thead> -->
-<!-- 				<tbody> -->
-<!-- 					<tr th:each="${ event : eventsList }"> -->
-<!-- 						<td th:text="${ #temporals.format(event.date, 'HH:mm') }"></td> -->
-<!-- 						<td th:text="${ event.eventName }"></td> -->
-<!-- 						<td th:text="${ event.problemTitle }"></td> -->
-<!-- 						<td th:text="${ event.problemDescription }"></td> -->
-<!-- 						<td th:if="${ #strings.equals(userType, 'user') }" th:text="${event.expert.username}"></td> -->
-<!-- 						<td th:if="${ #strings.equals(userType, 'expert') }" th:text="${event.user.username}"></td> -->
-<!-- 					</tr> -->
-<!-- 				</tbody> -->
-<!-- 			</table> -->
-<!-- 		</div> -->
+		<a th:href="${backUrl}" class="btn btn-outline-primary">Powrót</a>
 
-		<h1 class="mb-4" th:text="${ 'Kalendarz fachowca: ' +  expert.firstName + ' ' + expert.lastName + ' (' + expert.userName + ')' }"></h1>
+		<h1 class="mb-4 mt-4" th:text="${ 'Kalendarz fachowca: ' +  expert.firstName + ' ' + expert.lastName + ' (' + expert.userName + ')' }"></h1>
 		
 		<p class="mb-4">By umówić temin kliknij w termin na kalendarzu i przeciągnij, żeby ustawić czas spotkania.</p>
 		

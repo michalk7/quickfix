@@ -177,18 +177,27 @@ document.addEventListener('DOMContentLoaded', function() {
 		  		                  		  allowEscapeKey: false
 		  		                  		});
 		  		  				  },
-		  		  				  success: function() {
+		  		  				  success: function(response) {
 		  		  					  swalWithBootstrapButtons.close();
 		  		  					  
-		  		  					  refreshCalendarData();
-		  		  					  
-		  		  					  swalWithBootstrapButtons.fire({
-		  		  	    				  title: 'Gotowe!',
-		  		  	    				  icon: 'success',
-		  		  	    				  text: 'Wydarzenie zostało potwierdzone.',
-		  		  	    				  confirmButtonText: 'OK'
-		  		  	    			  });
-		  		  					  
+		  		  					  if(!response.error) {
+		  		  						  
+		  		  						  refreshCalendarData();
+			  		  					  
+			  		  					  swalWithBootstrapButtons.fire({
+			  		  	    				  title: 'Gotowe!',
+			  		  	    				  icon: 'success',
+			  		  	    				  text: 'Wydarzenie zostało potwierdzone.',
+			  		  	    				  confirmButtonText: 'OK'
+			  		  	    			  });
+		  		  						  
+		  		  					  } else {
+		  		  						  swalWithBootstrapButtons.fire({
+		  		  							  title: 'Błąd',
+		  		  							  html: 'Zmiany nie zostały zapisane<br><br>' + response.message,
+		  		  							  icon: 'error'
+		  		  						  });
+		  		  					  }
 		  		  					  
 		  		  				  },
 		  		  				  contentType: "application/json; charset=utf-8",
@@ -243,17 +252,25 @@ document.addEventListener('DOMContentLoaded', function() {
 				  		                  		  allowEscapeKey: false
 				  		                  		});
 				  		  				  },
-				  		  				  success: function() {
+				  		  				  success: function(response) {
 				  		  					  swalWithBootstrapButtons.close();
 				  		  					  
-				  		  					  refreshCalendarData();
-				  		  					  
-				  		  					  swalWithBootstrapButtons.fire({
-				  		  	    				  title: 'Gotowe!',
-				  		  	    				  icon: 'success',
-				  		  	    				  text: 'Wydarzenie zostało usunięte.',
-				  		  	    				  confirmButtonText: 'OK'
-				  		  	    			  });
+				  		  					  if(!response.error) {
+				  		  						  refreshCalendarData();
+					  		  					  
+					  		  					  swalWithBootstrapButtons.fire({
+					  		  	    				  title: 'Gotowe!',
+					  		  	    				  icon: 'success',
+					  		  	    				  text: 'Wydarzenie zostało usunięte.',
+					  		  	    				  confirmButtonText: 'OK'
+					  		  	    			  });
+				  		  					  } else {
+				  		  						  swalWithBootstrapButtons.fire({
+				  		  							  title: 'Błąd',
+				  		  							  html: 'Zmiany nie zostały zapisane<br><br>' + response.message,
+				  		  							  icon: 'error'
+				  		  						  });
+				  		  					  }
 				  		  					  
 				  		  					  
 				  		  				  },

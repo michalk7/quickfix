@@ -43,18 +43,39 @@ public class CalendarServiceImpl implements CalendarService {
 	}
 
 	@Override
+	@Transactional
 	public Event save(Event event) {
 		return eventRepository.save(event);
 	}
 
 	@Override
+	@Transactional
 	public Optional<Event> findById(long id) {
 		return eventRepository.findById(id);
 	}
 
 	@Override
+	@Transactional
 	public void delete(Event event) {
 		eventRepository.delete(event);
+	}
+
+	@Override
+	@Transactional
+	public List<Event> findAllByStartDateBetweenAndExpert(LocalDateTime dateStart, LocalDateTime dateEnd, User expert) {
+		return eventRepository.findAllByStartDateBetweenAndExpert(dateStart, dateEnd, expert);
+	}
+
+	@Override
+	@Transactional
+	public List<Event> findAllByEndDateBetweenAndExpert(LocalDateTime dateStart, LocalDateTime dateEnd, User expert) {
+		return eventRepository.findAllByEndDateBetweenAndExpert(dateStart, dateEnd, expert);
+	}
+
+	@Override
+	@Transactional
+	public List<Event> findAllByNewEventBetweenAndExpert(LocalDateTime dateStart, LocalDateTime dateEnd, User expert) {
+		return eventRepository.findAllByNewEventBetweenAndExpert(dateStart, dateEnd, expert);
 	}
 
 }

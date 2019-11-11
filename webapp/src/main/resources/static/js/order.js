@@ -140,36 +140,49 @@ document.addEventListener('DOMContentLoaded', function() {
                         		  allowEscapeKey: false
                         		});
         				  },
-        				  success: function() {
+        				  success: function(response) {
         					  swalWithBootstrapButtons.close();
         					  
-        					  calendar.addEvent({
-        	    				  title: 'Niepotwierdzone',
-        	    				  start: arg.start,
-        	    				  end: arg.end,
-        	    				  allDay: arg.allDay,
-        	    				  color: '#ede007',
-        	    				  textColor: 'black'
-        	    			  });
+        					  console.log(response);
         					  
-        					  calendar.unselect();
-        					  
-        					  swalWithBootstrapButtons.fire({
-        	    				  title: 'Gotowe!',
-        	    				  icon: 'success',
-        	    				  text: 'Wydarzenie zostało zapisane. W ciągu 5 sekund nastąpi przekierowanie do twojego kalendarza.',
-        	    				  timer: 5000,
-        	    				  allowOutsideClick: false,
-                        		  allowEscapeKey: false
-        	    			  }).then((resultT) => {
-        	    				  window.location.replace(window.location.origin + '/calendar');
-        	    			  });
-        					  
-        					  
+        					  if(!response.error) {
+        						  
+        						  calendar.addEvent({
+            	    				  title: 'Niepotwierdzone',
+            	    				  start: arg.start,
+            	    				  end: arg.end,
+            	    				  allDay: arg.allDay,
+            	    				  color: '#ede007',
+            	    				  textColor: 'black'
+            	    			  });
+            					  
+            					  calendar.unselect();
+            					  
+            					  swalWithBootstrapButtons.fire({
+            	    				  title: 'Gotowe!',
+            	    				  icon: 'success',
+            	    				  text: 'Wydarzenie zostało zapisane. W ciągu 5 sekund nastąpi przekierowanie do twojego kalendarza.',
+            	    				  timer: 5000,
+            	    				  allowOutsideClick: false,
+                            		  allowEscapeKey: false
+            	    			  }).then((resultT) => {
+            	    				  window.location.replace(window.location.origin + '/calendar');
+            	    			  });
+        						  
+        					  } else {
+        						  swalWithBootstrapButtons.fire({
+          		    			  		title: 'Błąd',
+          		    			  		html: 'Zmiany nie zostały zapisane<br><br>' + response.message,
+          		    			  		icon: 'error'
+          		    			  	});
+          					 
+        						  calendar.unselect();
+        					  }
         					  
         				  },
         				  contentType: "application/json; charset=utf-8",
         				  error: function() {
+        					  swalWithBootstrapButtons.close();
         					  swalWithBootstrapButtons.fire(
         		    			  		'Błąd',
         		    			  		'Zmiany nie zostały zapisane',

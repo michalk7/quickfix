@@ -160,7 +160,7 @@ public class CalendarRestController {
 		User user = userService.findByUserName(userName);
 		
 		if(!expertOpt.isPresent()) {
-			return new GenericResponse("Wrong expert id", "Wrong expert id");
+			return new GenericResponse("Niepoprawne id fachowca", "Wrong expert id");
 		}
 		
 		LocalDateTime dateStart = LocalDateTime.parse(eventToSave.getStartDate(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
@@ -168,21 +168,36 @@ public class CalendarRestController {
 		
 		User expert = expertOpt.orElse(new User());
 		
-		Event event = new Event(dateStart, dateEnd, "Usługa u " + user.getUserName() + " realizowana przez " + expert.getUserName(), 
-				eventToSave.getProblemTitle(), eventToSave.getProblemDescription(), false);
+		List<Event> eventsBetween = calendarService.findAllByDateBetweenAndExpert(dateStart, dateEnd, expert);
+		List<Event> eventsStartDateBetween = calendarService.findAllByStartDateBetweenAndExpert(dateStart, dateEnd, expert);
+		List<Event> eventsEndDateBetween = calendarService.findAllByEndDateBetweenAndExpert(dateStart, dateEnd, expert);
+		List<Event> eventsSurrounding = calendarService.findAllByNewEventBetweenAndExpert(dateStart, dateEnd, expert);
 		
-		event.setExpert(expert);
-		event.setUser(user);
-		
-		event.setId(0);
-		
-		Event savedEvent = calendarService.save(event);
-		
-		if(savedEvent == null) {
-			return new GenericResponse("Save Error", "Save Error");
+		if(eventsBetween.isEmpty() && eventsStartDateBetween.isEmpty() && eventsEndDateBetween.isEmpty() && eventsSurrounding.isEmpty()) {
+			
+			Event event = new Event(dateStart, dateEnd, "Usługa u " + user.getUserName() + " realizowana przez " + expert.getUserName(), 
+					eventToSave.getProblemTitle(), eventToSave.getProblemDescription(), false);
+			
+			event.setExpert(expert);
+			event.setUser(user);
+			
+			event.setId(0);
+			
+			Event savedEvent = calendarService.save(event);
+			
+			if(savedEvent == null) {
+				return new GenericResponse("Błąd zapisu", "Save Error");
+			}
+			
+			//mailing
+			
+			return new GenericResponse("Zapisano");
+			
+		} else {
+			return new GenericResponse("W tym samym czasie fachowiec ma już umówione inne spotkania", "There are events in the same time");
 		}
 		
-		return new GenericResponse("Saved");
+		
 		
 	}
 	
@@ -190,13 +205,13 @@ public class CalendarRestController {
 	public GenericResponse setEventConfirmed(@PathVariable("eventId") long eventId, @RequestBody EventConfirmationDTO eventConfirmation, Authentication authentication) {
 		
 		if(authentication.getAuthorities().stream().noneMatch(e -> e.getAuthority().equals("ROLE_EXPERT"))) {
-			return new GenericResponse("You don't have permission to execute this operation", "You don't have permission to execute this operation");
+			return new GenericResponse("Nie masz uprawnień do wykonania tej operacji", "You don't have permission to execute this operation");
 		}
 		
 		Optional<Event> eventOpt = calendarService.findById(eventId);
 		
 		if(!eventOpt.isPresent()) {
-			return new GenericResponse("Wrong event id", "Wrong event id");
+			return new GenericResponse("Niepoprawne id fachowca", "Wrong event id");
 		}
 		
 		Event event = eventOpt.get();
@@ -209,12 +224,12 @@ public class CalendarRestController {
 		Event savedEvent = calendarService.save(event);
 		
 		if(savedEvent == null) {
-			return new GenericResponse("Save Error", "Save Error");
+			return new GenericResponse("Błąd zapisu", "Save Error");
 		}
 		
 		//wysłać maile
 		
-		return new GenericResponse("Updated");
+		return new GenericResponse("Zaktualizowano");
 	}
 	
 	
@@ -222,13 +237,13 @@ public class CalendarRestController {
 	public GenericResponse deleteEvent(@PathVariable("eventId") long eventId, Authentication authentication) {
 		
 		if(authentication.getAuthorities().stream().noneMatch(e -> e.getAuthority().equals("ROLE_EXPERT"))) {
-			return new GenericResponse("You don't have permission to execute this operation", "You don't have permission to execute this operation");
+			return new GenericResponse("Nie masz uprawnień do wykonania tej operacji", "You don't have permission to execute this operation");
 		}
 		
 		Optional<Event> eventOpt = calendarService.findById(eventId);
 		
 		if(!eventOpt.isPresent()) {
-			return new GenericResponse("Wrong event id", "Wrong event id");
+			return new GenericResponse("Niepoprawne id fachowca", "Wrong event id");
 		}
 		
 		Event event = eventOpt.get();
@@ -240,7 +255,7 @@ public class CalendarRestController {
 		
 		//wysłać maile
 		
-		return new GenericResponse("Deleted");
+		return new GenericResponse("Rekord usunięty");
 		
 	}
 	

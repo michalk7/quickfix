@@ -4,12 +4,18 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
+import org.springframework.core.env.Environment;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,6 +33,7 @@ import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.webapp.dto.EventConfirmationDTO;
 import com.kubara.michal.inzynierka.webapp.dto.EventDTO;
 import com.kubara.michal.inzynierka.webapp.dto.EventSaveDTO;
+import com.kubara.michal.inzynierka.webapp.registration.GenericMailEvent;
 import com.kubara.michal.inzynierka.webapp.service.CalendarService;
 import com.kubara.michal.inzynierka.webapp.service.UserService;
 import com.kubara.michal.inzynierka.webapp.util.GenericResponse;
@@ -41,6 +48,15 @@ public class CalendarRestController {
 	
 	@Autowired
 	private CalendarService calendarService;
+	
+	@Autowired
+	private ApplicationEventPublisher eventPublisher;
+	
+	@Autowired
+	private MessageSource messages;
+	
+	@Autowired
+	private Environment env;
 	
 	@GetMapping("/getList")
 	public List<EventDTO> getUserEventList(@RequestParam(value = "start", required = false) Optional<String> start, 
@@ -154,7 +170,8 @@ public class CalendarRestController {
 	}
 	
 	@PostMapping("/saveEvent/{expertId}")
-	public GenericResponse saveEvent(@PathVariable("expertId") long expertId, @Valid @RequestBody EventSaveDTO eventToSave, BindingResult bindingResult, Authentication authentication ) {
+	public GenericResponse saveEvent(@PathVariable("expertId") long expertId, @Valid @RequestBody EventSaveDTO eventToSave, 
+			BindingResult bindingResult, Authentication authentication, HttpServletRequest request ) {
 		
 		if(bindingResult.hasErrors()) {
 			return new GenericResponse("Dane niekompletne", "Incomplete data");
@@ -197,6 +214,20 @@ public class CalendarRestController {
 			}
 			
 			//mailing
+			Locale locale = request.getLocale();
+			String userMailContent = "Dzień dobry,\n\r\n\rTwoje wydarzenie: " + event.getEventName() + " zostało dodane.";
+			String expertMailContent = "Dzień dobry,\n\r\n\rUżytkownik dodał nowe wydarzenie do Twojego kalendarza: " + event.getEventName();
+			SimpleMailMessage mailToUser = constructEmail(locale, user, "Dodano nowe wydarzenie.", userMailContent);
+			SimpleMailMessage mailToExpert = constructEmail(locale, expert, "Dodano nowe wydarzenie.", expertMailContent);
+			
+			try {
+				eventPublisher.publishEvent(new GenericMailEvent(user, mailToUser));
+				eventPublisher.publishEvent(new GenericMailEvent(expert, mailToExpert));
+			} catch (Exception e) {
+				e.printStackTrace();
+				return new GenericResponse("Zmiany zostały zapisane, ale wysyłanie maili nie powiodło się", "Mail Error");
+			}
+			
 			
 			return new GenericResponse("Zapisano");
 			
@@ -209,7 +240,7 @@ public class CalendarRestController {
 	}
 	
 	@PutMapping("/setConfirmation/{eventId}")
-	public GenericResponse setEventConfirmed(@PathVariable("eventId") long eventId, @RequestBody EventConfirmationDTO eventConfirmation, Authentication authentication) {
+	public GenericResponse setEventConfirmed(@PathVariable("eventId") long eventId, @RequestBody EventConfirmationDTO eventConfirmation, Authentication authentication, HttpServletRequest request) {
 		
 		if(authentication.getAuthorities().stream().noneMatch(e -> e.getAuthority().equals("ROLE_EXPERT"))) {
 			return new GenericResponse("Nie masz uprawnień do wykonania tej operacji", "You don't have permission to execute this operation");
@@ -234,14 +265,27 @@ public class CalendarRestController {
 			return new GenericResponse("Błąd zapisu", "Save Error");
 		}
 		
-		//wysłać maile
+		//mailing
+		Locale locale = request.getLocale();
+		String userMailContent = "Dzień dobry,\n\r\n\rTwoje wydarzenie: " + event.getEventName() + " zostało potwierdzone.";
+		String expertMailContent = "Dzień dobry,\n\r\n\rPotwierdziłeś wydarzenie użytkownika " + user.getUserName() + ": " + event.getEventName();
+		SimpleMailMessage mailToUser = constructEmail(locale, user, "Potwierdzono wydarzenie.", userMailContent);
+		SimpleMailMessage mailToExpert = constructEmail(locale, expert, "Potwierdzono wydarzenie.", expertMailContent);
+		
+		try {
+			eventPublisher.publishEvent(new GenericMailEvent(user, mailToUser));
+			eventPublisher.publishEvent(new GenericMailEvent(expert, mailToExpert));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new GenericResponse("Zmiany zostały zapisane, ale wysyłanie maili nie powiodło się", "Mail Error");
+		}
 		
 		return new GenericResponse("Zaktualizowano");
 	}
 	
 	
 	@DeleteMapping("/{eventId}")
-	public GenericResponse deleteEvent(@PathVariable("eventId") long eventId, Authentication authentication) {
+	public GenericResponse deleteEvent(@PathVariable("eventId") long eventId, Authentication authentication, HttpServletRequest request) {
 		
 		if(authentication.getAuthorities().stream().noneMatch(e -> e.getAuthority().equals("ROLE_EXPERT"))) {
 			return new GenericResponse("Nie masz uprawnień do wykonania tej operacji", "You don't have permission to execute this operation");
@@ -260,10 +304,36 @@ public class CalendarRestController {
 		
 		calendarService.delete(event);
 		
-		//wysłać maile
+		//mailing
+		Locale locale = request.getLocale();
+		String userMailContent = "Dzień dobry,\n\r\n\rTwoje wydarzenie: " + event.getEventName() + " zostało odrzucone.";
+		String expertMailContent = "Dzień dobry,\n\r\n\rOdrzuciłeś wydarzenie użytkownika " + user.getUserName() + ": " + event.getEventName();
+		SimpleMailMessage mailToUser = constructEmail(locale, user, "Odrzucono wydarzenie.", userMailContent);
+		SimpleMailMessage mailToExpert = constructEmail(locale, expert, "Odrzucono wydarzenie.", expertMailContent);
+		
+		try {
+			eventPublisher.publishEvent(new GenericMailEvent(user, mailToUser));
+			eventPublisher.publishEvent(new GenericMailEvent(expert, mailToExpert));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new GenericResponse("Zmiany zostały zapisane, ale wysyłanie maili nie powiodło się", "Mail Error");
+		}
 		
 		return new GenericResponse("Rekord usunięty");
 		
+	}
+	
+	private SimpleMailMessage constructEmail(Locale locale, User user, String mailTitle, String mailContent) {
+        String signature = messages.getMessage("message.confirmMailSignature", null, locale);
+        String recipientAddress = user.getEmail();
+		String subject = "QuickFix - " + mailTitle;
+        
+        SimpleMailMessage email = new SimpleMailMessage();
+        email.setTo(recipientAddress);
+        email.setSubject(subject);
+        email.setText(mailContent + signature);
+        email.setFrom(env.getProperty("spring.mail.username"));
+        return email;
 	}
 	
 	

@@ -57,7 +57,7 @@ public class UserRegisterController {
 	private MessageSource messages;
 	
 	@Autowired
-	Environment env;
+	private Environment env;
 	
 	Logger logger = LoggerFactory.getLogger(UserRegisterController.class);
 	
@@ -233,7 +233,12 @@ public class UserRegisterController {
 		Locale locale = request.getLocale();
 		SimpleMailMessage mail = constructResendVerificationTokenEmail(appUrl, locale, newToken, user);
 		
-		eventPublisher.publishEvent(new OnTokenResendEvent(user, request.getLocale(), appUrl, newToken, mail));
+		try {
+			eventPublisher.publishEvent(new OnTokenResendEvent(user, request.getLocale(), appUrl, newToken, mail));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new GenericResponse("Mail Error", "Mail Error");
+		}
 		
 		return new GenericResponse(messages.getMessage("message.resendToken", null, locale));
 		

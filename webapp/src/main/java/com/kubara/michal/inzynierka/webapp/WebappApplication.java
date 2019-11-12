@@ -11,7 +11,7 @@ import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 @SpringBootApplication(scanBasePackages = "com.kubara.michal.inzynierka.*")
 @EnableJpaRepositories(basePackages = "com.kubara.michal.inzynierka.*")
 @EntityScan(basePackages = "com.kubara.michal.inzynierka.*")
-//@EnableAsync
+@EnableAsync
 public class WebappApplication {
 
 	@Bean

@@ -56,12 +56,18 @@ public class SearchController {
 		byte two = (byte) (onlyMyEstate.isPresent() ? 1 : 0);
 		byte three = (byte) (showAll.isPresent() ? 1 : 0);
 		
-		int resultNumber = (one * 4) + (two * 2) + three;
+		
 		
 		User currentUser = userService.findByUserName(authentication.getName());
 		String userCity = currentUser.getAddress().getCity();
 		
 		Estate userEstate = currentUser.getUserEstate();
+		
+		if(userEstate == null) {
+			two = 0;
+		}
+		
+		int resultNumber = (one * 4) + (two * 2) + three;
 		
 		Category selectedCategory = null;
 		if(categoriesGroup.isPresent() && categoriesGroup.orElse(-1) != -1) {

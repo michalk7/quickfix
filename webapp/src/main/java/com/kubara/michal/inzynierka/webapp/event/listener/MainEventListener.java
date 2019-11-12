@@ -3,19 +3,22 @@ package com.kubara.michal.inzynierka.webapp.event.listener;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import com.kubara.michal.inzynierka.core.entity.User;
+import com.kubara.michal.inzynierka.webapp.event.GenericMailEvent;
 import com.kubara.michal.inzynierka.webapp.event.OnRegistrationCompleteEvent;
+import com.kubara.michal.inzynierka.webapp.event.OnTokenResendEvent;
 import com.kubara.michal.inzynierka.webapp.service.UserService;
 
 @Component
-public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
+public class MainEventListener {
 
 	@Autowired
 	private UserService service;
@@ -27,14 +30,17 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 	private JavaMailSender mailSender;
 	
 	@Autowired
-	Environment env;
+	private Environment env;
 	
-	@Override
-	public void onApplicationEvent(OnRegistrationCompleteEvent event) {
-		this.confirmRegistration(event);
+	@Async
+	@EventListener
+	public void sendGenericMail(GenericMailEvent event) {
+		mailSender.send(event.getMail());
 	}
-
-	private void confirmRegistration(OnRegistrationCompleteEvent event) {
+	
+	@Async
+	@EventListener
+	public void confirmRegistration(OnRegistrationCompleteEvent event) {
 		User user = event.getUser();
 		String token = UUID.randomUUID().toString();
 		
@@ -53,7 +59,13 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         email.setFrom(env.getProperty("spring.mail.username"));
         mailSender.send(email);
 
-		
 	}
-
+	
+	@Async
+	@EventListener
+	public void sendNewToken(OnTokenResendEvent event) {
+		mailSender.send(event.getMail());
+	}
+	
+	
 }

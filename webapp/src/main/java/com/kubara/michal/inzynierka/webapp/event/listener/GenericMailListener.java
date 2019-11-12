@@ -1,11 +1,13 @@
-package com.kubara.michal.inzynierka.webapp.registration.listener;
+package com.kubara.michal.inzynierka.webapp.event.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
 
-import com.kubara.michal.inzynierka.webapp.registration.GenericMailEvent;
+import com.kubara.michal.inzynierka.webapp.event.GenericMailEvent;
 
+@Component
 public class GenericMailListener implements ApplicationListener<GenericMailEvent> {
 
 	@Autowired

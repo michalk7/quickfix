@@ -1,4 +1,4 @@
-package com.kubara.michal.inzynierka.webapp.registration.listener;
+package com.kubara.michal.inzynierka.webapp.event.listener;
 
 import java.util.UUID;
 
@@ -11,7 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import com.kubara.michal.inzynierka.core.entity.User;
-import com.kubara.michal.inzynierka.webapp.registration.OnRegistrationCompleteEvent;
+import com.kubara.michal.inzynierka.webapp.event.OnRegistrationCompleteEvent;
 import com.kubara.michal.inzynierka.webapp.service.UserService;
 
 @Component

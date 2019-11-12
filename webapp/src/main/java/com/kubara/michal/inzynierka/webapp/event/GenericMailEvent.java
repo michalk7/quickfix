@@ -1,4 +1,4 @@
-package com.kubara.michal.inzynierka.webapp.registration;
+package com.kubara.michal.inzynierka.webapp.event;
 
 import org.springframework.context.ApplicationEvent;
 import org.springframework.mail.SimpleMailMessage;

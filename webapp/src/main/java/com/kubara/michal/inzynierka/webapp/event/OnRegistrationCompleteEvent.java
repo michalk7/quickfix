@@ -1,4 +1,4 @@
-package com.kubara.michal.inzynierka.webapp.registration;
+package com.kubara.michal.inzynierka.webapp.event;
 
 import java.util.Locale;
 

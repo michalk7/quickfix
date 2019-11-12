@@ -33,7 +33,7 @@ import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.webapp.dto.EventConfirmationDTO;
 import com.kubara.michal.inzynierka.webapp.dto.EventDTO;
 import com.kubara.michal.inzynierka.webapp.dto.EventSaveDTO;
-import com.kubara.michal.inzynierka.webapp.registration.GenericMailEvent;
+import com.kubara.michal.inzynierka.webapp.event.GenericMailEvent;
 import com.kubara.michal.inzynierka.webapp.service.CalendarService;
 import com.kubara.michal.inzynierka.webapp.service.UserService;
 import com.kubara.michal.inzynierka.webapp.util.GenericResponse;
@@ -178,7 +178,7 @@ public class CalendarRestController {
 		}
 		
 		Optional<User> expertOpt = userService.findById(expertId);
-		
+		//zmiana
 		String userName = authentication.getName();
 		
 		User user = userService.findByUserName(userName);
@@ -302,8 +302,6 @@ public class CalendarRestController {
 		User user = event.getUser();
 		User expert = event.getExpert();
 		
-		calendarService.delete(event);
-		
 		//mailing
 		Locale locale = request.getLocale();
 		String userMailContent = "Dzień dobry,\n\r\n\rTwoje wydarzenie: " + event.getEventName() + " zostało odrzucone.";
@@ -318,6 +316,8 @@ public class CalendarRestController {
 			e.printStackTrace();
 			return new GenericResponse("Zmiany zostały zapisane, ale wysyłanie maili nie powiodło się", "Mail Error");
 		}
+		
+		calendarService.delete(event);
 		
 		return new GenericResponse("Rekord usunięty");
 		

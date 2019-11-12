@@ -1,11 +1,11 @@
-package com.kubara.michal.inzynierka.webapp.registration.listener;
+package com.kubara.michal.inzynierka.webapp.event.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
-import com.kubara.michal.inzynierka.webapp.registration.OnTokenResendEvent;
+import com.kubara.michal.inzynierka.webapp.event.OnTokenResendEvent;
 
 @Component
 public class ResendTokenListener implements ApplicationListener<OnTokenResendEvent> {

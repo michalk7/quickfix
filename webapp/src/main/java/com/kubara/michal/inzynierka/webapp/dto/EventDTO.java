@@ -11,12 +11,16 @@ public class EventDTO {
 	private String color;
 	private String textColor;
 	private boolean confirmed;
+	private String firstName;
+	private String lastName;
+	private String phoneNumber;
 	
 	public EventDTO() {
 	
 	}
 
-	public EventDTO(long id, String title, String start, String end, String problemTitle, String problemDescription, String color, String textColor, boolean confirmed) {
+	public EventDTO(long id, String title, String start, String end, String problemTitle, String problemDescription,
+			String color, String textColor, boolean confirmed, String firstName, String lastName, String phoneNumber) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -27,9 +31,10 @@ public class EventDTO {
 		this.color = color;
 		this.textColor = textColor;
 		this.confirmed = confirmed;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
 	}
-
-
 
 	public long getId() {
 		return id;
@@ -103,13 +108,28 @@ public class EventDTO {
 		this.confirmed = confirmed;
 	}
 
-	@Override
-	public String toString() {
-		return "EventDTO [id=" + id + ", title=" + title + ", start=" + start + ", end=" + end + ", problemTitle="
-				+ problemTitle + ", problemDescription=" + problemDescription + ", color=" + color + ", textColor="
-				+ textColor + "]";
+	public String getFirstName() {
+		return firstName;
 	}
 
-	
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 	
 }

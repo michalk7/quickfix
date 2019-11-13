@@ -81,6 +81,8 @@ public class CalendarRestController {
 		
 		List<Event> events = null;
 		
+		final boolean isExpert = user.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_EXPERT"));
+		
 		if(user.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_EXPERT"))) {
 			events = dateRange ? calendarService.findAllByDateBetweenAndExpert(dateStart, dateEnd, user) : calendarService.findAllByExpert(user);
 		} else if(user.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_USER"))) {
@@ -93,8 +95,13 @@ public class CalendarRestController {
 			String color = e.isConfirmed() ? "#2a67a3" : "#d3d3d3";
 			String textColor = e.isConfirmed() ? "white" : "black";
 			
+			String firstName = isExpert ? e.getUser().getFirstName() : e.getExpert().getFirstName();
+			String lastName = isExpert ? e.getUser().getLastName() : e.getExpert().getLastName();
+			String phoneNumber = isExpert ? e.getUser().getAddress().getPhoneNumber() : e.getExpert().getAddress().getPhoneNumber();
+			
 			EventDTO dtoEvent = new EventDTO(e.getId(), e.getEventName(), e.getStartDate().toString(), 
-									e.getEndDate().toString(), e.getProblemTitle(), e.getProblemDescription(), color, textColor, e.isConfirmed());
+									e.getEndDate().toString(), e.getProblemTitle(), e.getProblemDescription(), 
+									color, textColor, e.isConfirmed(), firstName, lastName, phoneNumber);
 			return dtoEvent;
 		}).collect(Collectors.toList());
 		
@@ -161,7 +168,7 @@ public class CalendarRestController {
 			}
 			
 			EventDTO dtoEvent = new EventDTO(e.getId(), titleText, e.getStartDate().toString(), 
-									e.getEndDate().toString(), "", "", color, textColor, e.isConfirmed());
+									e.getEndDate().toString(), "", "", color, textColor, e.isConfirmed(), "", "", "");
 			return dtoEvent;
 		}).collect(Collectors.toList());
 		

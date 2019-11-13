@@ -123,14 +123,20 @@ document.addEventListener('DOMContentLoaded', function() {
     		  
     		  if(info.event.start < moment() || info.event.extendedProps.confirmed) {
     			  detailsSwal.fire({
-        			  text: info.event.extendedProps.problemDescription,
+        			  html: info.event.extendedProps.problemDescription + '<br><br>' 
+        			  		+ '<h4>Kontakt:</h4>' + info.event.extendedProps.firstName + ' ' + info.event.extendedProps.lastName
+        			  		+ '<br>' + 'tel. ' + info.event.extendedProps.phoneNumber,
         			  showConfirmButton: true
         		  });
     		  } else {
     			  
     			  let buttons = $('<div>')
-	  	  			.append('<div class="swal2-content" style="display: block;">'+info.event.extendedProps.problemDescription+'</div>')
-	  	  			.append("<br>").append("<hr>")
+	  	  			.append('<div class="swal2-content" style="display: block;">'
+	  	  					+ info.event.extendedProps.problemDescription + '<br><br>' 
+	  	  					+ '<h4>Kontakt:</h4>' + info.event.extendedProps.firstName + ' ' + info.event.extendedProps.lastName
+	  	  					+ '<br>' + 'tel. ' + info.event.extendedProps.phoneNumber
+	  	  					+'</div>')
+	  	  			.append("<br>")
 	  	  			.append('<button class="btn btn-danger mr-4" id="rejectButton">Odrzuć</button>')
 	  	  			.append('<button class="btn btn-success" id="confirmButton">Potwierdź</button>');
 	  	  
@@ -303,7 +309,9 @@ document.addEventListener('DOMContentLoaded', function() {
     	  } else { //if jesteśmy userem
     		  
     		  detailsSwal.fire({
-    			  text: info.event.extendedProps.problemDescription,
+    			  html: info.event.extendedProps.problemDescription + '<br><br>' 
+			  			+ '<h4>Kontakt:</h4>' + info.event.extendedProps.firstName + ' ' + info.event.extendedProps.lastName
+			  			+ '<br>' + 'tel. ' +  info.event.extendedProps.phoneNumber,
     			  showConfirmButton: true
     		  });
     		  

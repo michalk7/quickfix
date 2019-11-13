@@ -3,7 +3,6 @@ package com.kubara.michal.inzynierka.webapp.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.kubara.michal.inzynierka.webapp.validation.ValidEmail;
 import com.kubara.michal.inzynierka.webapp.validation.ValidPolishPhoneNumber;
 
 public class UserEditDTO {
@@ -19,11 +18,6 @@ public class UserEditDTO {
 	@NotNull(message = "Wymagane")
 	@Size(min = 1, message = "Wymagane")
 	private String lastName;
-	
-	@ValidEmail(message = "Niepoprawny email")
-	@NotNull(message = "Wymagane")
-	@Size(min = 1, message = "Wymagane")
-	private String email;
 	
 	@NotNull(message = "Wymagane")
 	@Size(min = 1, message = "Wymagane")
@@ -82,14 +76,6 @@ public class UserEditDTO {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public String getCity() {

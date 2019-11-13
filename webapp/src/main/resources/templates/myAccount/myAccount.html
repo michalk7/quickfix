@@ -32,6 +32,14 @@
 		 	<div class="tab-pane fade" id="userData" role="tabpanel" aria-labelledby="userData-tab"
 		 		th:classappend="${ #ctx.containsVariable('dataTab') } ? 'show active' : ''">
 
+				<div class="text-center mb-4 mt-4">
+					<h1 class="h3 mb-3 font-weight-normal">Dane użytkownika:</h1>
+				</div>
+					
+				<div class="form-group">
+					<input id="editToggle" type="checkbox" data-toggle="toggle" data-size="sm" th:checked="${ not #ctx.containsVariable('validated') }">
+					<label for="editToggle">Edycja</label>
+				</div>
 
 				<form id="main" th:action="@{/myAccount/editUserData}" 
 					  	   th:object="${user}" th:method="PUT"
@@ -40,14 +48,7 @@
 				
 				<fieldset id="editActivator" disabled>
 				
-					<div class="text-center mb-4 mt-4">
-						<h1 class="h3 mb-3 font-weight-normal">Dane użytkownika:</h1>
-					</div>
 					
-					<div class="form-group">
-						<input id="editToggle" type="checkbox" data-toggle="toggle" data-size="sm">
-						<label for="editToggle">Edycja</label>
-					</div>
 					
 			
 				    <!-- Place for messages: error, alert etc ... -->
@@ -58,6 +59,10 @@
 								<!-- Check for registration error -->
 								<div th:if="${editError}" class="alert alert-danger col-xs-offset-1 col-xs-10"
 									th:text=${editError} >error
+								</div>
+								
+								<div th:if="${param.editSuccess}"class="alert alert-success col-xs-offset-1 col-xs-10">
+									Dane zostały zmienione pomyślnie.
 								</div>
 																										
 				            </div>
@@ -114,7 +119,7 @@
 					
 					<div class="form-row align-items-center">
 						<!-- Email -->
-						<div class="col-md-4 mb-3">
+						<!-- <div class="col-md-4 mb-3">
 							<label for="inputEmail">Email (*)</label>
 							<input id="inputEmail" type="text" th:field="*{email}" 
 								placeholder="Email (*)" class="form-control" required 
@@ -127,10 +132,10 @@
 								</div>
 								<p th:each="err : ${#fields.errors('email')}" th:text="${err}"><p/>
 							</div>
-						</div>
+						</div> -->
 						
 						<!-- city -->
-						<div class="col-md-4 mb-3">
+						<div class="col-md-6 mb-3">
 							<label for="inputCity">Miasto (*)</label>
 							<input id="inputCity" type="text" th:field="*{city}" 
 								placeholder="Miasto (*)" class="form-control" required
@@ -144,7 +149,7 @@
 						</div>
 						
 						<!-- Dzielnica -->
-						<div class="col-md-4 mb-3">
+						<div class="col-md-6 mb-3">
 							<label for="inputDistrict" >Dzielnica</label>
 							<input id="inputDistrict" type="text" th:field="*{district}" 
 								placeholder="Dzielnica" class="form-control"
@@ -171,6 +176,37 @@
 							</div>
 						</div>
 					
+						<!-- houseNumber -->
+						<div class="col-md-4 mb-3">
+							<label for="inputHouseNumber">Numer domu (*)</label>
+							<input id="inputHouseNumber" type="text" th:field="*{houseNumber}" 
+								placeholder="Numer domu (*)" class="form-control" required
+								th:classappend="${ #fields.hasErrors('houseNumber')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" />
+							<div class="invalid-feedback">
+								<div th:if="${ not #fields.hasErrors('houseNumber')  }">
+									<p>Wymagane</p>
+								</div>
+								<p th:each="err : ${#fields.errors('houseNumber')}" th:text="${err}"><p/>
+							</div>
+						</div>
+						
+						<!-- apartmentNumber -->
+						<div class="col-md-4 mb-3">
+							<label for="inputApartmentNumber">Numer mieszkania</label>
+							<input id="inputApartmentNumber" type="text" th:field="*{apartmentNumber}" 
+								placeholder="Numer mieszkania" class="form-control"
+								th:classappend="${ #fields.hasErrors('apartmentNumber')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" />
+							<div class="invalid-feedback">
+								<p th:each="err : ${#fields.errors('apartmentNumber')}" th:text="${err}"><p/>
+							</div>
+						</div>
+						
+					
+					</div>
+					
+					
+					<div class="form-row align-items-center">
+						
 						<div class="col-md-4 mb-3">
 							<!-- postCode -->
 							<label for="inputPostCode">Kod pocztowy (*)</label>
@@ -197,35 +233,7 @@
 								<p th:each="err : ${#fields.errors('postCity')}" th:text="${err}"><p/>
 							</div>
 						</div>
-					
-					</div>
-					
-					
-					<div class="form-row align-items-center">
-						<!-- houseNumber -->
-						<div class="col-md-4 mb-3">
-							<label for="inputHouseNumber">Numer domu (*)</label>
-							<input id="inputHouseNumber" type="text" th:field="*{houseNumber}" 
-								placeholder="Numer domu (*)" class="form-control" required
-								th:classappend="${ #fields.hasErrors('houseNumber')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" />
-							<div class="invalid-feedback">
-								<div th:if="${ not #fields.hasErrors('houseNumber')  }">
-									<p>Wymagane</p>
-								</div>
-								<p th:each="err : ${#fields.errors('houseNumber')}" th:text="${err}"><p/>
-							</div>
-						</div>
 						
-						<!-- apartmentNumber -->
-						<div class="col-md-4 mb-3">
-							<label for="inputApartmentNumber">Numer mieszkania</label>
-							<input id="inputApartmentNumber" type="text" th:field="*{apartmentNumber}" 
-								placeholder="Numer mieszkania" class="form-control"
-								th:classappend="${ #fields.hasErrors('apartmentNumber')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" />
-							<div class="invalid-feedback">
-								<p th:each="err : ${#fields.errors('apartmentNumber')}" th:text="${err}"><p/>
-							</div>
-						</div>
 						
 						<!-- phoneNumber -->
 						<div class="col-md-4 mb-3">
@@ -280,6 +288,10 @@
 								<!-- Check for registration error -->
 								<div th:if="${passwordChangeError}" class="alert alert-danger col-xs-offset-1 col-xs-10"
 									th:text=${passwordChangeError} >error
+								</div>
+								
+								<div th:if="${param.passwordChangeSuccess}"class="alert alert-success col-xs-offset-1 col-xs-10">
+									Hasło zostało zmienione pomyślnie.
 								</div>
 																										
 				            </div>

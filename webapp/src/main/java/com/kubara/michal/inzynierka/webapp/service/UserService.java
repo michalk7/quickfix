@@ -8,8 +8,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.core.entity.VerificationToken;
 import com.kubara.michal.inzynierka.webapp.dto.ExpertDTO;
+import com.kubara.michal.inzynierka.webapp.dto.PasswordChangeDTO;
 import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
+import com.kubara.michal.inzynierka.webapp.dto.UserEditDTO;
 import com.kubara.michal.inzynierka.webapp.validation.UserAlreadyExistsException;
+import com.kubara.michal.inzynierka.webapp.validation.WrongPasswordException;
 
 public interface UserService extends UserDetailsService {
 	
@@ -38,5 +41,9 @@ public interface UserService extends UserDetailsService {
 	Optional<User> findById(long userId);
 	
 	List<User> findAll();
+
+	User update(User userToEdit, UserEditDTO dtoUser) throws UserAlreadyExistsException;
+	
+	void changePassword(User user, PasswordChangeDTO passwordDTO) throws WrongPasswordException;
     
 }

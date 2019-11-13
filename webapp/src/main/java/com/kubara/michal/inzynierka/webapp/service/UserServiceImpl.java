@@ -27,8 +27,11 @@ import com.kubara.michal.inzynierka.core.entity.Street;
 import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.core.entity.VerificationToken;
 import com.kubara.michal.inzynierka.webapp.dto.ExpertDTO;
+import com.kubara.michal.inzynierka.webapp.dto.PasswordChangeDTO;
 import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
+import com.kubara.michal.inzynierka.webapp.dto.UserEditDTO;
 import com.kubara.michal.inzynierka.webapp.validation.UserAlreadyExistsException;
+import com.kubara.michal.inzynierka.webapp.validation.WrongPasswordException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -257,7 +260,65 @@ public class UserServiceImpl implements UserService {
 	public List<User> findAll() {
 		return userRepository.findAll();
 	}
+
+	@Override
+	@Transactional
+	public User update(User userToEdit, UserEditDTO dtoUser) throws UserAlreadyExistsException {
+		
+		if(userNameExistsExceptUser(dtoUser.getUserName(), userToEdit)) {
+			throw new UserAlreadyExistsException("Podana nazwa użytkownika jest już zajęta.", false);
+		}
+		
+		
+		userToEdit.setUserName(dtoUser.getUserName());
+		userToEdit.setFirstName(dtoUser.getFirstName());
+		userToEdit.setLastName(dtoUser.getLastName());
+		
+		Address address = userToEdit.getAddress();
+		address.setCity(dtoUser.getCity());
+		address.setDistrict(dtoUser.getDistrict());
+		address.setPostCode(dtoUser.getPostCode());
+		address.setPostCity(dtoUser.getPostCity());
+		address.setStreet(dtoUser.getStreet());
+		address.setHouseNumber(dtoUser.getHouseNumber());
+		address.setApartmentNumber(dtoUser.getApartmentNumber());
+		address.setPhoneNumber(dtoUser.getPhoneNumber());
+		
+		Optional<Street> estateStreet = streetRepository.findByStreetNameAndStreetNumberAndCityAndDistrictAndPostCode(address.getStreet(), 
+											address.getHouseNumber(), address.getCity(), address.getDistrict(), address.getPostCode());
+		if(estateStreet.isPresent()) {
+			Estate estate = estateStreet.get().getEstate();
+			if(estate.getId() != userToEdit.getUserEstate().getId()) {
+				userToEdit.setUserEstate(estate);
+			}
+		}
+		
+		User result = userRepository.save(userToEdit);
+
+		return result;
+	}
 	
+	@Override
+	@Transactional
+	public void changePassword(User user, PasswordChangeDTO passwordDTO) throws WrongPasswordException {
+		if(!passwordEncoder.matches(passwordDTO.getOldPassword(), user.getPassword())) {
+			throw new WrongPasswordException("Błędne hasło.");
+		}
+		user.setPassword(passwordEncoder.encode(passwordDTO.getPassword()));
+		userRepository.save(user);
+	}
+	
+	private boolean userNameExistsExceptUser(String userName, User userExc) {
+		User user = userRepository.findByUserName(userName);
+		if(user != null) {
+			if(user.getId() != userExc.getId()) {
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+
 	
 
 }

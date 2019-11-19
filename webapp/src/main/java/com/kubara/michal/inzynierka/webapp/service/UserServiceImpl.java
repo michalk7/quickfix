@@ -16,12 +16,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kubara.michal.inzynierka.core.dao.ResetPasswordTokenRepository;
 import com.kubara.michal.inzynierka.core.dao.RoleRepository;
 import com.kubara.michal.inzynierka.core.dao.StreetRepository;
 import com.kubara.michal.inzynierka.core.dao.UserRepository;
 import com.kubara.michal.inzynierka.core.dao.VerificationTokenRepository;
 import com.kubara.michal.inzynierka.core.entity.Address;
 import com.kubara.michal.inzynierka.core.entity.Estate;
+import com.kubara.michal.inzynierka.core.entity.ResetPasswordToken;
 import com.kubara.michal.inzynierka.core.entity.Role;
 import com.kubara.michal.inzynierka.core.entity.Street;
 import com.kubara.michal.inzynierka.core.entity.User;
@@ -44,6 +46,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
     private VerificationTokenRepository tokenRepository;
+	
+	@Autowired
+	private ResetPasswordTokenRepository resetPasswordTokenRepository;
 	
 	@Autowired
 	private StreetRepository streetRepository;
@@ -317,6 +322,20 @@ public class UserServiceImpl implements UserService {
 			return false;
 		}
 		return false;
+	}
+
+	@Override
+	@Transactional
+	public void createResetPasswordToken(User user, String token) {
+		ResetPasswordToken newToken = new ResetPasswordToken(token, user);
+		resetPasswordTokenRepository.save(newToken);		
+	}
+
+	@Override
+	@Transactional
+	public void setNewPassword(User user, String password) {
+		user.setPassword(passwordEncoder.encode(password));
+		userRepository.save(user);
 	}
 
 	

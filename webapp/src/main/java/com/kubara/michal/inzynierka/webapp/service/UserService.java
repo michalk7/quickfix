@@ -45,5 +45,9 @@ public interface UserService extends UserDetailsService {
 	User update(User userToEdit, UserEditDTO dtoUser) throws UserAlreadyExistsException;
 	
 	void changePassword(User user, PasswordChangeDTO passwordDTO) throws WrongPasswordException;
+
+	void createResetPasswordToken(User user, String token);
+
+	void setNewPassword(User user, String password);
     
 }

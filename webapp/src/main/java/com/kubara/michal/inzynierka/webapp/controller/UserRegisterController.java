@@ -3,6 +3,7 @@ package com.kubara.michal.inzynierka.webapp.controller;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -33,8 +34,7 @@ import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.core.entity.VerificationToken;
 import com.kubara.michal.inzynierka.webapp.dto.ExpertDTO;
 import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
-import com.kubara.michal.inzynierka.webapp.event.OnRegistrationCompleteEvent;
-import com.kubara.michal.inzynierka.webapp.event.OnTokenResendEvent;
+import com.kubara.michal.inzynierka.webapp.event.GenericMailEvent;
 import com.kubara.michal.inzynierka.webapp.service.CategoryService;
 import com.kubara.michal.inzynierka.webapp.service.UserService;
 import com.kubara.michal.inzynierka.webapp.util.GenericResponse;
@@ -85,7 +85,7 @@ public class UserRegisterController {
 	
 	@PostMapping("/processExpertRegistrationForm")
 	public String proccessExpertRegistrationForm(@Valid @ModelAttribute("expert") ExpertDTO dtoExpert, 
-			BindingResult bindingResult, Model model, WebRequest request) {
+			BindingResult bindingResult, Model model, HttpServletRequest request) {
 		
 		if(bindingResult.hasErrors()) {
 			return "/expert/expert-registration-form";
@@ -101,10 +101,13 @@ public class UserRegisterController {
 			return "/expert/expert-registration-form";
 		}
 		
+		String token = UUID.randomUUID().toString();
+		userService.createVerificationToken(registered, token);
+		SimpleMailMessage mail = constructAccountCreatedEmail(getAppUrl(request), request.getLocale(), token, registered);
+		
 		try {
-			String appUrl = request.getContextPath();
 			logger.info("Przed odpaleniem listenera");
-			eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
+			eventPublisher.publishEvent(new GenericMailEvent(this, mail));
 			logger.info("Po odpaleniu listenera");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -132,7 +135,7 @@ public class UserRegisterController {
 
 	@PostMapping("/processRegistrationForm")
 	public String proccessRegistrationForm(@Valid @ModelAttribute("user") UserDTO dtoUser, BindingResult bindingResult,
-			Model model, WebRequest request) {
+			Model model, HttpServletRequest request) {
 		
 		if(bindingResult.hasErrors()) {
 			return "/user/user-registration-form";
@@ -143,10 +146,13 @@ public class UserRegisterController {
 			return "/user/user-registration-form";
 		}
 		
+		String token = UUID.randomUUID().toString();
+		userService.createVerificationToken(registered, token);
+		SimpleMailMessage mail = constructAccountCreatedEmail(getAppUrl(request), request.getLocale(), token, registered);
+		
 		try {
-			String appUrl = request.getContextPath();
 			logger.info("Przed odpaleniem listenera");
-			eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), appUrl));
+			eventPublisher.publishEvent(new GenericMailEvent(this, mail));
 			logger.info("Po odpaleniu listenera");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -234,7 +240,7 @@ public class UserRegisterController {
 		SimpleMailMessage mail = constructResendVerificationTokenEmail(appUrl, locale, newToken, user);
 		
 		try {
-			eventPublisher.publishEvent(new OnTokenResendEvent(user, request.getLocale(), appUrl, newToken, mail));
+			eventPublisher.publishEvent(new GenericMailEvent(this, mail));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new GenericResponse("Mail Error", "Mail Error");
@@ -247,18 +253,30 @@ public class UserRegisterController {
 	private SimpleMailMessage constructResendVerificationTokenEmail(String appUrl, Locale locale, VerificationToken verificationToken, User user) {
 		String url = appUrl + "/register/registrationConfirm?token=" + verificationToken.getToken();
 		String message = messages.getMessage("message.resendTokenMailText", null, locale);
-        String signature = messages.getMessage("message.confirmMailSignature", null, locale);
-        String recipientAddress = user.getEmail();
 		String subject = "QuickFix - Ponowne wysłanie linku aktywującego.";
-        
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(recipientAddress);
-        email.setSubject(subject);
-        email.setText(message + url + signature);
-        email.setFrom(env.getProperty("spring.mail.username"));
-        return email;
+		
+		return constructEmailMessage(subject, message + url, user, locale);
 	}
 	
-	
-	
+	 private SimpleMailMessage constructAccountCreatedEmail(String appUrl, Locale locale, String token, User user) {
+		String url = appUrl + "/register/registrationConfirm?token=" + token;
+		String message = messages.getMessage("message.confirmMailText", null, locale);
+		String subject = "QuickFix - Potwierdzenie Rejestracji";
+		return constructEmailMessage(subject, message + url, user, locale);
+	}
+
+	private SimpleMailMessage constructEmailMessage(String subject, String body, User user, Locale locale) {
+		SimpleMailMessage email = new SimpleMailMessage();
+        String signature = messages.getMessage("message.confirmMailSignature", null, locale);
+	    email.setSubject(subject);
+	    email.setText(body + signature);
+	    email.setTo(user.getEmail());
+	    email.setFrom(env.getProperty("spring.mail.username"));
+	    return email;
+	}
+
+	private String getAppUrl(HttpServletRequest request) {
+        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+    }
+
 }

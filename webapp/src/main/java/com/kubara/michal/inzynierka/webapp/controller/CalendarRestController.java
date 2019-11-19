@@ -228,8 +228,8 @@ public class CalendarRestController {
 			SimpleMailMessage mailToExpert = constructEmail(locale, expert, "Dodano nowe wydarzenie.", expertMailContent);
 			
 			try {
-				eventPublisher.publishEvent(new GenericMailEvent(user, mailToUser));
-				eventPublisher.publishEvent(new GenericMailEvent(expert, mailToExpert));
+				eventPublisher.publishEvent(new GenericMailEvent(this, mailToUser));
+				eventPublisher.publishEvent(new GenericMailEvent(this, mailToExpert));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return new GenericResponse("Zmiany zostały zapisane, ale wysyłanie maili nie powiodło się", "Mail Error");
@@ -280,8 +280,8 @@ public class CalendarRestController {
 		SimpleMailMessage mailToExpert = constructEmail(locale, expert, "Potwierdzono wydarzenie.", expertMailContent);
 		
 		try {
-			eventPublisher.publishEvent(new GenericMailEvent(user, mailToUser));
-			eventPublisher.publishEvent(new GenericMailEvent(expert, mailToExpert));
+			eventPublisher.publishEvent(new GenericMailEvent(this, mailToUser));
+			eventPublisher.publishEvent(new GenericMailEvent(this, mailToExpert));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new GenericResponse("Zmiany zostały zapisane, ale wysyłanie maili nie powiodło się", "Mail Error");
@@ -317,8 +317,8 @@ public class CalendarRestController {
 		SimpleMailMessage mailToExpert = constructEmail(locale, expert, "Odrzucono wydarzenie.", expertMailContent);
 		
 		try {
-			eventPublisher.publishEvent(new GenericMailEvent(user, mailToUser));
-			eventPublisher.publishEvent(new GenericMailEvent(expert, mailToExpert));
+			eventPublisher.publishEvent(new GenericMailEvent(this, mailToUser));
+			eventPublisher.publishEvent(new GenericMailEvent(this, mailToExpert));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new GenericResponse("Zmiany zostały zapisane, ale wysyłanie maili nie powiodło się", "Mail Error");

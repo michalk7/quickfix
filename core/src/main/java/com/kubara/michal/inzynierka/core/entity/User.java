@@ -32,6 +32,7 @@ public class User {
 	private Collection<Role> roles;
 	private Address address;
 	private VerificationToken verificationToken;
+	private ResetPasswordToken resetPasswordToken;
 	private Collection<Category> categories;
 	private Estate userEstate;
 	private Collection<Estate> expertEstates;
@@ -161,6 +162,15 @@ public class User {
 		this.verificationToken = verificationToken;
 	}
 
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	public ResetPasswordToken getResetPasswordToken() {
+		return resetPasswordToken;
+	}
+
+	public void setResetPasswordToken(ResetPasswordToken resetPasswordToken) {
+		this.resetPasswordToken = resetPasswordToken;
+	}
+
 	public boolean isVerified() {
 		return verified;
 	}
@@ -192,16 +202,6 @@ public class User {
 	public void setUserEstate(Estate userEstate) {
 		this.userEstate = userEstate;
 	}
-
-//	@ManyToOne(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH } )
-//	@JoinColumn(name="expert_estate_id")
-//	public Estate getExpertEstate() {
-//		return expertEstate;
-//	}
-//
-//	public void setExpertEstate(Estate expertEstate) {
-//		this.expertEstate = expertEstate;
-//	}
 
 	@ManyToMany(fetch=FetchType.LAZY, cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	@JoinTable(name="experts_estates",

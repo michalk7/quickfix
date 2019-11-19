@@ -13,17 +13,6 @@
 </head>
 <body>
 	<div th:fragment="header">
-		<!--  
-		<nav class="navbar navbar-dark bg-dark">
-				<a class="navbar-brand" th:href="@{/}">Brand</a>
-				<div id="navbar" class="collapse navbar-collapse">
-	                <ul class="nav navbar-nav">
-	                    <li class="active"><a th:href="@{/}">Home</a></li>
-	                    <li class="active"><a th:href="@{/about}">About</a></li>
-	                </ul>
-				</div>
-		</nav>
-		-->
 		
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		    <a class="navbar-brand" th:href="@{/}">QuickFix</a>
@@ -76,10 +65,8 @@
 				  		<form th:action="@{/logout}" method="POST">
 				  			<input class="nav-link btn btn-outline-success my-2 my-sm-0" type="submit" value="Wyloguj"/>
 				  		</form>
-<!-- 				  		<a class="nav-link btn btn-outline-success my-2 my-sm-0" th:href="@{/logout}">Wyloguj</a> -->
 				  	</li>
 			  	
-			  	<!-- dodac link do moje konto -->
 			  </ul>
 			  
 		    </div>

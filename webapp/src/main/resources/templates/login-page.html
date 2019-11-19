@@ -31,6 +31,10 @@
 					<div th:if="${param.showAccountWasActive}" class="alert alert-danger col-xs-offset-1 col-xs-10">
 						Konto zostało już wcześniej aktywowane
 					</div>
+					
+					<div th:if="${ #ctx.containsVariable('errorPasswordChangeMsg') }" class="alert alert-danger col-xs-offset-1 col-xs-10" th:text="${errorPasswordChangeMsg}">
+						passChangeError
+					</div>
 
 					<!-- Check for logout -->
 					<div th:if="${param.logout}"class="alert alert-success col-xs-offset-1 col-xs-10">
@@ -39,6 +43,10 @@
 					
 					<div th:if="${param.showActivateMsg}" class="alert alert-success col-xs-offset-1 col-xs-10">
 						Konto zostało pomyślnie aktywowane
+					</div>
+					
+					<div th:if="${param.setPasswordSuccess}" class="alert alert-success col-xs-offset-1 col-xs-10">
+						Hasło zostało pomyślnie zmienione.
 					</div>
 					
 					<div th:if="${param.registrationSuccess}"class="alert alert-success col-xs-offset-1 col-xs-10">
@@ -75,6 +83,10 @@
 	  	
 	  	<div class="form-label-group">
 			<a th:href="@{/register/showRegisterPage}" role="button" aria-pressed="true">Nie masz konta? Zarejestruj się</a>
+		</div>
+		
+		<div class="form-label-group">
+			<a th:href="@{/user/showResetPasswordPage}" role="button">Zapomniałem hasła</a>
 		</div>
 		
 		<div>

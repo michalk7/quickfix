@@ -327,7 +327,11 @@
 								<div th:if="${ not #fields.hasErrors('password')  }">
 									<p>Wymagane</p>
 								</div>
-								<p th:each="err : ${#fields.errors('password')}" th:text="${err}"><p/>
+								<div th:each="err : ${#fields.errors('password')}">
+									<div th:each="msg : ${ #strings.arraySplit(err, '|;|') }">
+										<p th:text="${msg}"></p>
+									</div>
+								</div>
 						</div>
 						</div>
 					</div>

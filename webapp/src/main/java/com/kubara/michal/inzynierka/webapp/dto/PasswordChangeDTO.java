@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.kubara.michal.inzynierka.webapp.validation.FieldMatch;
+import com.kubara.michal.inzynierka.webapp.validation.ValidPassword;
 
 @FieldMatch.List({
     @FieldMatch(first = "password", second = "matchingPassword", message = "Hasła muszą być zgodne.")
@@ -12,6 +13,7 @@ public class PasswordChangeDTO {
 
 	@NotNull(message = "Wymagane")
 	@Size(min = 1, message = "Wymagane")
+	@ValidPassword(message = "Hasło nie spełnia reguł")
 	private String password;
 	
 	@NotNull(message = "Wymagane")

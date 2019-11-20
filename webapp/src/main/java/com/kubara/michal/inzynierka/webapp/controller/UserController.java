@@ -1,5 +1,8 @@
 package com.kubara.michal.inzynierka.webapp.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -102,7 +105,28 @@ public class UserController {
 		}
 
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		List<Character> usernameRev = new ArrayList<>();
+		for(char c : user.getUserName().toCharArray()) {
+			usernameRev.add(c);
+		}
+		
+		Collections.reverse(usernameRev);
+		String reversedUserName = "";
+		for(char c : usernameRev) {
+			reversedUserName += c;
+		}
+		
+		String newPass = passwordDTO.getPassword();
+		
+		if( newPass.contains(user.getUserName()) || newPass.contains(reversedUserName)) {
+			bindingResult.rejectValue("password", "message.passwordContainsUsername");
+			return "setNewPassword";
+		}
+		
 		userService.setNewPassword(user, passwordDTO.getPassword());
+		
+		userService.deleteResetToken(user.getResetPasswordToken());
 		
 		return "redirect:/showLoginPage?setPasswordSuccess";
 	}

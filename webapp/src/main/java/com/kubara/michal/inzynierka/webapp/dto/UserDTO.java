@@ -6,6 +6,7 @@ import javax.validation.constraints.Size;
 import com.kubara.michal.inzynierka.webapp.validation.FieldMatch;
 import com.kubara.michal.inzynierka.webapp.validation.IsCheckboxCheck;
 import com.kubara.michal.inzynierka.webapp.validation.ValidEmail;
+import com.kubara.michal.inzynierka.webapp.validation.ValidPassword;
 import com.kubara.michal.inzynierka.webapp.validation.ValidPolishPhoneNumber;
 
 @FieldMatch.List({
@@ -19,6 +20,7 @@ public class UserDTO {
 	
 	@NotNull(message = "Wymagane")
 	@Size(min = 1, message = "Wymagane")
+	@ValidPassword(message = "Hasło nie spełnia reguł")
 	private String password;
 	
 	@NotNull(message = "Wymagane")

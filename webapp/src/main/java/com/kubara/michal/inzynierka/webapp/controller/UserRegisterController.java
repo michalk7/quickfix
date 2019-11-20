@@ -1,6 +1,8 @@
 package com.kubara.michal.inzynierka.webapp.controller;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -95,7 +97,15 @@ public class UserRegisterController {
 			return "/expert/expert-registration-form";
 		}
 		
-
+		String reversedUserName = reverseString(dtoExpert.getUserName());
+		
+		String newPass = dtoExpert.getPassword();
+		
+		if( newPass.contains(dtoExpert.getUserName()) || newPass.contains(reversedUserName)) {
+			bindingResult.rejectValue("password", "message.passwordContainsUsername");
+			return "/expert/expert-registration-form";
+		}
+		
 		User registered = createNewExpertAccount(dtoExpert, bindingResult);
 		if(registered == null) {
 			return "/expert/expert-registration-form";
@@ -121,6 +131,7 @@ public class UserRegisterController {
 		
 		return "redirect:/showLoginPage?registrationSuccess";
 	}
+
 	
 	private User createNewExpertAccount(ExpertDTO dtoExpert, BindingResult bindingResult) {
 		User registeredUser = null;
@@ -138,6 +149,15 @@ public class UserRegisterController {
 			Model model, HttpServletRequest request) {
 		
 		if(bindingResult.hasErrors()) {
+			return "/user/user-registration-form";
+		}
+		
+		String reversedUserName = reverseString(dtoUser.getUserName());
+		
+		String newPass = dtoUser.getPassword();
+		
+		if( newPass.contains(dtoUser.getUserName()) || newPass.contains(reversedUserName)) {
+			bindingResult.rejectValue("password", "message.passwordContainsUsername");
 			return "/user/user-registration-form";
 		}
 		
@@ -278,5 +298,19 @@ public class UserRegisterController {
 	private String getAppUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
-
+	
+	private String reverseString(String string) {
+		List<Character> charList = new ArrayList<>();
+		for(char c : string.toCharArray()) {
+			charList.add(c);
+		}
+		
+		Collections.reverse(charList);
+		String reversedString = "";
+		for(char c : charList) {
+			reversedString += c;
+		}
+		return reversedString;
+	}
+	
 }

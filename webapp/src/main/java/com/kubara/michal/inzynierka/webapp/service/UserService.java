@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import com.kubara.michal.inzynierka.core.entity.ResetPasswordToken;
 import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.core.entity.VerificationToken;
 import com.kubara.michal.inzynierka.webapp.dto.ExpertDTO;
@@ -49,5 +50,7 @@ public interface UserService extends UserDetailsService {
 	void createResetPasswordToken(User user, String token);
 
 	void setNewPassword(User user, String password);
+
+	void deleteResetToken(ResetPasswordToken resetPasswordToken);
     
 }

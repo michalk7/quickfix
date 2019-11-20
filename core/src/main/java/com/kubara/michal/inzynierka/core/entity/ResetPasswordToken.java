@@ -60,7 +60,7 @@ public class ResetPasswordToken {
 		this.token = token;
 	}
 
-	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(nullable = false, name = "user_id")
 	public User getUser() {
 		return user;

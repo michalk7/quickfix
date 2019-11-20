@@ -327,6 +327,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void createResetPasswordToken(User user, String token) {
+		ResetPasswordToken oldToken = resetPasswordTokenRepository.findByUser(user);
+		if(oldToken != null) {
+			user.setResetPasswordToken(null);
+			resetPasswordTokenRepository.delete(oldToken);
+		}
 		ResetPasswordToken newToken = new ResetPasswordToken(token, user);
 		resetPasswordTokenRepository.save(newToken);		
 	}
@@ -336,6 +341,13 @@ public class UserServiceImpl implements UserService {
 	public void setNewPassword(User user, String password) {
 		user.setPassword(passwordEncoder.encode(password));
 		userRepository.save(user);
+	}
+
+	@Override
+	@Transactional
+	public void deleteResetToken(ResetPasswordToken resetPasswordToken) {
+		resetPasswordToken.getUser().setResetPasswordToken(null);
+		resetPasswordTokenRepository.delete(resetPasswordToken);
 	}
 
 	

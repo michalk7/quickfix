@@ -1,5 +1,8 @@
 package com.kubara.michal.inzynierka.webapp.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -99,6 +102,24 @@ public class MyAccountController {
 		model.addAttribute("user", getUserEditDTOFromUser(user));
 		
 		if(bindingResult.hasErrors()) {
+			return "/myAccount/myAccount";
+		}
+
+		List<Character> usernameRev = new ArrayList<>();
+		for(char c : user.getUserName().toCharArray()) {
+			usernameRev.add(c);
+		}
+		
+		Collections.reverse(usernameRev);
+		String reversedUserName = "";
+		for(char c : usernameRev) {
+			reversedUserName += c;
+		}
+		
+		String newPass = passwordChange.getPassword();
+		
+		if( newPass.contains(user.getUserName()) || newPass.contains(reversedUserName)) {
+			bindingResult.rejectValue("password", "message.passwordContainsUsername");
 			return "/myAccount/myAccount";
 		}
 		

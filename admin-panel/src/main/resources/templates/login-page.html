@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>QuickFix - AdminPanel - Logowanie</title>
+	
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+	
+	<link rel="stylesheet" type="text/css" th:href="@{/css/login-page.css}" href="../../css/login-page.css" />
+</head>
+<body>
+
+	 <form th:action="@{/authenticateTheUser}" method="POST" class="form-signin">
+	 	<div class="text-center mb-4">
+	    	<h1 class="h3 mb-3 font-weight-normal">Logowanie</h1>
+	    </div>
+	    
+	    <div class="form-group">
+	        <div class="col-xs-15">
+	            <div>
+				
+					<!-- Check for login error -->																	
+					<div th:if="${param.error}" class="alert alert-danger col-xs-offset-1 col-xs-10" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">
+						error
+					</div>
+					
+<!-- 					<div th:if="${session[RESEND_ACTIVATION_LINK]}" class="alert alert-danger col-xs-offset-1 col-xs-10" > -->
+<!-- 						<a href="" th:text="${session[RESEND_ACTIVATION_LINK]}"></a>		 -->
+<!-- 					</div> -->
+					
+					<div th:if="${param.showAccountWasActive}" class="alert alert-danger col-xs-offset-1 col-xs-10">
+						Konto zostało już wcześniej aktywowane
+					</div>
+					
+					<div th:if="${ #ctx.containsVariable('errorPasswordChangeMsg') }" class="alert alert-danger col-xs-offset-1 col-xs-10" th:text="${errorPasswordChangeMsg}">
+						passChangeError
+					</div>
+
+					<!-- Check for logout -->
+					<div th:if="${param.logout}"class="alert alert-success col-xs-offset-1 col-xs-10">
+						Wylogowano pomyślnie
+					</div>
+					
+					<div th:if="${param.showActivateMsg}" class="alert alert-success col-xs-offset-1 col-xs-10">
+						Konto zostało pomyślnie aktywowane
+					</div>
+					
+					<div th:if="${param.setPasswordSuccess}" class="alert alert-success col-xs-offset-1 col-xs-10">
+						Hasło zostało pomyślnie zmienione.
+					</div>
+					
+					<div th:if="${param.registrationSuccess}"class="alert alert-success col-xs-offset-1 col-xs-10">
+						Konto zostało utworzone. Na podany adres email wysłaliśmy link aktywacyjny.
+					</div>
+					
+					<div th:if="${param.message}" class="alert alert-success col-xs-offset-1 col-xs-10" th:text="${param.message}">msg</div>
+					
+	            </div>
+	        </div>
+	    </div>
+	    
+	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+	
+	 	<div class="form-label-group">
+	    	<input type="text" id="inputUserName" name="username" class="form-control" placeholder="Nazwa użytkownika" required autofocus>
+	    	<label for="inputUserName">Nazwa użytkownika</label>
+	  	</div>
+	
+	 	<div class="form-label-group">
+	    	<input type="password" id="inputPassword" name="password" class="form-control" placeholder="Hasło" required>
+	    	<label for="inputPassword">Hasło</label>
+	  	</div>
+	  	
+	  	<div class="form-label-group">
+	  		<button class="btn btn-lg btn-primary btn-block" type="submit">Zaloguj się</button>
+	  	</div>
+
+		<div>
+			<a th:href="@{/}" role="button">Powrót do strony głównej</a>
+		</div>
+		
+  	
+	  	<p class="mt-5 mb-3 text-muted text-center">&copy; 2019 Michał Kubara</p>
+	</form>
+
+
+</body>
+</html>

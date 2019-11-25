@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>QuickFix - AdminPanel - Home</title>
 	
 	<!--  <div th:replace="fragments/header :: header-css"/>  -->
@@ -10,12 +11,29 @@
 </head>
 <body>
 	
-	<div class="container">
+	<div th:replace="fragments/header :: header"></div>
+	
+	<div class="container-fluid">
+		<div class="row">
 		
-		<h1>hello</h1>
+		
+			<div th:replace="fragments/header :: sidebar"></div>
+			
+			
+        	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4 col-sm-10">
+        		<h1>Panel administracyjny aplikacji QuickFix</h1>
+        	</main>
+			
+		
+		</div>
 	</div>
 
 	<div th:replace="fragments/footer :: footer"></div>
+	
+	 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
 
 </body>
 </html>

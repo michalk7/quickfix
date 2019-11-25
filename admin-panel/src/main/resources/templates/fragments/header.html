@@ -14,45 +14,52 @@
 <body>
 	<div th:fragment="header">
 		
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
 		    <a class="navbar-brand" th:href="@{/}">QuickFix</a>
 		    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
 		      <span class="navbar-toggler-icon"></span>
 		    </button>
 		
-		    <div class="navbar-collapse collapse" id="navbarColor01">
-		      <ul class="navbar-nav mr-auto">
-		        <li class="nav-item">
-		          <a class="nav-link" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
-		        </li>
-		        <li class="nav-item" sec:authorize="isAuthenticated() ? hasRole('ROLE_USER') : true">
-		          <a class="nav-link" th:href="@{/search}">Znajdź fachowca</a>
-		        </li>
-		        <li class="nav-item">
-		          <a class="nav-link" th:href="@{/expert}">Dla fachowców</a>
-		        </li>
-		        <li class="nav-item" sec:authorize="isAuthenticated()">
-		        	<a class="nav-link" th:href="@{/calendar}">Mój kalendarz</a>
-		        </li>
-		        <li class="nav-item">
-		          <a class="nav-link" th:href="@{/about}">O nas</a>
-		        </li>
-		      </ul>
-		      
-		      
+		    <div class="navbar-collapse collapse" id="navbarColor01">   
 		      
 		      <ul class="navbar-nav ml-auto">
-			  		<li class="add-margin-right navbar-text" sec:authorize="isAuthenticated()">
+					
+					 <li class="nav-item dropdown d-sm-block d-md-none">
+		                <a class="nav-link dropdown-toggle" href="#" id="smallerscreenmenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		                  Menu panelu
+		                </a>
+		                <div class="dropdown-menu" aria-labelledby="smallerscreenmenu">
+		                    <a class="dropdown-item activeChanger" th:href="@{/}">
+		                    	<span data-feather="home"></span>
+		                    	Dashboard
+		                    </a>
+		                    <a class="dropdown-item activeChanger" href="#">
+		                    	<span data-feather="terminal"></span>
+		                    	Admini
+		                    </a>
+		                    <a class="dropdown-item activeChanger" href="#">
+		                    	<span data-feather="users"></span>
+		                    	Fachowcy
+		                    </a>
+		                    <a class="dropdown-item activeChanger" href="#">
+		                    	<span data-feather="shopping-cart"></span>
+		                    	Klienci
+		                    </a>
+		                    <a class="dropdown-item activeChanger" href="#">
+		                    	<span data-feather="layers"></span>
+		                    	Osiedla
+		                    </a>
+		                    <a class="dropdown-item activeChanger" href="#">
+		                    	<span data-feather="calendar"></span>
+		                    	Wydarzenia
+		                    </a>
+		                </div>
+		            </li>
+		            
+		            <li class="add-margin-right navbar-text" sec:authorize="isAuthenticated()">
 				  		Zalogowano jako <span sec:authentication="name"></span>
 					</li>
-				  
-					<li class="add-margin-right nav-item" sec:authorize="!isAuthenticated()">
-			  			<a th:if="${ !#strings.contains(#httpServletRequest.requestURI, '/expert') }" 
-			  				class="nav-link btn btn-outline-success my-2 my-sm-0" th:href="@{/register/showRegisterPage}">Rejestracja</a>
-			  			<a th:if="${ #strings.contains(#httpServletRequest.requestURI, '/expert') }" 
-			  				class="nav-link btn btn-outline-success my-2 my-sm-0" th:href="@{/expert/showRegisterPage}">Rejestracja</a>
-			  		</li>
-				  
+						  
 				  	<li class="nav-item" sec:authorize="!isAuthenticated()">
 				  		<a class="nav-link btn btn-outline-success my-2 my-sm-0" th:href="@{/showLoginPage}">Logowanie</a>
 				  	</li>
@@ -72,6 +79,53 @@
 		    </div>
 		  </nav>
 		  
+	</div>
+	
+	<div th:fragment="sidebar">
+		 <nav class="col-md-2 col-sm-2 d-none d-md-block bg-light sidebar mt-1">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link activeChanger" th:href="@{/}">
+                  <span data-feather="home"></span>
+                  Dashboard
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link activeChanger" href="#">
+                  <span data-feather="terminal"></span>
+                  Admini
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link activeChanger" href="#">
+                  <span data-feather="users"></span>
+                  Fachowcy
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link activeChanger" href="#">
+                  <span data-feather="shopping-cart"></span>
+                  Klienci
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link activeChanger" href="#">
+                  <span data-feather="layers"></span>
+                  Osiedla
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link activeChanger" href="#">
+                  <span data-feather="calendar"></span>
+                  Wydarzenia
+                </a>
+              </li>
+            </ul>
+            
+          </div>
+        </nav>
+		
 	</div>
 	
 	

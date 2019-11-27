@@ -3,11 +3,11 @@ package com.kubara.michal.inzynierka.webapp.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.kubara.michal.inzynierka.webapp.validation.FieldMatch;
-import com.kubara.michal.inzynierka.webapp.validation.IsCheckboxCheck;
-import com.kubara.michal.inzynierka.webapp.validation.ValidEmail;
-import com.kubara.michal.inzynierka.webapp.validation.ValidPassword;
-import com.kubara.michal.inzynierka.webapp.validation.ValidPolishPhoneNumber;
+import com.kubara.michal.inzynierka.core.validation.FieldMatch;
+import com.kubara.michal.inzynierka.core.validation.IsCheckboxCheck;
+import com.kubara.michal.inzynierka.core.validation.ValidEmail;
+import com.kubara.michal.inzynierka.core.validation.ValidPassword;
+import com.kubara.michal.inzynierka.core.validation.ValidPolishPhoneNumber;
 
 @FieldMatch.List({
     @FieldMatch(first = "password", second = "matchingPassword", message = "Hasła muszą być zgodne.")

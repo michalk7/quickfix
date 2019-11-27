@@ -3,7 +3,7 @@ package com.kubara.michal.inzynierka.webapp.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.kubara.michal.inzynierka.webapp.validation.ValidPolishPhoneNumber;
+import com.kubara.michal.inzynierka.core.validation.ValidPolishPhoneNumber;
 
 public class UserEditDTO {
 

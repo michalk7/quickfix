@@ -37,10 +37,10 @@ import com.kubara.michal.inzynierka.core.entity.VerificationToken;
 import com.kubara.michal.inzynierka.webapp.dto.ExpertDTO;
 import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
 import com.kubara.michal.inzynierka.webapp.event.GenericMailEvent;
+import com.kubara.michal.inzynierka.webapp.exception.UserAlreadyExistsException;
 import com.kubara.michal.inzynierka.webapp.service.CategoryService;
 import com.kubara.michal.inzynierka.webapp.service.UserService;
 import com.kubara.michal.inzynierka.webapp.util.GenericResponse;
-import com.kubara.michal.inzynierka.webapp.validation.UserAlreadyExistsException;
 
 @Controller
 @RequestMapping("/register")

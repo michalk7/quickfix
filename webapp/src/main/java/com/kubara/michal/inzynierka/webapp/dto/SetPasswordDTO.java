@@ -3,8 +3,8 @@ package com.kubara.michal.inzynierka.webapp.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.kubara.michal.inzynierka.webapp.validation.FieldMatch;
-import com.kubara.michal.inzynierka.webapp.validation.ValidPassword;
+import com.kubara.michal.inzynierka.core.validation.FieldMatch;
+import com.kubara.michal.inzynierka.core.validation.ValidPassword;
 
 @FieldMatch.List({
     @FieldMatch(first = "password", second = "matchingPassword", message = "Hasła muszą być zgodne.")

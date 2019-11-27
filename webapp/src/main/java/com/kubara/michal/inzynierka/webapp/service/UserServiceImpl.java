@@ -32,8 +32,8 @@ import com.kubara.michal.inzynierka.webapp.dto.ExpertDTO;
 import com.kubara.michal.inzynierka.webapp.dto.PasswordChangeDTO;
 import com.kubara.michal.inzynierka.webapp.dto.UserDTO;
 import com.kubara.michal.inzynierka.webapp.dto.UserEditDTO;
-import com.kubara.michal.inzynierka.webapp.validation.UserAlreadyExistsException;
-import com.kubara.michal.inzynierka.webapp.validation.WrongPasswordException;
+import com.kubara.michal.inzynierka.webapp.exception.UserAlreadyExistsException;
+import com.kubara.michal.inzynierka.webapp.exception.WrongPasswordException;
 
 @Service
 public class UserServiceImpl implements UserService {

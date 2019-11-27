@@ -24,9 +24,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.kubara.michal.inzynierka.core.entity.User;
 import com.kubara.michal.inzynierka.webapp.dto.PasswordChangeDTO;
 import com.kubara.michal.inzynierka.webapp.dto.UserEditDTO;
+import com.kubara.michal.inzynierka.webapp.exception.UserAlreadyExistsException;
+import com.kubara.michal.inzynierka.webapp.exception.WrongPasswordException;
 import com.kubara.michal.inzynierka.webapp.service.UserService;
-import com.kubara.michal.inzynierka.webapp.validation.UserAlreadyExistsException;
-import com.kubara.michal.inzynierka.webapp.validation.WrongPasswordException;
 
 @Controller
 @RequestMapping("/myAccount")

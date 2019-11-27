@@ -1,4 +1,4 @@
-package com.kubara.michal.inzynierka.webapp.validation;
+package com.kubara.michal.inzynierka.webapp.exception;
 
 
 @SuppressWarnings("serial")

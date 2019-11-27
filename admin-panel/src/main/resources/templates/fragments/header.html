@@ -15,7 +15,7 @@
 	<div th:fragment="header">
 		
 		<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-		    <a class="navbar-brand" th:href="@{/}">QuickFix</a>
+		    <a class="navbar-brand" th:href="@{/}">QuickFix - Admin Panel</a>
 		    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
 		      <span class="navbar-toggler-icon"></span>
 		    </button>
@@ -33,11 +33,11 @@
 		                    	<span data-feather="home"></span>
 		                    	Dashboard
 		                    </a>
-		                    <a class="dropdown-item activeChanger" href="#">
+		                    <a class="dropdown-item activeChanger" th:href="@{/admins}">
 		                    	<span data-feather="terminal"></span>
-		                    	Admini
+		                    	Administratorzy
 		                    </a>
-		                    <a class="dropdown-item activeChanger" href="#">
+		                    <a class="dropdown-item activeChanger" th:href="@{/experts}">
 		                    	<span data-feather="users"></span>
 		                    	Fachowcy
 		                    </a>
@@ -92,13 +92,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link activeChanger" href="#">
+                <a class="nav-link activeChanger" th:href="@{/admins}">
                   <span data-feather="terminal"></span>
-                  Admini
+                  Administratorzy
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link activeChanger" href="#">
+                <a class="nav-link activeChanger" th:href="@{/experts}">
                   <span data-feather="users"></span>
                   Fachowcy
                 </a>

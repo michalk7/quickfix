@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>QuickFix - AdminPanel - Dodaj administratora</title>
+	
+	<!--  <div th:replace="fragments/header :: header-css"/>  -->
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/css/addAdmin.css}" href="../../css/addAdmin.css" />
+
+</head>
+<body>
+	
+	<div th:replace="fragments/header :: header"></div>
+	
+	<div class="container-fluid">
+		<div class="row">
+		
+		
+			<div th:replace="fragments/header :: sidebar"></div>
+			
+			
+        	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4 col-sm-10">
+        		<h1>Dodaj administratora</h1>
+        		
+        	
+        		<form id="mainForm" th:action="@{/admins/add}" 
+					  	   th:object="${admin}" th:method="POST"
+					  	   class="form-signin" novalidate
+					  	   th:classappend="${ not #ctx.containsVariable('validated') } ? was-validated : needs-validation">	
+					
+			
+				    <!-- Place for messages: error, alert etc ... -->
+				    <div class="form-group">
+				        <div class="col-xs-15">
+				            <div>
+							
+								<!-- Check for registration error -->
+								<div th:if="${editError}" class="alert alert-danger col-xs-offset-1 col-xs-10"
+									th:text=${editError} >error
+								</div>
+								
+								<div th:if="${param.editSuccess}"class="alert alert-success col-xs-offset-1 col-xs-10">
+									Dane zostały zmienione pomyślnie.
+								</div>
+																										
+				            </div>
+				        </div>
+				    </div>
+				    
+				    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+			
+					<!-- User name -->
+					<div class="form-group row">
+						<label for="inputUserName" class="col-sm-2 col-form-label">Nazwa użytkownika (*)</label>
+						<div class="col-sm-6">
+							<input id="inputUserName" type="text" th:field="*{userName}" placeholder="Nazwa użytkownika (*)" 
+								class="form-control" autofocus required
+								th:classappend="${ #fields.hasErrors('userName') } ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"/>
+							<div class="invalid-feedback">
+								<div th:if="${ not #fields.hasErrors('userName')  }">
+									<p>Wymagane</p>
+								</div>
+								<p th:each="err : ${#fields.errors('userName')}" th:text="${err}"><p/>
+							</div>
+						</div>
+					</div>	
+					
+					<!-- First name -->
+					<div class="form-group row">
+						<label for="inputFirstName" class="col-sm-2 col-form-label">Imię (*)</label>
+						<div class="col-sm-6">
+							<input id="inputFirstName" type="text" th:field="*{firstName}" placeholder="Imię (*)" 
+								class="form-control" required
+								th:classappend="${ #fields.hasErrors('firstName')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"/>
+							<div class="invalid-feedback">
+								<div th:if="${ not #fields.hasErrors('firstName')  }">
+									<p>Wymagane</p>
+								</div>
+								<p th:each="err : ${#fields.errors('firstName')}" th:text="${err}"><p/>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Last name -->
+					<div class="form-group row">
+						<label for="inputLastName" class="col-sm-2 col-form-label">Nazwisko (*)</label>
+						<div class="col-sm-6">
+							<input id="inputLastName" type="text" th:field="*{lastName}" 
+								placeholder="Nazwisko (*)" class="form-control" required
+								th:classappend="${ #fields.hasErrors('lastName')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" />
+							<div class="invalid-feedback">
+								<div th:if="${ not #fields.hasErrors('lastName')  }">
+									<p>Wymagane</p>
+								</div>
+								<p th:each="err : ${#fields.errors('lastName')}" th:text="${err}"><p/>
+							</div>
+						</div>
+					</div>
+					
+					
+					<!-- Email -->
+					<div class="form-group row">
+						<label for="inputEmail" class="col-sm-2 col-form-label">Email (*)</label>
+						<div class="col-sm-6">
+							<input id="inputEmail" type="text" th:field="*{email}" 
+								placeholder="Email (*)" class="form-control" required 
+								th:classappend="${ #fields.hasErrors('email')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"
+								pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?" 
+								/>
+							<div class="invalid-feedback">
+								<div th:if="${ not #fields.hasErrors('email')  }">
+									<p>Wymagane</p>
+								</div>
+								<p th:each="err : ${#fields.errors('email')}" th:text="${err}"><p/>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Password -->
+					<div class="form-group row">
+						<label for="inputPassword" class="col-sm-2 col-form-label">Nowe hasło (*)</label>
+						<div class="col-sm-6">
+							<input id="inputPassword" type="password" th:field="*{password}" placeholder="Nowe hasło (*)" 
+								class="form-control" required 
+								th:classappend="${ #fields.hasErrors('password') } ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"/>
+							
+							<div class="invalid-feedback">
+								<div th:if="${ not #fields.hasErrors('password')  }">
+									<p>Wymagane</p>
+								</div>
+								<div th:each="err : ${#fields.errors('password')}">
+									<div th:each="msg : ${ #strings.arraySplit(err, '|;|') }">
+										<p th:text="${msg}"></p>
+									</div>
+								</div>
+						</div>
+						</div>
+					</div>
+					
+					<!-- Confirm Password -->
+					<div class="form-group row">
+						<label for="inputPasswordConfirmation" class="col-sm-2 col-form-label">Potwierdź hasło (*)</label>
+						<div class="col-sm-6">
+							<input id="inputPasswordConfirmation" type="password" th:field="*{matchingPassword}" placeholder="Potwierdź hasło (*)" 
+								class="form-control" required
+								th:classappend="${ #fields.hasErrors('matchingPassword')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"/>
+							<div class="invalid-feedback">
+								<div th:if="${ not #fields.hasErrors('matchingPassword')  }">
+									<p>Wymagane</p>
+								</div>
+								<p th:each="err : ${#fields.errors('matchingPassword')}" th:text="${err}"><p/>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="form-row align-items-center mb-4">
+						<div class="col-auto">
+							<button class="btn btn-lg btn-primary" type="submit">Zapisz</button>
+						</div>
+						
+					</div>
+					<a th:href="@{/admins}">Powrót</a>
+					
+				</form>
+        		
+        		
+        		
+        		
+        		<div th:replace="fragments/footer :: footer"></div>
+        	</main>
+		
+		</div>
+	</div>
+
+	<script th:src="@{/js/addAdmin.js}"></script>
+	
+	 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+</body>
+</html>

@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import com.kubara.michal.inzynierka.adminpanel.service.AdminService;
 
@@ -28,6 +29,9 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
 	private UserDetailsService userDetailsService;
 	
 	@Autowired
+	private AuthenticationFailureHandler authenticationFailureHandler;
+	
+	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService);
 	}
@@ -41,10 +45,13 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 			.antMatchers("/").hasRole("ADMIN")
+			.antMatchers("/admins/**").hasRole("ADMIN")
+			.antMatchers("/experts/**").hasRole("ADMIN")
 			.and()
 				.formLogin()
 					.loginPage("/showLoginPage")
 					.loginProcessingUrl("/authenticateTheUser")
+					.failureHandler(authenticationFailureHandler)
 					.permitAll()
 			.and()
 				.logout()

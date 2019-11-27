@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>QuickFix - AdminPanel - Fachowcy</title>
+	
+	<!--  <div th:replace="fragments/header :: header-css"/>  -->
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/css/expertList.css}" href="../../css/expertList.css" />
+
+</head>
+<body>
+	
+	<div th:replace="fragments/header :: header"></div>
+	
+	<div class="container-fluid">
+		<div class="row">
+		
+		
+			<div th:replace="fragments/header :: sidebar"></div>
+			
+			
+        	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4 col-sm-10">
+        		<h1>Fachowcy</h1>
+        		
+        		<a class="btn btn-outline-primary btn-lg mt-2" th:href="@{/experts/add}">Dodaj fachowca</a>
+        		
+        		<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Elementów na stronie</button>
+			    <div class="dropdown-menu">
+			    	<a class="dropdown-item" th:href="@{ /experts(size=5, page=1) }" th:classappend="${ expertPage.size == 5 } ? active">5</a>
+			    	<a class="dropdown-item" th:href="@{ /experts(size=10, page=1) }" th:classappend="${ expertPage.size == 10 } ? active">10</a>
+			    	<a class="dropdown-item" th:href="@{ /experts(size=25, page=1) }" th:classappend="${ expertPage.size == 25 } ? active">25</a>
+			    </div>
+        		
+        		 <!-- Place for messages: error, alert etc ... -->
+				    <div class="form-group">
+				        <div class="col-xs-15">
+				            <div>
+							
+								<!-- Check for registration error -->
+								<div th:if="${error}" class="alert alert-danger col-xs-offset-1 col-xs-10 mt-4"
+									th:text=${error} >error
+								</div>
+								
+								<div th:if="${param.addSuccess}"class="alert alert-success col-xs-offset-1 col-xs-10 mt-4">
+									Administrator został dodany.
+								</div>
+																										
+				            </div>
+				        </div>
+				    </div>
+        		
+        		<table class="table table-bordered table-striped mt-4">
+        			<thead class="thead-dark">
+        				<tr>
+        					<th>#</th>
+        					<th>Username</th>
+        					<th>Imię</th>
+        					<th>Nazwisko</th>
+        					<th>Email</th>
+        				</tr>
+        			</thead>
+        			<tbody>
+        				<tr th:if="${#lists.isEmpty(expertPage.content)} ">
+        					<td colspan="5">Brak danych.</td>
+        				</tr>
+        				<tr th:each="expert, iStat : ${expertPage.content}">
+        					<td><span th:text="${iStat.index + 1}"></span></td>
+        					<td><span th:text="${expert.userName}"></span></td>
+        					<td><span th:text="${expert.firstName}"></span></td>
+        					<td><span th:text="${expert.lastName}"></span></td>
+        					<td><span th:text="${expert.email}"></span></td>
+        				</tr>
+        			</tbody>
+        		</table>
+        		
+        		<div th:if="${ expertPage.totalPages > 0 }">
+					<div class="d-inline-flex page-navigation">
+						<a th:href="@{ /experts(size=${ expertPage.size }, page=${ pageNumbers.get(0) }) }"
+								th:text="'<<'" class="btn btn-outline-success btn-sm page-button page-navigation-buttons"></a>
+						
+						<a th:href="@{ /experts(size=${ expertPage.size }, page=${ expertPage.number }) }"
+								th:text="'<'" class="btn btn-outline-success btn-sm page-button page-navigation-buttons"
+								th:classappend="${ expertPage.number == 0 } ? disabled"></a>
+						
+						<div th:each="pageNumber : ${ pageNumbers }">
+							<a th:href="@{ /experts(size=${ expertPage.size }, page=${ pageNumber }) }"
+								th:text="${ pageNumber }"
+								th:classappend="${ pageNumber == expertPage.number + 1 } ? active" class="btn btn-outline-success btn-sm page-button page-navigation-buttons"></a>
+						</div>
+						
+						<a th:href="@{ /experts(size=${ expertPage.size }, page=${ expertPage.number + 2 }) }"
+								th:text="'>'" class="btn btn-outline-success btn-sm page-button page-navigation-buttons"
+								th:classappend="${ expertPage.number == expertPage.totalPages - 1 } ? disabled"></a>
+					
+						<a th:href="@{ /experts(size=${ expertPage.size }, page=${ pageNumbers.get(pageNumbers.size() - 1) }) }"
+								th:text="'>>'" class="btn btn-outline-success btn-sm page-navigation-buttons"></a>
+					
+					</div>
+				</div>
+        		
+        		
+        		<div th:replace="fragments/footer :: footer"></div>
+        	</main>
+			
+		
+		</div>
+	</div>
+	
+	 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+</body>
+</html>

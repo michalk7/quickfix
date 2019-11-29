@@ -5,6 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>QuickFix - AdminPanel - Fachowcy</title>
 	
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	
 	<!--  <div th:replace="fragments/header :: header-css"/>  -->
 	<link th:include="fragments/header :: header-css" th:remove="tag"/>
 
@@ -90,11 +93,11 @@
 	        						<button th:data-href="@{'/experts/details/' + ${expert.id}}"
 	        							class="btn btn-primary btn-sm details-button">Pokaż szczegóły</button>
 	        						
-	        						<a th:href="@{/experts/edit(expertId=${expert.id})}"
+	        						<a th:href="@{'/experts/edit/' + ${expert.id}}"
 	        							class="btn btn-info btn-sm">Edytuj</a>
 	        						
-	        						<a th:href="@{/experts/delete(expertId=${expert.id})}"
-	        							class="btn btn-danger btn-sm">Usuń</a>
+	        						<button th:data-href="@{'/experts/delete/' + ${expert.id}}"
+	        							class="btn btn-danger btn-sm delete-button">Usuń</button>
 	        					</td>
 	        				</tr>
 	        			</tbody>
@@ -136,7 +139,7 @@
 		</div>
 	</div>
 
-	<script th:src="@{/js/expertList.js}"></script>
+	<script th:src="@{/js/userDetails.js}"></script>
 	
 	 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>

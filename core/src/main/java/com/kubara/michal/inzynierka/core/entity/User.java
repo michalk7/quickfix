@@ -217,7 +217,7 @@ public class User {
 		this.expertEstates = expertEstates;
 	}
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", orphanRemoval = true)
 	public Collection<Event> getUserEvents() {
 		return userEvents;
 	}
@@ -226,7 +226,7 @@ public class User {
 		this.userEvents = userEvents;
 	}
 
-	@OneToMany(mappedBy = "expert")
+	@OneToMany(mappedBy = "expert", orphanRemoval = true)
 	public Collection<Event> getExpertEvents() {
 		return expertEvents;
 	}

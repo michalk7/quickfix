@@ -12,5 +12,9 @@ public interface ExpertService {
 	Page<User> findAll(Pageable pageable);
 
 	Optional<User> findById(long expertId);
+
+	boolean isExpert(User expert);
+
+	void delete(User expert);
 	
 }

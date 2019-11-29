@@ -32,6 +32,18 @@ public class ExpertServiceImpl implements ExpertService {
 	public Optional<User> findById(long expertId) {
 		return userRepository.findById(expertId);
 	}
+
+	@Override
+	@Transactional
+	public boolean isExpert(User expert) {
+		return expert.getRoles().contains(roleRepository.findByName("ROLE_EXPERT"));
+	}
+
+	@Override
+	@Transactional
+	public void delete(User expert) {
+		userRepository.delete(expert);
+	}
 	
 	
 

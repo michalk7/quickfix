@@ -1,6 +1,5 @@
 package com.kubara.michal.inzynierka.adminpanel.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertDetailsDTO;
 import com.kubara.michal.inzynierka.adminpanel.service.ExpertService;
-import com.kubara.michal.inzynierka.core.entity.Category;
+import com.kubara.michal.inzynierka.adminpanel.utils.GenericResponse;
 import com.kubara.michal.inzynierka.core.entity.User;
 
 @Controller
@@ -94,6 +94,26 @@ public class ExpertController {
 				categories);
 		
 		return expertToSend;
+	}
+	
+	@DeleteMapping("/delete/{expertId}")
+	@ResponseBody
+	public GenericResponse deleteExpert(@PathVariable("expertId") long expertId) {
+		Optional<User> expertOpt = expertService.findById(expertId);
+		
+		if(!expertOpt.isPresent()) {
+			return new GenericResponse("Brak experta o podanym id", "Wrong ID");
+		}
+		
+		User expert = expertOpt.get();
+		
+		if(!expertService.isExpert(expert)) {
+			return new GenericResponse("Użytkownik nie jest fachowcem", "Wrong User type");
+		}
+		
+		expertService.delete(expert);
+		
+		return new GenericResponse("Pomyślnie usunięto fachowca");
 	}
 	
 }

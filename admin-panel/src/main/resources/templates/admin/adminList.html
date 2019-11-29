@@ -45,29 +45,31 @@
 				        </div>
 				    </div>
         		
-        		<table class="table table-bordered table-striped mt-4">
-        			<thead class="thead-dark">
-        				<tr>
-        					<th>#</th>
-        					<th>Username</th>
-        					<th>Imię</th>
-        					<th>Nazwisko</th>
-        					<th>Email</th>
-        				</tr>
-        			</thead>
-        			<tbody>
-        				<tr th:if="${admins.empty}">
-        					<td colspan="5">Brak danych.</td>
-        				</tr>
-        				<tr th:each="admin, iStat : ${admins}">
-        					<td><span th:text="${iStat.index + 1}"></span></td>
-        					<td><span th:text="${admin.userName}"></span></td>
-        					<td><span th:text="${admin.firstName}"></span></td>
-        					<td><span th:text="${admin.lastName}"></span></td>
-        					<td><span th:text="${admin.email}"></span></td>
-        				</tr>
-        			</tbody>
-        		</table>
+        		<div class="table-responsive">
+	        		<table class="table table-bordered table-striped mt-2">
+	        			<thead class="thead-dark">
+	        				<tr>
+	        					<th>#</th>
+	        					<th>Username</th>
+	        					<th>Imię</th>
+	        					<th>Nazwisko</th>
+	        					<th>Email</th>
+	        				</tr>
+	        			</thead>
+	        			<tbody>
+	        				<tr th:if="${admins.empty}">
+	        					<td colspan="5">Brak danych.</td>
+	        				</tr>
+	        				<tr th:each="admin, iStat : ${admins}">
+	        					<td><span th:text="${iStat.index + 1}"></span></td>
+	        					<td><span th:text="${admin.userName}"></span></td>
+	        					<td><span th:text="${admin.firstName}"></span></td>
+	        					<td><span th:text="${admin.lastName}"></span></td>
+	        					<td><span th:text="${admin.email}"></span></td>
+	        				</tr>
+	        			</tbody>
+	        		</table>
+        		</div>
         		
         		<div th:replace="fragments/footer :: footer"></div>
         	</main>

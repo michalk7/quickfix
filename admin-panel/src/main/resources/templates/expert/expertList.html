@@ -10,6 +10,8 @@
 
 	<link rel="stylesheet" type="text/css" th:href="@{/css/expertList.css}" href="../../css/expertList.css" />
 
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
 </head>
 <body>
 	
@@ -25,14 +27,19 @@
         	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4 col-sm-10">
         		<h1>Fachowcy</h1>
         		
-        		<a class="btn btn-outline-primary btn-lg mt-2" th:href="@{/experts/add}">Dodaj fachowca</a>
+        		<div class="d-flex align-items-start flex-column">
+        			
+        			<a class="btn btn-outline-primary btn-lg mt-2 mb-3" th:href="@{/experts/add}">Dodaj fachowca</a>
         		
-        		<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Elementów na stronie</button>
-			    <div class="dropdown-menu">
-			    	<a class="dropdown-item" th:href="@{ /experts(size=5, page=1) }" th:classappend="${ expertPage.size == 5 } ? active">5</a>
-			    	<a class="dropdown-item" th:href="@{ /experts(size=10, page=1) }" th:classappend="${ expertPage.size == 10 } ? active">10</a>
-			    	<a class="dropdown-item" th:href="@{ /experts(size=25, page=1) }" th:classappend="${ expertPage.size == 25 } ? active">25</a>
-			    </div>
+	        		<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Elementów na stronie</button>
+				    <div class="dropdown-menu">
+				    	<a class="dropdown-item" th:href="@{ /experts(size=5, page=1) }" th:classappend="${ expertPage.size == 5 } ? active">5</a>
+				    	<a class="dropdown-item" th:href="@{ /experts(size=10, page=1) }" th:classappend="${ expertPage.size == 10 } ? active">10</a>
+				    	<a class="dropdown-item" th:href="@{ /experts(size=25, page=1) }" th:classappend="${ expertPage.size == 25 } ? active">25</a>
+				    </div>
+        		
+        		</div>
+        		
         		
         		 <!-- Place for messages: error, alert etc ... -->
 				    <div class="form-group">
@@ -52,29 +59,49 @@
 				        </div>
 				    </div>
         		
-        		<table class="table table-bordered table-striped mt-4">
-        			<thead class="thead-dark">
-        				<tr>
-        					<th>#</th>
-        					<th>Username</th>
-        					<th>Imię</th>
-        					<th>Nazwisko</th>
-        					<th>Email</th>
-        				</tr>
-        			</thead>
-        			<tbody>
-        				<tr th:if="${#lists.isEmpty(expertPage.content)} ">
-        					<td colspan="5">Brak danych.</td>
-        				</tr>
-        				<tr th:each="expert, iStat : ${expertPage.content}">
-        					<td><span th:text="${iStat.index + 1}"></span></td>
-        					<td><span th:text="${expert.userName}"></span></td>
-        					<td><span th:text="${expert.firstName}"></span></td>
-        					<td><span th:text="${expert.lastName}"></span></td>
-        					<td><span th:text="${expert.email}"></span></td>
-        				</tr>
-        			</tbody>
-        		</table>
+        		<div class="table-responsive">
+        		
+        			<table class="table table-bordered table-striped">
+	        			<thead class="thead-dark">
+	        				<tr>
+	        					<th>#</th>
+	        					<th>Username</th>
+	        					<th>Imię</th>
+	        					<th>Nazwisko</th>
+	        					<th>Email</th>
+	        					<th>Konto aktywne</th>
+	        					<th>Konto zweryfikowane</th>
+	        					<th>Akcje</th>
+	        				</tr>
+	        			</thead>
+	        			<tbody>
+	        				<tr th:if="${#lists.isEmpty(expertPage.content)} ">
+	        					<td colspan="8">Brak danych.</td>
+	        				</tr>
+	        				<tr th:each="expert, iStat : ${expertPage.content}">
+	        					<td><span th:text="${iStat.index + 1}"></span></td>
+	        					<td><span th:text="${expert.userName}"></span></td>
+	        					<td><span th:text="${expert.firstName}"></span></td>
+	        					<td><span th:text="${expert.lastName}"></span></td>
+	        					<td><span th:text="${expert.email}"></span></td>
+	        					<td><span th:text="${expert.enabled ? 'Tak' : 'Nie'}"></span></td>
+	        					<td><span th:text="${expert.verified ? 'Tak' : 'Nie'}"></span></td>
+	        					<td>
+	        						<button th:data-href="@{'/experts/details/' + ${expert.id}}"
+	        							class="btn btn-primary btn-sm details-button">Pokaż szczegóły</button>
+	        						
+	        						<a th:href="@{/experts/edit(expertId=${expert.id})}"
+	        							class="btn btn-info btn-sm">Edytuj</a>
+	        						
+	        						<a th:href="@{/experts/delete(expertId=${expert.id})}"
+	        							class="btn btn-danger btn-sm">Usuń</a>
+	        					</td>
+	        				</tr>
+	        			</tbody>
+        			</table>
+        		
+        		</div>
+        		
         		
         		<div th:if="${ expertPage.totalPages > 0 }">
 					<div class="d-inline-flex page-navigation">
@@ -108,6 +135,8 @@
 		
 		</div>
 	</div>
+
+	<script th:src="@{/js/expertList.js}"></script>
 	
 	 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>

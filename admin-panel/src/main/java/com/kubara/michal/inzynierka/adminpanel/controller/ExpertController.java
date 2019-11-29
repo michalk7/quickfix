@@ -1,5 +1,6 @@
 package com.kubara.michal.inzynierka.adminpanel.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,10 +12,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.kubara.michal.inzynierka.adminpanel.dto.ExpertDetailsDTO;
 import com.kubara.michal.inzynierka.adminpanel.service.ExpertService;
+import com.kubara.michal.inzynierka.core.entity.Category;
 import com.kubara.michal.inzynierka.core.entity.User;
 
 @Controller
@@ -61,6 +66,34 @@ public class ExpertController {
 		
 		return "/expert/expertList";
 		
+	}
+	
+	@GetMapping("/details/{expertId}")
+	@ResponseBody
+	public ExpertDetailsDTO getExpertDetails(@PathVariable("expertId") long expertId) {
+		
+		Optional<User> expertOpt = expertService.findById(expertId);
+		
+		if(!expertOpt.isPresent()) {
+			return null;
+		}
+		
+		User expert = expertOpt.get();
+		
+		List<String> categories = expert.getCategories().stream().map(e -> e.getName()).collect(Collectors.toList());
+		
+		ExpertDetailsDTO expertToSend = new ExpertDetailsDTO(
+				expert.getAddress().getCity(),
+				expert.getAddress().getDistrict(),
+				expert.getAddress().getPostCode(),
+				expert.getAddress().getPostCity(),
+				expert.getAddress().getStreet(),
+				expert.getAddress().getHouseNumber(), 
+				expert.getAddress().getApartmentNumber(),
+				expert.getAddress().getPhoneNumber(),
+				categories);
+		
+		return expertToSend;
 	}
 	
 }

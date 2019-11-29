@@ -1,5 +1,7 @@
 package com.kubara.michal.inzynierka.adminpanel.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,5 +26,13 @@ public class ExpertServiceImpl implements ExpertService {
 	public Page<User> findAll(Pageable pageable) {
 		return userRepository.findAllByRoles(roleRepository.findByName("ROLE_EXPERT"), pageable);
 	}
+
+	@Override
+	@Transactional
+	public Optional<User> findById(long expertId) {
+		return userRepository.findById(expertId);
+	}
+	
+	
 
 }

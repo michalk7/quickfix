@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.kubara.michal.inzynierka.adminpanel.dto.ExpertDTO;
+import com.kubara.michal.inzynierka.adminpanel.exception.UserAlreadyExistsException;
 import com.kubara.michal.inzynierka.core.entity.User;
 
 public interface ExpertService {
@@ -16,5 +18,7 @@ public interface ExpertService {
 	boolean isExpert(User expert);
 
 	void delete(User expert);
+
+	User saveExpert(ExpertDTO expertDto) throws UserAlreadyExistsException;
 	
 }

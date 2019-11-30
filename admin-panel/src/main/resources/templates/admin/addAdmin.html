@@ -121,9 +121,9 @@
 					
 					<!-- Password -->
 					<div class="form-group row">
-						<label for="inputPassword" class="col-sm-2 col-form-label">Nowe hasło (*)</label>
+						<label for="inputPassword" class="col-sm-2 col-form-label">Hasło (*)</label>
 						<div class="col-sm-6">
-							<input id="inputPassword" type="password" th:field="*{password}" placeholder="Nowe hasło (*)" 
+							<input id="inputPassword" type="password" th:field="*{password}" placeholder="Hasło (*)" 
 								class="form-control" required 
 								th:classappend="${ #fields.hasErrors('password') } ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"/>
 							

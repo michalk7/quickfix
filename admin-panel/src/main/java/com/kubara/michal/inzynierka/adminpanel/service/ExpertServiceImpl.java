@@ -11,10 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertDTO;
+import com.kubara.michal.inzynierka.adminpanel.dto.ExpertEditDTO;
 import com.kubara.michal.inzynierka.adminpanel.exception.UserAlreadyExistsException;
 import com.kubara.michal.inzynierka.core.dao.RoleRepository;
+import com.kubara.michal.inzynierka.core.dao.StreetRepository;
 import com.kubara.michal.inzynierka.core.dao.UserRepository;
 import com.kubara.michal.inzynierka.core.entity.Address;
+import com.kubara.michal.inzynierka.core.entity.Estate;
+import com.kubara.michal.inzynierka.core.entity.Street;
 import com.kubara.michal.inzynierka.core.entity.User;
 
 @Service
@@ -25,6 +29,9 @@ public class ExpertServiceImpl implements ExpertService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private StreetRepository streetRepository;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -107,6 +114,56 @@ public class ExpertServiceImpl implements ExpertService {
 		User result = userRepository.save(user);
 		
 		return result;
+	}
+
+	private boolean userNameExistsExceptUser(String userName, User userExc) {
+		User user = userRepository.findByUserName(userName);
+		if(user != null) {
+			if(user.getId() != userExc.getId()) {
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+	
+	@Override
+	@Transactional
+	public User update(User expertToEdit, ExpertEditDTO expertDto) throws UserAlreadyExistsException {
+		
+		if(userNameExistsExceptUser(expertDto.getUserName(), expertToEdit)) {
+			throw new UserAlreadyExistsException("Podana nazwa użytkownika jest już zajęta.", false);
+		}
+
+		expertToEdit.setUserName(expertDto.getUserName());
+		expertToEdit.setFirstName(expertDto.getFirstName());
+		expertToEdit.setLastName(expertDto.getLastName());
+		expertToEdit.setEmail(expertDto.getEmail());
+		expertToEdit.setCategories(expertDto.getSelectedCategoriesFromCheckboxes());
+		
+		Address address = expertToEdit.getAddress();
+		address.setCity(expertDto.getCity());
+		address.setDistrict(expertDto.getDistrict());
+		address.setPostCode(expertDto.getPostCode());
+		address.setPostCity(expertDto.getPostCity());
+		address.setStreet(expertDto.getStreet());
+		address.setHouseNumber(expertDto.getHouseNumber());
+		address.setApartmentNumber(expertDto.getApartmentNumber());
+		address.setPhoneNumber(expertDto.getPhoneNumber());
+		
+		Optional<Street> estateStreet = streetRepository.findByStreetNameAndStreetNumberAndCityAndDistrictAndPostCode(address.getStreet(), 
+				address.getHouseNumber(), address.getCity(), address.getDistrict(), address.getPostCode());
+		if(estateStreet.isPresent()) {
+			Estate estate = estateStreet.get().getEstate();
+			if(estate.getId() != expertToEdit.getUserEstate().getId()) {
+				expertToEdit.setUserEstate(estate);
+			}
+		}
+
+		User result = userRepository.save(expertToEdit);
+
+		return result;
+		
 	}
 	
 	

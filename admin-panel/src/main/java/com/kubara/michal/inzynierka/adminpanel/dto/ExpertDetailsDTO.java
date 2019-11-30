@@ -2,8 +2,6 @@ package com.kubara.michal.inzynierka.adminpanel.dto;
 
 import java.util.List;
 
-import com.kubara.michal.inzynierka.core.entity.Category;
-
 public class ExpertDetailsDTO {
 
 	private String city;

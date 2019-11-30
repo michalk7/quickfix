@@ -21,12 +21,14 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertDetailsDTO;
+import com.kubara.michal.inzynierka.adminpanel.dto.ExpertEditDTO;
 import com.kubara.michal.inzynierka.adminpanel.exception.UserAlreadyExistsException;
 import com.kubara.michal.inzynierka.adminpanel.service.CategoryService;
 import com.kubara.michal.inzynierka.adminpanel.service.ExpertService;
@@ -187,5 +189,71 @@ public class ExpertController {
 		return newExpert;
 	}
 	
+	@GetMapping("/edit/{expertId}")
+	public String getEditPage(@PathVariable("expertId") long expertId, Model model) {
+		
+		Optional<User> expertOpt = expertService.findById(expertId);
+		
+		if(!expertOpt.isPresent()) {
+			return "redirect:/experts?wrongId";
+		}
+		
+		model.addAttribute("expert", getExpertDtoFromUser(expertOpt.get()));
+		model.addAttribute("validated", false);
+		
+		return "/expert/editExpert";
+	}
+	
+	@PutMapping("/editUserData")
+	public String editUserData(@Valid @ModelAttribute("expert") ExpertEditDTO expertDto, BindingResult bindingResult,
+			Model model) {
+		if(bindingResult.hasErrors()) {
+			return "/expert/editExpert";
+		}
+		
+		Optional<User> expertOpt = expertService.findById(expertDto.getId());
+		if(!expertOpt.isPresent()) {
+			return "/expert/editExpert";
+		}
+		
+		User editedExpert = editExpertAccount(expertOpt.get(), expertDto, bindingResult);
+		
+		if(editedExpert == null) {
+			return "/expert/editExpert";
+		}
+		
+		return "redirect:/experts?editSuccess";
+		
+	}
+
+	private User editExpertAccount(User expertToEdit, ExpertEditDTO expertDto, BindingResult bindingResult) {
+		User expert = null;
+		try {
+			expert = expertService.update(expertToEdit, expertDto);
+		} catch(UserAlreadyExistsException e) {
+			bindingResult.rejectValue(e.isEmailException() ? "email" : "userName", e.isEmailException() ? "message.emailExists" : "message.userNameExists");
+			return null;
+		}
+		return expert;
+	}
+
+	private ExpertEditDTO getExpertDtoFromUser(User user) {
+		ExpertEditDTO expert = new ExpertEditDTO();
+		expert.setId(user.getId());
+		expert.setUserName(user.getUserName());
+		expert.setFirstName(user.getFirstName());
+		expert.setLastName(user.getLastName());
+		expert.setEmail(user.getEmail());
+		expert.setCity(user.getAddress().getCity());
+		expert.setDistrict(user.getAddress().getDistrict());
+		expert.setPostCode(user.getAddress().getPostCode());
+		expert.setPostCity(user.getAddress().getPostCity());
+		expert.setStreet(user.getAddress().getStreet());
+		expert.setHouseNumber(user.getAddress().getHouseNumber());
+		expert.setApartmentNumber(user.getAddress().getApartmentNumber());
+		expert.setPhoneNumber(user.getAddress().getPhoneNumber());
+		expert.setSelectedCategoriesFromCheckboxes(user.getCategories().stream().collect(Collectors.toList()));
+		return expert;
+	}
 	
 }

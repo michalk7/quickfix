@@ -22,10 +22,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.kubara.michal.inzynierka.adminpanel.dto.AccountStatusDTO;
+import com.kubara.michal.inzynierka.adminpanel.dto.AccountVerificationDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertDetailsDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertEditDTO;
@@ -225,6 +228,50 @@ public class ExpertController {
 		return "redirect:/experts?editSuccess";
 		
 	}
+	
+	@PutMapping("/changeAccountStatus/{expertId}")
+	@ResponseBody
+	public GenericResponse changeAccountStatus(@PathVariable("expertId") long expertId, @RequestBody AccountStatusDTO accountStatusDTO) {
+		 Optional<User> expertOpt = expertService.findById(expertId);
+		 
+		 if(!expertOpt.isPresent()) {
+			 return new GenericResponse("Niepoprawne id fachowca", "Wrong expert id");
+		 }
+		 
+		 User expert = expertOpt.get();
+		 
+		 expert.setEnabled(accountStatusDTO.isEnabled());
+		 User savedExpert = expertService.save(expert);
+		 
+		 if(savedExpert == null) {
+			 return new GenericResponse("Błąd zapisu", "Save Error");
+		 }
+		 
+		 return new GenericResponse("Zmieniono status konta użytkownika");
+		 
+	}
+	
+	@PutMapping("/verifyAccount/{expertId}")
+	@ResponseBody
+	public GenericResponse verifyAccount(@PathVariable("expertId") long expertId, @RequestBody AccountVerificationDTO accountVerificationDTO) {
+		Optional<User> expertOpt = expertService.findById(expertId);
+		 
+		if(!expertOpt.isPresent()) {
+			return new GenericResponse("Niepoprawne id fachowca", "Wrong expert id");
+		}
+		 
+		User expert = expertOpt.get();
+		 
+		expert.setVerified(accountVerificationDTO.isVerified());
+		User savedExpert = expertService.save(expert);
+		 
+		if(savedExpert == null) {
+			return new GenericResponse("Błąd zapisu", "Save Error");
+		}
+		 
+		return new GenericResponse("Zmieniono status weryfikacji konta użytkownika");
+	}
+	
 
 	private User editExpertAccount(User expertToEdit, ExpertEditDTO expertDto, BindingResult bindingResult) {
 		User expert = null;

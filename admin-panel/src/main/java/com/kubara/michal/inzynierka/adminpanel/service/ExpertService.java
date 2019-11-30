@@ -23,5 +23,7 @@ public interface ExpertService {
 	User saveExpert(ExpertDTO expertDto) throws UserAlreadyExistsException;
 
 	User update(User expertToEdit, ExpertEditDTO expertDto) throws UserAlreadyExistsException;
+
+	User save(User expert);
 	
 }

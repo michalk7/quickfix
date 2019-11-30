@@ -165,6 +165,12 @@ public class ExpertServiceImpl implements ExpertService {
 		return result;
 		
 	}
+
+	@Override
+	@Transactional
+	public User save(User expert) {
+		return userRepository.save(expert);
+	}
 	
 	
 

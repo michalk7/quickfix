@@ -91,14 +91,28 @@
 	        					<td><span th:text="${expert.firstName}"></span></td>
 	        					<td><span th:text="${expert.lastName}"></span></td>
 	        					<td><span th:text="${expert.email}"></span></td>
-	        					<td><span th:text="${expert.enabled ? 'Tak' : 'Nie'}"></span></td>
-	        					<td><span th:text="${expert.verified ? 'Tak' : 'Nie'}"></span></td>
+	        					<td>
+	        						<div class="d-flex justify-content-between">
+	        							<span th:text="${expert.enabled ? 'Tak' : 'Nie'}"></span>
+	        							<button th:classappend="${expert.enabled ? 'btn-danger' : 'btn-success'}" 
+	        								class="btn btn-sm activate-button" th:data-active="${expert.enabled ? '1' : '0'}" 
+	        								th:text="${expert.enabled ? 'Deaktywuj' : 'Aktywuj'}"
+	        								th:data-href="@{'/experts/changeAccountStatus/' + ${expert.id}}"></button>
+	        						</div>
+	        					</td>
+	        					<td>
+	        						<div class="d-flex justify-content-between">
+	        							<span th:text="${expert.verified ? 'Tak' : 'Nie'}"></span>
+	        							<button th:if=${!expert.verified} class="btn btn-sm btn-success verify-button"
+	        								th:data-href="@{'/experts/verifyAccount/' + ${expert.id}}">Weryfikuj</button>
+	        						</div>
+	        					</td>
 	        					<td>
 	        						<button th:data-href="@{'/experts/details/' + ${expert.id}}"
-	        							class="btn btn-primary btn-sm details-button">Pokaż szczegóły</button>
+	        							class="btn btn-primary btn-sm details-button mr-2">Pokaż szczegóły</button>
 	        						
 	        						<a th:href="@{'/experts/edit/' + ${expert.id}}"
-	        							class="btn btn-info btn-sm">Edytuj</a>
+	        							class="btn btn-info btn-sm mr-2">Edytuj</a>
 	        						
 	        						<button th:data-href="@{'/experts/delete/' + ${expert.id}}"
 	        							class="btn btn-danger btn-sm delete-button">Usuń</button>
@@ -144,6 +158,7 @@
 	</div>
 
 	<script th:src="@{/js/userDetails.js}"></script>
+	<script th:src="@{/js/verifyExpert.js}"></script>
 	
 	 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>

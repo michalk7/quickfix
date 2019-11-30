@@ -29,15 +29,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kubara.michal.inzynierka.adminpanel.dto.AccountStatusDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.AccountVerificationDTO;
+import com.kubara.michal.inzynierka.adminpanel.dto.EstateChoiceDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertDetailsDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertEditDTO;
 import com.kubara.michal.inzynierka.adminpanel.exception.UserAlreadyExistsException;
 import com.kubara.michal.inzynierka.adminpanel.service.CategoryService;
+import com.kubara.michal.inzynierka.adminpanel.service.EstateService;
 import com.kubara.michal.inzynierka.adminpanel.service.ExpertService;
 import com.kubara.michal.inzynierka.adminpanel.utils.GenericResponse;
 import com.kubara.michal.inzynierka.adminpanel.utils.StringUtils;
 import com.kubara.michal.inzynierka.core.entity.Category;
+import com.kubara.michal.inzynierka.core.entity.Estate;
 import com.kubara.michal.inzynierka.core.entity.User;
 
 @Controller
@@ -49,6 +52,9 @@ public class ExpertController {
 	
 	@Autowired
 	private CategoryService categoryService;
+	
+	@Autowired
+	private EstateService estateService;
 	
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
@@ -270,6 +276,51 @@ public class ExpertController {
 		}
 		 
 		return new GenericResponse("Zmieniono status weryfikacji konta użytkownika");
+	}
+	
+	@GetMapping("/assignToEstate/{expertId}")
+	public String getAssignExpertToEstatePage(@PathVariable("expertId") long expertId, Model model) {
+		Optional<User> expertOpt = expertService.findById(expertId);
+		
+		if(!expertOpt.isPresent()) {
+			return "redirect:/experts?wrongId";
+		}
+		
+		User expert = expertOpt.get();
+		
+		List<Estate> estates = estateService.findAll().stream().filter(e -> !e.getExperts().contains(expert)).collect(Collectors.toList());
+		 
+		model.addAttribute("choice", new EstateChoiceDTO(expertId));
+		model.addAttribute("estates", estates);
+		model.addAttribute("validated", false);
+		
+		return "/expert/assignToEstate";
+	}
+	
+	@PostMapping("/assignExpertToEstate")
+	public String assignExpertToEstate(@Valid @ModelAttribute("choice") EstateChoiceDTO choiceDto, BindingResult bindingResult, Model model) {
+		
+		if(bindingResult.hasErrors()) {
+			return "/expert/assignToEstate";
+		}
+		
+		Optional<User> expertOpt = expertService.findById(choiceDto.getExpertId());
+		Optional<Estate> estateOpt = estateService.findById(choiceDto.getEstateId());
+		
+		if(!expertOpt.isPresent() || !estateOpt.isPresent()) {
+			return "/expert/assignToEstate";
+		}
+		
+		User expert = expertOpt.get();
+		Estate estate = estateOpt.get();
+		
+		expert.getExpertEstates().add(estate);
+		estate.getExperts().add(expert);
+		
+		expertService.save(expert);
+		
+		return "redirect:/experts?assignToEstateSuccess";
+		
 	}
 	
 

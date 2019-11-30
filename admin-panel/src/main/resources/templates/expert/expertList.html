@@ -54,12 +54,20 @@
 									th:text=${error} >error
 								</div>
 								
+								<div th:if="${param.wrongId}" class="alert alert-danger col-xs-offset-1 col-xs-10 mt-4">
+									Błędne id fachowca.
+								</div>
+								
 								<div th:if="${param.addSuccess}"class="alert alert-success col-xs-offset-1 col-xs-10 mt-4">
 									Fachowiec został dodany.
 								</div>
 								
 								<div th:if="${param.editSuccess}"class="alert alert-success col-xs-offset-1 col-xs-10 mt-4">
 									Dane fachowca zostały pomyślnie zmienione.
+								</div>
+								
+								<div th:if="${param.assignToEstateSuccess}"class="alert alert-success col-xs-offset-1 col-xs-10 mt-4">
+									Fachowiec został pomyślnie przypisany do osiedla.
 								</div>
 																										
 				            </div>
@@ -113,6 +121,12 @@
 	        						
 	        						<a th:href="@{'/experts/edit/' + ${expert.id}}"
 	        							class="btn btn-info btn-sm mr-2">Edytuj</a>
+	        							
+	        						<a th:href="@{'/experts/assignToEstate/' + ${expert.id}}"
+	        							class="btn btn-success btn-sm mr-2">Przypisz do osiedla</a>
+	        						
+	        						<a th:href="@{'/experts/changePassword/' + ${expert.id}}"
+	        							class="btn btn-warning btn-sm mr-2">Zmień hasło</a>
 	        						
 	        						<button th:data-href="@{'/experts/delete/' + ${expert.id}}"
 	        							class="btn btn-danger btn-sm delete-button">Usuń</button>

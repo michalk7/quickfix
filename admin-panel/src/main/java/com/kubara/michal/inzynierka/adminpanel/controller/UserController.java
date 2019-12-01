@@ -5,17 +5,22 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,9 +28,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kubara.michal.inzynierka.adminpanel.dto.AccountStatusDTO;
+import com.kubara.michal.inzynierka.adminpanel.dto.UserDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.UserDetailsDTO;
+import com.kubara.michal.inzynierka.adminpanel.exception.UserAlreadyExistsException;
 import com.kubara.michal.inzynierka.adminpanel.service.UserService;
 import com.kubara.michal.inzynierka.adminpanel.utils.GenericResponse;
+import com.kubara.michal.inzynierka.adminpanel.utils.StringUtils;
 import com.kubara.michal.inzynierka.core.entity.User;
 
 @Controller
@@ -148,6 +156,51 @@ public class UserController {
 		
 		return new GenericResponse("Zmieniono status konta użytkownika");
 		
+	}
+	
+	@GetMapping("/add")
+	public String getAddUserPage(Model model) {
+		model.addAttribute("user", new UserDTO());
+		model.addAttribute("validated", false);
+		
+		return "/user/addUser";
+	}
+	
+	@PostMapping("/add")
+	public String addNewUser(@Valid @ModelAttribute("user") UserDTO userDto, 
+			BindingResult bindingResult, Model model) {
+		if(bindingResult.hasErrors()) {
+			return "/user/addUser";
+		}
+		
+		String reversedUserName = StringUtils.reverseString(userDto.getUserName());
+		
+		String newPass = userDto.getPassword();
+		
+		if(newPass.contains(userDto.getUserName()) || newPass.contains(reversedUserName)) {
+			bindingResult.rejectValue("password", "message.passwordContainsUsername");
+			return "/user/addUser";
+		}
+		
+		User newUser = createNewUserAccount(userDto, bindingResult);
+		if(newUser == null) {
+			return "/user/addUser";
+		}
+		
+		return "redirect:/users?addSuccess";
+		
+	}
+
+	private User createNewUserAccount(UserDTO userDto, BindingResult bindingResult) {
+		User newUser = null;
+		try {
+			newUser = userService.saveUser(userDto);
+		} catch(UserAlreadyExistsException e) {
+			bindingResult.rejectValue(e.isEmailException() ? "email" : "userName", e.isEmailException() ? "message.emailExists" : "message.userNameExists");
+			return null;
+		}
+		
+		return newUser;
 	}
 	
 }

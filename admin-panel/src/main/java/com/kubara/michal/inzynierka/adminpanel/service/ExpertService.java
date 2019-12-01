@@ -25,5 +25,7 @@ public interface ExpertService {
 	User update(User expertToEdit, ExpertEditDTO expertDto) throws UserAlreadyExistsException;
 
 	User save(User expert);
+
+	void changePassword(User expert, String password);
 	
 }

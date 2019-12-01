@@ -171,6 +171,13 @@ public class ExpertServiceImpl implements ExpertService {
 	public User save(User expert) {
 		return userRepository.save(expert);
 	}
+
+	@Override
+	@Transactional
+	public void changePassword(User expert, String password) {
+		expert.setPassword(passwordEncoder.encode(password));
+		userRepository.save(expert);
+	}
 	
 	
 

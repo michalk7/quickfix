@@ -69,6 +69,10 @@
 								<div th:if="${param.assignToEstateSuccess}"class="alert alert-success col-xs-offset-1 col-xs-10 mt-4">
 									Fachowiec został pomyślnie przypisany do osiedla.
 								</div>
+								
+								<div th:if="${param.passwordChanged}"class="alert alert-success col-xs-offset-1 col-xs-10 mt-4">
+									Hasło fachowca zostało pomyślnie zmienione.
+								</div>
 																										
 				            </div>
 				        </div>
@@ -125,7 +129,7 @@
 	        						<a th:href="@{'/experts/assignToEstate/' + ${expert.id}}"
 	        							class="btn btn-success btn-sm mr-2">Przypisz do osiedla</a>
 	        						
-	        						<a th:href="@{'/experts/changePassword/' + ${expert.id}}"
+	        						<a th:href="@{'/experts/changePasswordPage/' + ${expert.id}}"
 	        							class="btn btn-warning btn-sm mr-2">Zmień hasło</a>
 	        						
 	        						<button th:data-href="@{'/experts/delete/' + ${expert.id}}"

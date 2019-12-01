@@ -33,6 +33,7 @@ import com.kubara.michal.inzynierka.adminpanel.dto.EstateChoiceDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertDetailsDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertEditDTO;
+import com.kubara.michal.inzynierka.adminpanel.dto.PasswordChangeDTO;
 import com.kubara.michal.inzynierka.adminpanel.exception.UserAlreadyExistsException;
 import com.kubara.michal.inzynierka.adminpanel.service.CategoryService;
 import com.kubara.michal.inzynierka.adminpanel.service.EstateService;
@@ -320,6 +321,50 @@ public class ExpertController {
 		expertService.save(expert);
 		
 		return "redirect:/experts?assignToEstateSuccess";
+		
+	}
+	
+	@GetMapping("/changePasswordPage/{expertId}")
+	public String getChangePasswordPage(@PathVariable("expertId") long expertId, Model model) {
+		
+		Optional<User> expertOpt = expertService.findById(expertId);
+		
+		if(!expertOpt.isPresent()) {
+			return "redirect:/experts?wrongId";
+		}
+		
+		model.addAttribute("passwordChange", new PasswordChangeDTO(expertId));
+		model.addAttribute("validated", false);
+		
+		return "/expert/changePassword";
+	}
+	
+	@PostMapping("/changePassword")
+	public String changeExpertPassword(@Valid @ModelAttribute("passwordChange") PasswordChangeDTO passwordChangeDTO, BindingResult bindingResult,
+			Model model) {
+		
+		if(bindingResult.hasErrors()) {
+			return "/expert/changePassword";
+		}
+		
+		Optional<User> expertOpt = expertService.findById(passwordChangeDTO.getExpertId());
+		if(!expertOpt.isPresent()) {
+			return "/expert/changePassword";
+		}
+		
+		User expert = expertOpt.get();
+		
+		String newPass = passwordChangeDTO.getPassword();
+		String reversedUserName = expert.getUserName();
+		
+		if(newPass.contains(expert.getUserName()) || newPass.contains(reversedUserName)) {
+			bindingResult.rejectValue("password", "message.passwordContainsUsername");
+			return "/expert/changePassword";
+		}
+		
+		expertService.changePassword(expert, passwordChangeDTO.getPassword());
+		
+		return "redirect:/experts?passwordChanged";
 		
 	}
 	

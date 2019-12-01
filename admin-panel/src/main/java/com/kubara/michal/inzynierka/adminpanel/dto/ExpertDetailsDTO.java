@@ -13,13 +13,14 @@ public class ExpertDetailsDTO {
 	private String apartmentNumber;
 	private String phoneNumber;
 	private List<String> categories;
+	private List<String> expertEstates;
 	
 	public ExpertDetailsDTO() {
 
 	}
 
 	public ExpertDetailsDTO(String city, String district, String postCode, String postCity, String street, String houseNumber,
-			String apartmentNumber, String phoneNumber, List<String> categories) {
+			String apartmentNumber, String phoneNumber, List<String> categories, List<String> expertEstates) {
 		this.city = city;
 		this.district = district;
 		this.postCode = postCode;
@@ -29,6 +30,7 @@ public class ExpertDetailsDTO {
 		this.apartmentNumber = apartmentNumber;
 		this.phoneNumber = phoneNumber;
 		this.categories = categories;
+		this.expertEstates = expertEstates;
 	}
 
 	public String getCity() {
@@ -102,5 +104,15 @@ public class ExpertDetailsDTO {
 	public void setCategories(List<String> categories) {
 		this.categories = categories;
 	}
+
+	public List<String> getExpertEstates() {
+		return expertEstates;
+	}
+
+	public void setExpertEstates(List<String> expertEstates) {
+		this.expertEstates = expertEstates;
+	}
+	
+	
 	
 }

@@ -2,9 +2,21 @@ function listCategories(categories) {
 	if(categories == null || categories.length == 0) {
 		return '';
 	} else {
-		let result = '<h4>Kategorie:</h4>';
+		let result = '<br><h4>Kategorie:</h4>';
 		for(const category of categories) {
 			result += category + '<br>';
+		}
+		return result;
+	}
+}
+
+function listEstates(expertEstates) {
+	if(expertEstates == null || expertEstates.length == 0) {
+		return '';
+	} else {
+		let result = '<br><h4>Obsługiwane osiedla:</h4>';
+		for(const estate of expertEstates) {
+			result += estate + '<br>';
 		}
 		return result;
 	}
@@ -63,10 +75,10 @@ $(document).ready(function() {
 	  	  					+ '<br><br>' 
 	  	  					+ '<h4>Kontakt:</h4>'
 	  	  					+ 'tel. ' + response.phoneNumber
-	  	  					+ '<br><br>' 
+	  	  					+ '<br>' 
 	  	  					+ listCategories(response.categories)
+	  	  					+ listEstates(response.expertEstates)
 	  	  					+'</div>')
-	  	  			.append("<br>")
 					
 					detailsSwal.fire({
 						html: swalContent,

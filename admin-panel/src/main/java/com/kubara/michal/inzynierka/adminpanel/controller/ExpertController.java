@@ -121,6 +121,7 @@ public class ExpertController {
 		User expert = expertOpt.get();
 		
 		List<String> categories = expert.getCategories().stream().map(e -> e.getName()).collect(Collectors.toList());
+		List<String> expertEstates = expert.getExpertEstates().stream().map(e -> e.getName()).collect(Collectors.toList());
 		
 		ExpertDetailsDTO expertToSend = new ExpertDetailsDTO(
 				expert.getAddress().getCity(),
@@ -131,7 +132,8 @@ public class ExpertController {
 				expert.getAddress().getHouseNumber(), 
 				expert.getAddress().getApartmentNumber(),
 				expert.getAddress().getPhoneNumber(),
-				categories);
+				categories,
+				expertEstates);
 		
 		return expertToSend;
 	}

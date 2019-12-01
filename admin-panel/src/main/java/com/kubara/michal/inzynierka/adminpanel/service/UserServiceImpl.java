@@ -11,10 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kubara.michal.inzynierka.adminpanel.dto.UserDTO;
+import com.kubara.michal.inzynierka.adminpanel.dto.UserEditDTO;
 import com.kubara.michal.inzynierka.adminpanel.exception.UserAlreadyExistsException;
 import com.kubara.michal.inzynierka.core.dao.RoleRepository;
+import com.kubara.michal.inzynierka.core.dao.StreetRepository;
 import com.kubara.michal.inzynierka.core.dao.UserRepository;
 import com.kubara.michal.inzynierka.core.entity.Address;
+import com.kubara.michal.inzynierka.core.entity.Estate;
+import com.kubara.michal.inzynierka.core.entity.Street;
 import com.kubara.michal.inzynierka.core.entity.User;
 
 @Service
@@ -25,6 +29,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private StreetRepository streetRepository;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -116,8 +123,62 @@ public class UserServiceImpl implements UserService {
 		
 		user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
 		
+		Optional<Street> estateStreet = streetRepository.findByStreetNameAndStreetNumberAndCityAndDistrictAndPostCode(address.getStreet(), 
+				address.getHouseNumber(), address.getCity(), address.getDistrict(), address.getPostCode());
+		if(estateStreet.isPresent()) {
+			Estate estate = estateStreet.get().getEstate();
+			user.setUserEstate(estate);
+		}
+		
 		User result = userRepository.save(user);
 		
+		return result;
+	}
+	
+	private boolean userNameExistsExceptUser(String userName, User userExc) {
+		User user = userRepository.findByUserName(userName);
+		if(user != null) {
+			if(user.getId() != userExc.getId()) {
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+
+	@Override
+	@Transactional
+	public User update(User userToEdit, UserEditDTO userDto) throws UserAlreadyExistsException {
+		if(userNameExistsExceptUser(userDto.getUserName(), userToEdit)) {
+			throw new UserAlreadyExistsException("Podana nazwa użytkownika jest już zajęta.", false);
+		}
+
+		userToEdit.setUserName(userDto.getUserName());
+		userToEdit.setFirstName(userDto.getFirstName());
+		userToEdit.setLastName(userDto.getLastName());
+		userToEdit.setEmail(userDto.getEmail());
+		
+		Address address = userToEdit.getAddress();
+		address.setCity(userDto.getCity());
+		address.setDistrict(userDto.getDistrict());
+		address.setPostCode(userDto.getPostCode());
+		address.setPostCity(userDto.getPostCity());
+		address.setStreet(userDto.getStreet());
+		address.setHouseNumber(userDto.getHouseNumber());
+		address.setApartmentNumber(userDto.getApartmentNumber());
+		address.setPhoneNumber(userDto.getPhoneNumber());
+		
+		Optional<Street> estateStreet = streetRepository.findByStreetNameAndStreetNumberAndCityAndDistrictAndPostCode(address.getStreet(), 
+				address.getHouseNumber(), address.getCity(), address.getDistrict(), address.getPostCode());
+		if(estateStreet.isPresent()) {
+			Estate estate = estateStreet.get().getEstate();
+			if(estate.getId() != userToEdit.getUserEstate().getId()) {
+				userToEdit.setUserEstate(estate);
+			}
+		}
+
+		User result = userRepository.save(userToEdit);
+
 		return result;
 	}
 

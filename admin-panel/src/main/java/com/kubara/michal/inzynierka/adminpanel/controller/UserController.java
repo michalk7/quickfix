@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kubara.michal.inzynierka.adminpanel.dto.AccountStatusDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.UserDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.UserDetailsDTO;
+import com.kubara.michal.inzynierka.adminpanel.dto.UserEditDTO;
 import com.kubara.michal.inzynierka.adminpanel.exception.UserAlreadyExistsException;
 import com.kubara.michal.inzynierka.adminpanel.service.UserService;
 import com.kubara.michal.inzynierka.adminpanel.utils.GenericResponse;
@@ -201,6 +202,72 @@ public class UserController {
 		}
 		
 		return newUser;
+	}
+	
+	@GetMapping("/edit/{userId}")
+	public String getEditPage(@PathVariable("userId") long userId, Model model) {
+		Optional<User> userOpt = userService.findById(userId);
+		
+		if(!userOpt.isPresent()) {
+			return "redirect:/users?wrongId";
+		}
+		
+		model.addAttribute("user", getUserDtoFromUser(userOpt.get()));
+		model.addAttribute("validated", false);
+		
+		return "/user/editUser";
+	}
+	
+	@PutMapping("/editUserData")
+	public String editUserData(@Valid @ModelAttribute("expert") UserEditDTO userDto, 
+			BindingResult bindingResult, Model model) {
+		if(bindingResult.hasErrors()) {
+			return "/user/editUser";
+		}
+		
+		Optional<User> userOpt = userService.findById(userDto.getId());
+		if(!userOpt.isPresent()) {
+			return "/user/editUser";
+		}
+		
+		User editedUser = editUserAccount(userOpt.get(), userDto, bindingResult);
+		
+		if(editedUser == null) {
+			return "/user/editUser";
+		}
+		
+		return "redirect:/users?editSuccess";
+		
+	}
+
+	private User editUserAccount(User userToEdit, UserEditDTO userDto, BindingResult bindingResult) {
+		User user = null;
+		try {
+			user = userService.update(userToEdit, userDto);
+		} catch(UserAlreadyExistsException e) {
+			bindingResult.rejectValue(e.isEmailException() ? "email" : "userName", e.isEmailException() ? "message.emailExists" : "message.userNameExists");
+			return null;
+		}
+		return user;
+	}
+
+	private UserEditDTO getUserDtoFromUser(User user) {
+		UserEditDTO userDto = new UserEditDTO();
+		userDto.setId(user.getId());
+		userDto.setUserName(user.getUserName());
+		userDto.setFirstName(user.getFirstName());
+		userDto.setLastName(user.getLastName());
+		userDto.setEmail(user.getEmail());
+		userDto.setCity(user.getAddress().getCity());
+		userDto.setDistrict(user.getAddress().getDistrict());
+		userDto.setPostCode(user.getAddress().getPostCode());
+		userDto.setPostCity(user.getAddress().getPostCity());
+		userDto.setStreet(user.getAddress().getStreet());
+		userDto.setHouseNumber(user.getAddress().getHouseNumber());
+		userDto.setApartmentNumber(user.getAddress().getApartmentNumber());
+		userDto.setPhoneNumber(user.getAddress().getPhoneNumber());
+		
+		return userDto;
 	}
 	
 }

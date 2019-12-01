@@ -14,11 +14,8 @@ import com.kubara.michal.inzynierka.adminpanel.dto.ExpertDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.ExpertEditDTO;
 import com.kubara.michal.inzynierka.adminpanel.exception.UserAlreadyExistsException;
 import com.kubara.michal.inzynierka.core.dao.RoleRepository;
-import com.kubara.michal.inzynierka.core.dao.StreetRepository;
 import com.kubara.michal.inzynierka.core.dao.UserRepository;
 import com.kubara.michal.inzynierka.core.entity.Address;
-import com.kubara.michal.inzynierka.core.entity.Estate;
-import com.kubara.michal.inzynierka.core.entity.Street;
 import com.kubara.michal.inzynierka.core.entity.User;
 
 @Service
@@ -29,9 +26,6 @@ public class ExpertServiceImpl implements ExpertService {
 	
 	@Autowired
 	private UserRepository userRepository;
-	
-	@Autowired
-	private StreetRepository streetRepository;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
@@ -150,15 +144,6 @@ public class ExpertServiceImpl implements ExpertService {
 		address.setHouseNumber(expertDto.getHouseNumber());
 		address.setApartmentNumber(expertDto.getApartmentNumber());
 		address.setPhoneNumber(expertDto.getPhoneNumber());
-		
-		Optional<Street> estateStreet = streetRepository.findByStreetNameAndStreetNumberAndCityAndDistrictAndPostCode(address.getStreet(), 
-				address.getHouseNumber(), address.getCity(), address.getDistrict(), address.getPostCode());
-		if(estateStreet.isPresent()) {
-			Estate estate = estateStreet.get().getEstate();
-			if(estate.getId() != expertToEdit.getUserEstate().getId()) {
-				expertToEdit.setUserEstate(estate);
-			}
-		}
 
 		User result = userRepository.save(expertToEdit);
 

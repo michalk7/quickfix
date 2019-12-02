@@ -53,6 +53,15 @@ public class MyAccountController {
 		model.addAttribute("passValidated", false);
 		model.addAttribute("user", getUserEditDTOFromUser(user));
 		model.addAttribute("passwordChange", new PasswordChangeDTO());
+		if(user.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_USER"))) {
+			model.addAttribute("isUser", true);
+		} else {
+			model.addAttribute("isUser", false);
+		}
+		if(user.getUserEstate() != null) {
+			model.addAttribute("estateName", user.getUserEstate().getName());
+		}
+		
 		
 		if(passTab.isPresent()) {
 			model.addAttribute("changePasswordTab", true);
@@ -67,17 +76,25 @@ public class MyAccountController {
 	@PutMapping("/editUserData")
 	public String handleEditUserData(@Valid @ModelAttribute("user") UserEditDTO userEdit, BindingResult bindingResult, Model model, Authentication authentication) {
 		
+		String userName = authentication.getName();
+		
+		User user = userService.findByUserName(userName);
+		
 		model.addAttribute("passValidated", false);
 		model.addAttribute("passwordChange", new PasswordChangeDTO());
 		model.addAttribute("dataTab", true);
+		if(user.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_USER"))) {
+			model.addAttribute("isUser", true);
+		} else {
+			model.addAttribute("isUser", false);
+		}
+		if(user.getUserEstate() != null) {
+			model.addAttribute("estateName", user.getUserEstate().getName());
+		}
 		
 		if(bindingResult.hasErrors()) {
 			return "/myAccount/myAccount";
 		}
-		
-		String userName = authentication.getName();
-		
-		User user = userService.findByUserName(userName);
 		
 		User editedUser = editUserAccount(user, userEdit, bindingResult);
 		
@@ -100,6 +117,14 @@ public class MyAccountController {
 		model.addAttribute("changePasswordTab", true);
 		model.addAttribute("validated", false);
 		model.addAttribute("user", getUserEditDTOFromUser(user));
+		if(user.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_USER"))) {
+			model.addAttribute("isUser", true);
+		} else {
+			model.addAttribute("isUser", false);
+		}
+		if(user.getUserEstate() != null) {
+			model.addAttribute("estateName", user.getUserEstate().getName());
+		}
 		
 		if(bindingResult.hasErrors()) {
 			return "/myAccount/myAccount";

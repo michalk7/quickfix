@@ -40,6 +40,10 @@
 					<input id="editToggle" type="checkbox" data-toggle="toggle" data-size="sm" th:checked="${ not #ctx.containsVariable('validated') }">
 					<label for="editToggle">Edycja</label>
 				</div>
+				
+				<div th:if="${isUser}">
+					<h5 style="margin-bottom: 0" th:text="${ #ctx.containsVariable('estateName') ? 'Osiedle: ' + estateName : 'Osiedle: nieprzypisano'}"></h5>
+				</div>
 
 				<form id="main" th:action="@{/myAccount/editUserData}" 
 					  	   th:object="${user}" th:method="PUT"

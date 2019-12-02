@@ -43,11 +43,12 @@
 	        					<th>Miasto</th>
 	        					<th>Dzielnica</th>
 	        					<th>Kod pocztowy</th>
+	        					<th>Akcje</th>
 	        				</tr>
 	        			</thead>
 	        			<tbody>
 	        				<tr th:if="${#lists.isEmpty(streets)} ">
-	        					<td colspan="6">Brak danych.</td>
+	        					<td colspan="7">Brak danych.</td>
 	        				</tr>
 	        				<tr th:each="street, iStat : ${streets}">
 	        					<td><span th:text="${iStat.index + 1}"></span></td>
@@ -56,6 +57,10 @@
 	        					<td><span th:text="${street.city}"></span></td>
 	        					<td><span th:text="${street.district}"></span></td>
 	        					<td><span th:text="${street.postCode}"></span></td>
+	        					<td>
+	        						<button th:data-href="@{'/estates/deleteStreet/' + ${street.estate.id} + '/' + ${street.id} }"
+	        							class="btn btn-danger btn-sm delete-street-button">Usuń</button>
+	        					</td>
 	        				</tr>
 	        			</tbody>
         			</table>
@@ -126,6 +131,8 @@
 		
 		</div>
 	</div>
+	
+	<script th:src="@{/js/estateDetails.js}"></script>
 	
 	 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>

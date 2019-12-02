@@ -6,20 +6,31 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.kubara.michal.inzynierka.adminpanel.dto.EstateDTO;
+import com.kubara.michal.inzynierka.adminpanel.dto.StreetDTO;
 import com.kubara.michal.inzynierka.adminpanel.service.EstateService;
+import com.kubara.michal.inzynierka.adminpanel.utils.GenericResponse;
 import com.kubara.michal.inzynierka.core.entity.Estate;
 import com.kubara.michal.inzynierka.core.entity.Street;
 import com.kubara.michal.inzynierka.core.entity.User;
@@ -98,5 +109,124 @@ public class EstateController {
 		
 		return "/estate/estateDetails";
 	}
+	
+	@GetMapping("/add")
+	public String getAddEstatePage(Model model) {
+		model.addAttribute("estate", new EstateDTO());
+		model.addAttribute("validated", false);
+		
+		return "/estate/addEstate";
+	}
+	
+	@PostMapping("/add")
+	public String addNewEstate(@Valid @ModelAttribute("estate") EstateDTO estateDto, 
+			BindingResult bindingResult, Model model) {
+		if(bindingResult.hasErrors()) {
+			return "/estate/addEstate";
+		}
+		
+		Estate estate = estateService.create(estateDto);
+		if(estate == null) {
+			return "/estate/addEstate";
+		}
+		
+		return "redirect:/estates?addSuccess";
+	}
+	
+	@GetMapping("/edit/{estateId}")
+	public String getEditPage(@PathVariable("estateId") long estateId, Model model) {
+		Optional<Estate> estateOpt = estateService.findById(estateId);
+		
+		if(!estateOpt.isPresent()) {
+			return "redirect:/estates?wrongId";
+		}
+		
+		Estate estate = estateOpt.get();
+		EstateDTO estateDto = new EstateDTO();
+		estateDto.setName(estate.getName());
+		estateDto.setId(estateId);
+		
+		model.addAttribute("estate", estateDto);
+		model.addAttribute("validated", false);
+		
+		return "/estate/editEstate";
+	}
+	
+	@PutMapping("/editEstate")
+	public String editEstate(@Valid @ModelAttribute("estate") EstateDTO estateDTO,
+			BindingResult bindingResult, Model model) {
+		if(bindingResult.hasErrors()) {
+			return "/estate/editEstate";
+		}
+		
+		Optional<Estate> estateOpt = estateService.findById(estateDTO.getId());
+		if(!estateOpt.isPresent()) {
+			model.addAttribute("editError", "Niepoprawne id osiedla");
+			return "/estate/editEstate";
+		}
+		Estate estate = estateOpt.get();
+		Estate editedEstate = estateService.update(estate, estateDTO);
+		
+		if(editedEstate == null) {
+			model.addAttribute("editError", "Operacja nie powiodła się");
+			return "/estate/editEstate";
+		}
+		
+		return "redirect:/estates?editSuccess";
+		
+	}
+	
+	@GetMapping("/addStreet/{estateId}")
+	public String getAddStreetPage(@PathVariable("estateId") long estateId, Model model) {
+		Optional<Estate> estateOpt = estateService.findById(estateId);
+		
+		if(!estateOpt.isPresent()) {
+			return "redirect:/estates?wrongId";
+		}
+		
+		StreetDTO streetDto = new StreetDTO();
+		streetDto.setEstateId(estateId);
+		
+		model.addAttribute("street", streetDto);
+		model.addAttribute("validated", false);
+		
+		return "/estate/addStreet";
+		
+	}
+	
+	@PostMapping("/addStreet")
+	public String addNewStreet(@Valid @ModelAttribute("street") StreetDTO streetDto,
+			BindingResult bindingResult, Model model) {
+		if(bindingResult.hasErrors()) {
+			return "/estate/addStreet";
+		}
+		
+		Street street = estateService.addStreet(streetDto);
+		if(street == null) {
+			return "/estate/addStreet";
+		}
+		
+		return "redirect:/estates?addStreetSuccess";
+		
+	}
+	
+	@DeleteMapping("/deleteStreet/{estateId}/{streetId}")
+	@ResponseBody
+	public GenericResponse deleteStreet(@PathVariable("estateId") long estateId, @PathVariable("streetId") long streetId, 
+			Model model ) {
+		Optional<Estate> estateOpt = estateService.findById(estateId);
+		Optional<Street> streetOpt = estateService.findStreetById(streetId);
+		
+		if(!estateOpt.isPresent() || !streetOpt.isPresent()) {
+			return new GenericResponse("Błędne id osiedla lub ulicy", "Wrong ID");
+		}
+		
+		Street street = streetOpt.get();
+		
+		estateService.deleteStreet(street);
+		
+		return new GenericResponse("Ulica usunięta pomyślnie.");
+	}
+	
 	
 }

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>QuickFix - AdminPanel - Edytuj osiedle</title>
+	
+	<!--  <div th:replace="fragments/header :: header-css"/>  -->
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+
+</head>
+<body>
+	
+	<div th:replace="fragments/header :: header"></div>
+	
+	<div class="container-fluid">
+		<div class="row">
+		
+		
+			<div th:replace="fragments/header :: sidebar"></div>
+			
+			
+        	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4 col-sm-10">
+        		<h1>Edytuj osiedle</h1>
+        		
+        	
+        		<form id="mainForm" th:action="@{/estates/editEstate}" 
+					  	   th:object="${estate}" th:method="PUT"
+					  	   class="form-signin" novalidate
+					  	   th:classappend="${ not #ctx.containsVariable('validated') } ? was-validated : needs-validation">	
+					
+			
+				    <!-- Place for messages: error, alert etc ... -->
+				    <div class="form-group">
+				        <div class="col-xs-15">
+				            <div>
+							
+								<!-- Check for registration error -->
+								<div th:if="${editError}" class="alert alert-danger col-xs-offset-1 col-xs-10"
+									th:text=${editError} >error
+								</div>
+																										
+				            </div>
+				        </div>
+				    </div>
+				    
+				    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					<input type="hidden" th:field="*{id}"/>
+			
+					<!-- User name -->
+					<div class="form-group row">
+						<label for="inputName" class="col-sm-2 col-form-label">Nazwa (*)</label>
+						<div class="col-sm-6">
+							<input id="inputName" type="text" th:field="*{name}" placeholder="Nazwa (*)" 
+								class="form-control" autofocus required
+								th:classappend="${ #fields.hasErrors('name') } ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"/>
+							<div class="invalid-feedback">
+								<div th:if="${ not #fields.hasErrors('name')  }">
+									<p>Wymagane</p>
+								</div>
+								<p th:each="err : ${#fields.errors('name')}" th:text="${err}"><p/>
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-row align-items-center mb-4">
+						<div class="col-auto">
+							<button class="btn btn-lg btn-primary" type="submit">Zapisz</button>
+						</div>
+						
+					</div>
+					<a th:href="@{/estates}">Powrót</a>
+					
+				</form>
+        		
+        		
+        		
+        		
+        		<div th:replace="fragments/footer :: footer"></div>
+        	</main>
+		
+		</div>
+	</div>
+
+	<script th:src="@{/js/addEstate.js}"></script>
+	
+	 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+</body>
+</html>

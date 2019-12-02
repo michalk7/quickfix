@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>QuickFix - AdminPanel - Dodaj ulice</title>
+	
+	<!--  <div th:replace="fragments/header :: header-css"/>  -->
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+
+</head>
+<body>
+	
+	<div th:replace="fragments/header :: header"></div>
+	
+	<div class="container-fluid">
+		<div class="row">
+		
+		
+			<div th:replace="fragments/header :: sidebar"></div>
+			
+			
+        	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4 col-sm-10">
+        		<h1>Dodaj ulice</h1>
+        		
+        	
+        		<form id="mainForm" th:action="@{/estates/addStreet}" 
+					  	   th:object="${street}" th:method="POST"
+					  	   class="form-signin" novalidate
+					  	   th:classappend="${ not #ctx.containsVariable('validated') } ? was-validated : needs-validation">	
+					
+			
+				    <!-- Place for messages: error, alert etc ... -->
+				    <div class="form-group">
+				        <div class="col-xs-15">
+				            <div>
+							
+								<!-- Check for registration error -->
+								<div th:if="${editError}" class="alert alert-danger col-xs-offset-1 col-xs-10"
+									th:text=${editError} >error
+								</div>
+																										
+				            </div>
+				        </div>
+				    </div>
+				    
+				    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+				    <input type="hidden" th:field="*{estateId}"/>
+			
+					<!-- User name -->
+					<div class="form-group row">
+						<label for="inputStreetName" class="col-sm-2 col-form-label">Nazwa ulicy (*)</label>
+						<div class="col-sm-6">
+							<input id="inputStreetName" type="text" th:field="*{streetName}" placeholder="Nazwa ulicy (*)" 
+								class="form-control" autofocus required
+								th:classappend="${ #fields.hasErrors('streetName') } ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"/>
+							<div class="invalid-feedback">
+								<div th:if="${ not #fields.hasErrors('streetName')  }">
+									<p>Wymagane</p>
+								</div>
+								<p th:each="err : ${#fields.errors('streetName')}" th:text="${err}"><p/>
+							</div>
+						</div>
+					</div>	
+					
+					<!-- streetNumber -->
+					<div class="form-group row">
+						<label for="inputStreetNumber" class="col-sm-2 col-form-label">Numer (*)</label>
+						<div class="col-sm-6">
+							<input id="inputStreetNumber" type="text" th:field="*{streetNumber}" 
+								placeholder="Numer (*)" class="form-control" required
+								th:classappend="${ #fields.hasErrors('streetNumber')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" />
+							<div class="invalid-feedback">
+								<div th:if="${ not #fields.hasErrors('streetNumber')  }">
+									<p>Wymagane</p>
+								</div>
+								<p th:each="err : ${#fields.errors('streetNumber')}" th:text="${err}"><p/>
+							</div>
+						</div>
+					</div>
+					
+					<!-- city -->
+					<div class="form-group row">
+						<label for="inputCity" class="col-sm-2 col-form-label">Miasto (*)</label>
+						<div class="col-sm-6">
+							<input id="inputCity" type="text" th:field="*{city}" 
+								placeholder="Miasto (*)" class="form-control" required
+								th:classappend="${ #fields.hasErrors('city')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" />
+							<div class="invalid-feedback">
+								<div th:if="${ not #fields.hasErrors('city')  }">
+									<p>Wymagane</p>
+								</div>
+								<p th:each="err : ${#fields.errors('city')}" th:text="${err}"><p/>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Dzielnica -->
+					<div class="form-group row">
+						<label for="inputDistrict" class="col-sm-2 col-form-label">Dzielnica</label>
+						<div class="col-sm-6">
+							<input id="inputDistrict" type="text" th:field="*{district}" 
+								placeholder="Dzielnica" class="form-control"
+								th:classappend="${ #fields.hasErrors('district')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)" />
+							<div class="invalid-feedback">
+								<p th:each="err : ${#fields.errors('district')}" th:text="${err}"><p/>
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<!-- postCode -->
+						<label for="inputPostCode" class="col-sm-2 col-form-label">Kod pocztowy (*)</label>
+						<div class="col-sm-6">
+							<input id="inputPostCode" type="text" th:field="*{postCode}" 
+								placeholder="Kod pocztowy (*)" class="form-control" required
+								th:classappend="${ #fields.hasErrors('postCode')} ? is-invalid : (${ not #ctx.containsVariable('validated') } ? is-valid)"
+								pattern="^\d{2}-\d{3}$"  />
+							<div class="invalid-feedback">
+								<p th:if="${ not #fields.hasErrors('postCode')  }">Wymagane</p>
+								<p th:each="err : ${#fields.errors('postCode')}" th:text="${err}"><p/>
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-row align-items-center mb-4">
+						<div class="col-auto">
+							<button class="btn btn-lg btn-primary" type="submit">Zapisz</button>
+						</div>
+						
+					</div>
+					<a th:href="@{/estates}">Powrót</a>
+					
+				</form>
+        		
+        		
+        		
+        		
+        		<div th:replace="fragments/footer :: footer"></div>
+        	</main>
+		
+		</div>
+	</div>
+
+	<script th:src="@{/js/addStreet.js}"></script>
+	
+	 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+</body>
+</html>

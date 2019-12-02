@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>QuickFix - AdminPanel - Szczegóły osiedla</title>
+	
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	
+	<!--  <div th:replace="fragments/header :: header-css"/>  -->
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/css/estateDetails.css}" href="../../css/estateDetails.css" />
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+</head>
+<body>
+	
+	<div th:replace="fragments/header :: header"></div>
+	
+	<div class="container-fluid">
+		<div class="row">
+		
+		
+			<div th:replace="fragments/header :: sidebar"></div>
+			
+			
+        	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4 col-sm-10">
+        		<h1 th:text="${ 'Szczegóły osiedla ' + estateName }"></h1>
+        		
+        		<h3>Ulice:</h3>
+        		
+        		<div class="table-responsive">
+        		
+        			<table class="table table-bordered table-striped">
+	        			<thead class="thead-dark">
+	        				<tr>
+	        					<th>#</th>
+	        					<th>Nazwa ulicy</th>
+	        					<th>Numer</th>
+	        					<th>Miasto</th>
+	        					<th>Dzielnica</th>
+	        					<th>Kod pocztowy</th>
+	        				</tr>
+	        			</thead>
+	        			<tbody>
+	        				<tr th:if="${#lists.isEmpty(streets)} ">
+	        					<td colspan="6">Brak danych.</td>
+	        				</tr>
+	        				<tr th:each="street, iStat : ${streets}">
+	        					<td><span th:text="${iStat.index + 1}"></span></td>
+	        					<td><span th:text="${street.streetName}"></span></td>
+	        					<td><span th:text="${street.streetNumber}"></span></td>
+	        					<td><span th:text="${street.city}"></span></td>
+	        					<td><span th:text="${street.district}"></span></td>
+	        					<td><span th:text="${street.postCode}"></span></td>
+	        				</tr>
+	        			</tbody>
+        			</table>
+        		
+        		</div>
+        		
+        		<h3>Fachowcy obsługujący ulice:</h3>
+        		
+        		<div class="table-responsive">
+        			<table class="table table-bordered table-striped">
+	        			<thead class="thead-dark">
+	        				<tr>
+	        					<th>#</th>
+	        					<th>Nazwa użytkownika</th>
+	        					<th>Imię</th>
+	        					<th>Nazwisko</th>
+	        					<th>Email</th>
+	        				</tr>
+	        			</thead>
+	        			<tbody>
+	        				<tr th:if="${#lists.isEmpty(experts)} ">
+	        					<td colspan="5">Brak danych.</td>
+	        				</tr>
+	        				<tr th:each="expert, iStat : ${experts}">
+	        					<td><span th:text="${iStat.index + 1}"></span></td>
+	        					<td><span th:text="${expert.userName}"></span></td>
+	        					<td><span th:text="${expert.firstName}"></span></td>
+	        					<td><span th:text="${expert.lastName}"></span></td>
+	        					<td><span th:text="${expert.email}"></span></td>
+	        				</tr>
+	        			</tbody>
+        			</table>
+        		</div>
+        		
+        		<h3>Przypisani klienci:</h3>
+        		
+        		<div class="table-responsive">
+        			<table class="table table-bordered table-striped">
+	        			<thead class="thead-dark">
+	        				<tr>
+	        					<th>#</th>
+	        					<th>Nazwa użytkownika</th>
+	        					<th>Imię</th>
+	        					<th>Nazwisko</th>
+	        					<th>Email</th>
+	        				</tr>
+	        			</thead>
+	        			<tbody>
+	        				<tr th:if="${#lists.isEmpty(users)} ">
+	        					<td colspan="5">Brak danych.</td>
+	        				</tr>
+	        				<tr th:each="user, iStat : ${users}">
+	        					<td><span th:text="${iStat.index + 1}"></span></td>
+	        					<td><span th:text="${user.userName}"></span></td>
+	        					<td><span th:text="${user.firstName}"></span></td>
+	        					<td><span th:text="${user.lastName}"></span></td>
+	        					<td><span th:text="${user.email}"></span></td>
+	        				</tr>
+	        			</tbody>
+        			</table>
+        		</div>
+        		
+        		<a th:href="@{/estates}">Powrót</a>
+        		
+        		<div th:replace="fragments/footer :: footer"></div>
+        	</main>
+			
+		
+		</div>
+	</div>
+	
+	 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+</body>
+</html>

@@ -349,7 +349,7 @@ public class ExpertController {
 			return "/expert/changePassword";
 		}
 		
-		Optional<User> expertOpt = expertService.findById(passwordChangeDTO.getExpertId());
+		Optional<User> expertOpt = expertService.findById(passwordChangeDTO.getId());
 		if(!expertOpt.isPresent()) {
 			return "/expert/changePassword";
 		}

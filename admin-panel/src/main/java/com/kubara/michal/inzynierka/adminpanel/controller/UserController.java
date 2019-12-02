@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kubara.michal.inzynierka.adminpanel.dto.AccountStatusDTO;
+import com.kubara.michal.inzynierka.adminpanel.dto.PasswordChangeDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.UserDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.UserDetailsDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.UserEditDTO;
@@ -249,6 +250,50 @@ public class UserController {
 			return null;
 		}
 		return user;
+	}
+	
+	@GetMapping("/changePasswordPage/{userId}")
+	public String getChangePasswordPage(@PathVariable("userId") long userId, Model model) {
+		
+		Optional<User> userOpt = userService.findById(userId);
+		
+		if(!userOpt.isPresent()) {
+			return "redirect:/users?wrongId";
+		}
+		
+		model.addAttribute("passwordChange", new PasswordChangeDTO(userId));
+		model.addAttribute("validated", false);
+		
+		return "/user/changePassword";
+	}
+	
+	@PostMapping("/changePassword")
+	public String changeExpertPassword(@Valid @ModelAttribute("passwordChange") PasswordChangeDTO passwordChangeDTO, BindingResult bindingResult,
+			Model model) {
+		
+		if(bindingResult.hasErrors()) {
+			return "/user/changePassword";
+		}
+		
+		Optional<User> userOpt = userService.findById(passwordChangeDTO.getId());
+		if(!userOpt.isPresent()) {
+			return "/user/changePassword";
+		}
+		
+		User user = userOpt.get();
+		
+		String newPass = passwordChangeDTO.getPassword();
+		String reversedUserName = user.getUserName();
+		
+		if(newPass.contains(user.getUserName()) || newPass.contains(reversedUserName)) {
+			bindingResult.rejectValue("password", "message.passwordContainsUsername");
+			return "/user/changePassword";
+		}
+		
+		userService.changePassword(user, passwordChangeDTO.getPassword());
+		
+		return "redirect:/users?passwordChanged";
+		
 	}
 
 	private UserEditDTO getUserDtoFromUser(User user) {

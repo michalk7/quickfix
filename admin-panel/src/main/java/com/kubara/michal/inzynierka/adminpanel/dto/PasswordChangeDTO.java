@@ -11,7 +11,7 @@ import com.kubara.michal.inzynierka.core.validation.ValidPassword;
 })
 public class PasswordChangeDTO {
 
-	private long expertId;
+	private long id;
 	
 	@NotNull(message = "Wymagane")
 	@Size(min = 1, message = "Wymagane")
@@ -26,17 +26,17 @@ public class PasswordChangeDTO {
 		
 	}
 	
-	public PasswordChangeDTO(long expertId) {
+	public PasswordChangeDTO(long id) {
 		super();
-		this.expertId = expertId;
+		this.id = id;
 	}
 
-	public long getExpertId() {
-		return expertId;
+	public long getId() {
+		return id;
 	}
 
-	public void setExpertId(long expertId) {
-		this.expertId = expertId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getPassword() {

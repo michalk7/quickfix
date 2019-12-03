@@ -15,6 +15,7 @@ import com.kubara.michal.inzynierka.core.dao.EstateRepository;
 import com.kubara.michal.inzynierka.core.dao.StreetRepository;
 import com.kubara.michal.inzynierka.core.entity.Estate;
 import com.kubara.michal.inzynierka.core.entity.Street;
+import com.kubara.michal.inzynierka.core.entity.User;
 
 @Service
 public class EstateServiceImpl implements EstateService {
@@ -88,6 +89,14 @@ public class EstateServiceImpl implements EstateService {
 	@Transactional
 	public void deleteStreet(Street street) {
 		streetRepository.delete(street);
+	}
+
+	@Override
+	@Transactional
+	public void deleteExpert(Estate estate, User expert) {
+		expert.getExpertEstates().remove(estate);
+		estate.getExperts().remove(expert);
+		estateRepository.save(estate);
 	}
 
 }

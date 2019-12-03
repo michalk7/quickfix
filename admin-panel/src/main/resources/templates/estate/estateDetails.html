@@ -67,7 +67,7 @@
         		
         		</div>
         		
-        		<h3>Fachowcy obsługujący ulice:</h3>
+        		<h3>Fachowcy obsługujący osiedle:</h3>
         		
         		<div class="table-responsive">
         			<table class="table table-bordered table-striped">
@@ -78,11 +78,12 @@
 	        					<th>Imię</th>
 	        					<th>Nazwisko</th>
 	        					<th>Email</th>
+	        					<th>Akcje</th>
 	        				</tr>
 	        			</thead>
 	        			<tbody>
 	        				<tr th:if="${#lists.isEmpty(experts)} ">
-	        					<td colspan="5">Brak danych.</td>
+	        					<td colspan="6">Brak danych.</td>
 	        				</tr>
 	        				<tr th:each="expert, iStat : ${experts}">
 	        					<td><span th:text="${iStat.index + 1}"></span></td>
@@ -90,6 +91,10 @@
 	        					<td><span th:text="${expert.firstName}"></span></td>
 	        					<td><span th:text="${expert.lastName}"></span></td>
 	        					<td><span th:text="${expert.email}"></span></td>
+	        					<td>
+	        						<button th:data-href="@{'/estates/deleteExpert/' + ${estateId} + '/' + ${expert.id} }"
+	        							class="btn btn-danger btn-sm delete-expert-button">Usuń</button>
+	        					</td>
 	        				</tr>
 	        			</tbody>
         			</table>

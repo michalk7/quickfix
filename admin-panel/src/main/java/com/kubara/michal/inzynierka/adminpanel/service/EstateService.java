@@ -10,6 +10,7 @@ import com.kubara.michal.inzynierka.adminpanel.dto.EstateDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.StreetDTO;
 import com.kubara.michal.inzynierka.core.entity.Estate;
 import com.kubara.michal.inzynierka.core.entity.Street;
+import com.kubara.michal.inzynierka.core.entity.User;
 
 public interface EstateService {
 
@@ -28,5 +29,7 @@ public interface EstateService {
 	Optional<Street> findStreetById(long streetId);
 
 	void deleteStreet(Street street);
+
+	void deleteExpert(Estate estate, User expert);
 	
 }

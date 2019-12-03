@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.kubara.michal.inzynierka.adminpanel.dto.EstateDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.StreetDTO;
 import com.kubara.michal.inzynierka.adminpanel.service.EstateService;
+import com.kubara.michal.inzynierka.adminpanel.service.ExpertService;
 import com.kubara.michal.inzynierka.adminpanel.utils.GenericResponse;
 import com.kubara.michal.inzynierka.core.entity.Estate;
 import com.kubara.michal.inzynierka.core.entity.Street;
@@ -41,6 +42,9 @@ public class EstateController {
 	
 	@Autowired
 	private EstateService estateService;
+	
+	@Autowired
+	private ExpertService expertService;
 
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
@@ -103,6 +107,7 @@ public class EstateController {
 		List<User> users = new ArrayList<User>(estate.getUsers());
 		
 		model.addAttribute("estateName", estate.getName());
+		model.addAttribute("estateId", estateId);
 		model.addAttribute("streets", streets);
 		model.addAttribute("experts", experts);
 		model.addAttribute("users", users);
@@ -228,5 +233,24 @@ public class EstateController {
 		return new GenericResponse("Ulica usunięta pomyślnie.");
 	}
 	
+	@DeleteMapping("/deleteExpert/{estateId}/{expertId}")
+	@ResponseBody
+	public GenericResponse deleteExpert(@PathVariable("estateId") long estateId, @PathVariable("expertId") long expertId, 
+			Model model ) {
+		Optional<Estate> estateOpt = estateService.findById(estateId);
+		Optional<User> expertOpt = expertService.findById(expertId);
+		
+		if(!estateOpt.isPresent() || !expertOpt.isPresent()) {
+			return new GenericResponse("Błędne id osiedla lub fachowca", "Wrong ID");
+		}
+		
+		Estate estate = estateOpt.get();
+		User expert = expertOpt.get();
+		
+		estateService.deleteExpert(estate, expert);
+		
+		return new GenericResponse("Fachowiec został usunięty z obsługi tego osiedla");
+		
+	}
 	
 }

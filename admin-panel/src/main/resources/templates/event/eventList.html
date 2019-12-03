@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>QuickFix - AdminPanel - Wydarzenia</title>
+	
+	<!--  <div th:replace="fragments/header :: header-css"/>  -->
+	<link th:include="fragments/header :: header-css" th:remove="tag"/>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/css/eventList.css}" href="../../css/eventList.css" />
+
+</head>
+<body>
+	
+	<div th:replace="fragments/header :: header"></div>
+	
+	<div class="container-fluid">
+		<div class="row">
+		
+		
+			<div th:replace="fragments/header :: sidebar"></div>
+			
+			
+        	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mt-4 col-sm-10">
+        		<h1>Wydarzenia</h1>
+        		
+        		<div class="d-flex align-items-start flex-column">
+        		
+	        		<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Elementów na stronie</button>
+				    <div class="dropdown-menu">
+				    	<a class="dropdown-item" th:href="@{ /events(size=5, page=1) }" th:classappend="${ eventPage.size == 5 } ? active">5</a>
+				    	<a class="dropdown-item" th:href="@{ /events(size=10, page=1) }" th:classappend="${ eventPage.size == 10 } ? active">10</a>
+				    	<a class="dropdown-item" th:href="@{ /events(size=25, page=1) }" th:classappend="${ eventPage.size == 25 } ? active">25</a>
+				    </div>
+        		
+        		</div>
+        		
+        		
+        		 <!-- Place for messages: error, alert etc ... -->
+				    <div class="form-group">
+				        <div class="col-xs-15">
+				            <div>
+							
+								<!-- Check for registration error -->
+								<div th:if="${error}" class="alert alert-danger col-xs-offset-1 col-xs-10 mt-4"
+									th:text=${error} >error
+								</div>
+																										
+				            </div>
+				        </div>
+				    </div>
+        		
+        		<div class="table-responsive">
+        		
+        			<table class="table table-bordered table-striped">
+	        			<thead class="thead-dark">
+	        				<tr>
+	        					<th>#</th>
+	        					<th>Nazwa wydarzenia</th>
+	        					<th>Problem</th>
+	        					<th>Opis problemu</th>
+	        					<th>Czy potwierdzone?</th>
+	        					<th>Klient</th>
+	        					<th>Fachowiec</th>
+	        					<th>Data początkowa</th>
+	        					<th>Data końcowa</th>
+	        				</tr>
+	        			</thead>
+	        			<tbody>
+	        				<tr th:if="${#lists.isEmpty(eventPage.content)} ">
+	        					<td colspan="9">Brak danych.</td>
+	        				</tr>
+	        				<tr th:each="event, iStat : ${eventPage.content}">
+	        					<td><span th:text="${iStat.index + 1}"></span></td>
+	        					<td><span th:text="${event.eventName}"></span></td>
+	        					<td><span th:text="${event.problemTitle}"></span></td>
+	        					<td><span th:text="${event.problemDescription}"></span></td>
+	        					<td><span th:text="${event.confirmed ? 'Tak' : 'Nie'}"></span></td>
+	        					<td><span th:text="${event.user.userName}"></span></td>
+	        					<td><span th:text="${event.expert.userName}"></span></td>
+	        					<td><span th:text="${ #temporals.format(event.startDate, 'dd-MM-yyyy HH:mm') }"></span></td>
+	        					<td><span th:text="${ #temporals.format(event.endDate, 'dd-MM-yyyy HH:mm') }"></span></td>
+	        				</tr>
+	        			</tbody>
+        			</table>
+        		
+        		</div>
+        		
+        		
+        		<div th:if="${ eventPage.totalPages > 0 }">
+					<div class="d-inline-flex page-navigation">
+						<a th:href="@{ /events(size=${ eventPage.size }, page=${ pageNumbers.get(0) }) }"
+								th:text="'<<'" class="btn btn-outline-success btn-sm page-button page-navigation-buttons"></a>
+						
+						<a th:href="@{ /events(size=${ eventPage.size }, page=${ eventPage.number }) }"
+								th:text="'<'" class="btn btn-outline-success btn-sm page-button page-navigation-buttons"
+								th:classappend="${ eventPage.number == 0 } ? disabled"></a>
+						
+						<div th:each="pageNumber : ${ pageNumbers }">
+							<a th:href="@{ /events(size=${ eventPage.size }, page=${ pageNumber }) }"
+								th:text="${ pageNumber }"
+								th:classappend="${ pageNumber == eventPage.number + 1 } ? active" class="btn btn-outline-success btn-sm page-button page-navigation-buttons"></a>
+						</div>
+						
+						<a th:href="@{ /events(size=${ eventPage.size }, page=${ eventPage.number + 2 }) }"
+								th:text="'>'" class="btn btn-outline-success btn-sm page-button page-navigation-buttons"
+								th:classappend="${ eventPage.number == eventPage.totalPages - 1 } ? disabled"></a>
+					
+						<a th:href="@{ /events(size=${ eventPage.size }, page=${ pageNumbers.get(pageNumbers.size() - 1) }) }"
+								th:text="'>>'" class="btn btn-outline-success btn-sm page-navigation-buttons"></a>
+					
+					</div>
+				</div>
+        		
+        		
+        		<div th:replace="fragments/footer :: footer"></div>
+        	</main>
+			
+		
+		</div>
+	</div>
+	
+	 <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+</body>
+</html>

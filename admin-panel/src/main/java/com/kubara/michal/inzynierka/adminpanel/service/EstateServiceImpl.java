@@ -12,7 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.kubara.michal.inzynierka.adminpanel.dto.EstateDTO;
 import com.kubara.michal.inzynierka.adminpanel.dto.StreetDTO;
 import com.kubara.michal.inzynierka.core.dao.EstateRepository;
+import com.kubara.michal.inzynierka.core.dao.RoleRepository;
 import com.kubara.michal.inzynierka.core.dao.StreetRepository;
+import com.kubara.michal.inzynierka.core.dao.UserRepository;
+import com.kubara.michal.inzynierka.core.entity.Address;
 import com.kubara.michal.inzynierka.core.entity.Estate;
 import com.kubara.michal.inzynierka.core.entity.Street;
 import com.kubara.michal.inzynierka.core.entity.User;
@@ -24,7 +27,13 @@ public class EstateServiceImpl implements EstateService {
 	private EstateRepository estateRepository;
 	
 	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
 	private StreetRepository streetRepository;
+	
+	@Autowired
+	private RoleRepository roleRepository;
 	
 	@Override
 	@Transactional
@@ -76,7 +85,38 @@ public class EstateServiceImpl implements EstateService {
 		street.setEstate(estate);
 		estate.getStreets().add(street);
 		
-		return streetRepository.save(street);
+		Street result = streetRepository.save(street);
+		
+		if(result != null) {
+			List<User> usersWithoutEstate = userRepository.findAllByRolesAndEnabledAndUserEstate(roleRepository.findByName("ROLE_USER"), true, null);
+			
+			String streetDistrict = "";
+			if(street.getDistrict() != null) {
+				streetDistrict = street.getDistrict();
+			}
+			
+			for(User user : usersWithoutEstate) {
+				Address address = user.getAddress();
+				
+				String addressDistrict = "";
+				if(address.getDistrict() != null) {
+					addressDistrict = address.getDistrict();
+				}
+				if(address.getStreet().equals(street.getStreetName())
+						&& address.getHouseNumber().equals(street.getStreetNumber())
+						&& address.getCity().equals(street.getCity())
+						&& addressDistrict.equals(streetDistrict)
+						&& address.getPostCode().equals(street.getPostCode())
+					) {
+					estate.getUsers().add(user);
+					user.setUserEstate(estate);
+					estateRepository.save(estate);
+				}
+			}
+		}
+		
+		
+		return result;
 	}
 
 	@Override
@@ -87,7 +127,29 @@ public class EstateServiceImpl implements EstateService {
 
 	@Override
 	@Transactional
-	public void deleteStreet(Street street) {
+	public void deleteStreet(Street street, Estate estate) {
+		String streetDistrict = "";
+		if(street.getDistrict() != null) {
+			streetDistrict = street.getDistrict();
+		}
+		for(User user : estate.getUsers()) {
+			Address address = user.getAddress();
+			
+			String addressDistrict = "";
+			if(address.getDistrict() != null) {
+				addressDistrict = address.getDistrict();
+			}
+			if(address.getStreet().equals(street.getStreetName())
+					&& address.getHouseNumber().equals(street.getStreetNumber())
+					&& address.getCity().equals(street.getCity())
+					&& addressDistrict.equals(streetDistrict)
+					&& address.getPostCode().equals(street.getPostCode())
+				) {
+				estate.getUsers().remove(user);
+				user.setUserEstate(null);
+				estateRepository.save(estate);
+			}
+		}
 		streetRepository.delete(street);
 	}
 

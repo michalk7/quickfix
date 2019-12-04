@@ -1,5 +1,7 @@
 package com.kubara.michal.inzynierka.core.dao;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,4 +43,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	
 	//z trzema kryteriami showall = nic w zapytaniu
 	Page<User> findAllByRolesAndEnabledAndVerifiedAndCategoriesAndExpertEstates(Role role, boolean enabled, boolean verified, Category category, Estate estate, Pageable pageable);
+
+	List<User> findAllByRolesAndEnabledAndUserEstate(Role role, boolean enabled, Estate userEstate);
+	
 }

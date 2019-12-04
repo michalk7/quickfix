@@ -28,7 +28,7 @@ public interface EstateService {
 
 	Optional<Street> findStreetById(long streetId);
 
-	void deleteStreet(Street street);
+	void deleteStreet(Street street, Estate estate);
 
 	void deleteExpert(Estate estate, User expert);
 

@@ -227,8 +227,9 @@ public class EstateController {
 		}
 		
 		Street street = streetOpt.get();
+		Estate estate = estateOpt.get();
 		
-		estateService.deleteStreet(street);
+		estateService.deleteStreet(street, estate);
 		
 		return new GenericResponse("Ulica usunięta pomyślnie.");
 	}

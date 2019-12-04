@@ -2,6 +2,7 @@ package com.kubara.michal.inzynierka.core.entity;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -53,7 +54,7 @@ public class Estate {
 	}
 
 
-	@OneToMany(mappedBy="estate")
+	@OneToMany(mappedBy="estate", orphanRemoval = true)
 	public Set<Street> getStreets() {
 		return streets;
 	}
@@ -73,7 +74,7 @@ public class Estate {
 		this.users = users;
 	}
 
-	@ManyToMany(mappedBy = "expertEstates")
+	@ManyToMany(mappedBy = "expertEstates", cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
 	public Set<User> getExperts() {
 		return experts;
 	}

@@ -27,5 +27,7 @@ public interface UserService {
 	User saveUser(UserDTO userDto) throws UserAlreadyExistsException;
 
 	User update(User userToEdit, UserEditDTO userDto) throws UserAlreadyExistsException;
+
+	boolean assignUserToEstate(User user);
 	
 }

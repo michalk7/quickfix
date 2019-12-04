@@ -172,7 +172,9 @@ public class UserServiceImpl implements UserService {
 				address.getHouseNumber(), address.getCity(), address.getDistrict(), address.getPostCode());
 		if(estateStreet.isPresent()) {
 			Estate estate = estateStreet.get().getEstate();
-			if(estate.getId() != userToEdit.getUserEstate().getId()) {
+			if(userToEdit.getUserEstate() == null) {
+				userToEdit.setUserEstate(estate);
+			} else if(estate.getId() != userToEdit.getUserEstate().getId()) {
 				userToEdit.setUserEstate(estate);
 			}
 		}
@@ -180,6 +182,27 @@ public class UserServiceImpl implements UserService {
 		User result = userRepository.save(userToEdit);
 
 		return result;
+	}
+
+	@Override
+	@Transactional
+	public boolean assignUserToEstate(User user) {
+		Address address = user.getAddress();
+		
+		Optional<Street> estateStreet = streetRepository.findByStreetNameAndStreetNumberAndCityAndDistrictAndPostCode(address.getStreet(), 
+				address.getHouseNumber(), address.getCity(), address.getDistrict(), address.getPostCode());
+		if(estateStreet.isPresent()) {
+			Estate estate = estateStreet.get().getEstate();
+			if(user.getUserEstate() == null) {
+				user.setUserEstate(estate);
+				return true;
+			} else if(estate.getId() != user.getUserEstate().getId()) {
+				user.setUserEstate(estate);
+				return true;
+			}
+		}
+		return false;
+		
 	}
 
 }

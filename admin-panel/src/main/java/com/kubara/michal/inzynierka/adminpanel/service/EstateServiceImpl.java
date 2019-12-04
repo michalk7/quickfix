@@ -99,4 +99,17 @@ public class EstateServiceImpl implements EstateService {
 		estateRepository.save(estate);
 	}
 
+	@Override
+	@Transactional
+	public void delete(Estate estate) {
+		estate.getExperts().forEach(e -> e.getExpertEstates().remove(estate));
+		estate.getExperts().clear();
+		for( User user : estate.getUsers() ) {
+			user.setUserEstate(null);
+		}
+		estate.getUsers().clear();
+		estateRepository.save(estate);
+		estateRepository.delete(estate);
+	}
+
 }

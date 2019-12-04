@@ -295,6 +295,27 @@ public class UserController {
 		return "redirect:/users?passwordChanged";
 		
 	}
+	
+	@PutMapping("/assignToEstate/{userId}")
+	@ResponseBody
+	public GenericResponse assignUserToEstate(@PathVariable("userId") long userId) {
+		Optional<User> userOpt = userService.findById(userId);
+		
+		if(!userOpt.isPresent()) {
+			return new GenericResponse("Brak użytkownika o podanym id", "Wrong ID");
+		}
+		
+		User user = userOpt.get();
+		
+		boolean result = userService.assignUserToEstate(user);
+		if(result) {
+			return new GenericResponse("Użytkownik został przypisany do osiedla.");
+		} else {
+			return new GenericResponse("Brak osiedla do którego można przypisać użytkownika", "Estate not found");
+		}
+		
+	}
+	
 
 	private UserEditDTO getUserDtoFromUser(User user) {
 		UserEditDTO userDto = new UserEditDTO();

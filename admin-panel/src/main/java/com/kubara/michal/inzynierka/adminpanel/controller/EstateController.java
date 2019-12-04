@@ -253,4 +253,20 @@ public class EstateController {
 		
 	}
 	
+	@DeleteMapping("/delete/{estateId}")
+	@ResponseBody
+	public GenericResponse deleteEstate(@PathVariable("estateId") long estateId, Model model ) {
+		Optional<Estate> estateOpt = estateService.findById(estateId);
+		
+		if(!estateOpt.isPresent()) {
+			return new GenericResponse("Błędne id osiedla", "Wrong ID");
+		}
+		
+		Estate estate = estateOpt.get();
+		
+		estateService.delete(estate);
+		
+		return new GenericResponse("Osiedle zostało usunięte.");	
+	}
+	
 }

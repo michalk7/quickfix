@@ -31,5 +31,7 @@ public interface EstateService {
 	void deleteStreet(Street street);
 
 	void deleteExpert(Estate estate, User expert);
+
+	void delete(Estate estate);
 	
 }

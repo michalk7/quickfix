@@ -289,13 +289,18 @@ public class UserServiceImpl implements UserService {
 		address.setApartmentNumber(dtoUser.getApartmentNumber());
 		address.setPhoneNumber(dtoUser.getPhoneNumber());
 		
-		Optional<Street> estateStreet = streetRepository.findByStreetNameAndStreetNumberAndCityAndDistrictAndPostCode(address.getStreet(), 
-											address.getHouseNumber(), address.getCity(), address.getDistrict(), address.getPostCode());
-		if(estateStreet.isPresent()) {
-			Estate estate = estateStreet.get().getEstate();
-			if(estate.getId() != userToEdit.getUserEstate().getId()) {
-				userToEdit.setUserEstate(estate);
+		if(userToEdit.getRoles().stream().anyMatch(e -> e.getName().equals("ROLE_USER"))) {
+			Optional<Street> estateStreet = streetRepository.findByStreetNameAndStreetNumberAndCityAndDistrictAndPostCode(address.getStreet(), 
+					address.getHouseNumber(), address.getCity(), address.getDistrict(), address.getPostCode());
+			if(estateStreet.isPresent()) {
+				Estate estate = estateStreet.get().getEstate();
+				if(userToEdit.getUserEstate() == null) {
+					userToEdit.setUserEstate(estate);
+				} else if(estate.getId() != userToEdit.getUserEstate().getId()) {
+					userToEdit.setUserEstate(estate);
+				}
 			}
+
 		}
 		
 		User result = userRepository.save(userToEdit);

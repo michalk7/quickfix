@@ -8,11 +8,11 @@
 		<version>2.1.9.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.kubara.michal.inzynierka</groupId>
+	<groupId>com.kubara.michal.quickfix</groupId>
 	<artifactId>core</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>core</name>
-	<description>Demo project for Spring Boot</description>
+	<name>QuickFix - Core</name>
+	<description>Core library for QuickFix app</description>
 
 	<properties>
 		<java.version>1.8</java.version>

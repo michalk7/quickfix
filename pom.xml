@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.kubara.michal</groupId>
-    <artifactId>inzynierka-root</artifactId>
+    <artifactId>quickfix</artifactId>
     <version>0.1.0</version>
     <packaging>pom</packaging>
 

@@ -5,9 +5,7 @@
 	<meta charset="UTF-8">
 	<title>QuickFix - Mój kalendarz</title>
 	<link th:include="fragments/header :: header-css" th:remove="tag"/>
-	
-<!-- 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"  -->
-<!-- 		integrity="sha256-siyOpF/pBWUPgIcQi17TLBkjvNgNQArcmwJB8YvkAgg=" crossorigin="anonymous" /> -->
+
 	<link rel="stylesheet" th:href="@{/css/calendar.css}" href="../../css/calendar.css" />
 	
 	<meta name="_csrf" th:content="${_csrf.token}"/>
@@ -32,45 +30,6 @@
 	
 	
 	<div class="container">
-	
-<!-- 		<h2 id="tableTitle" th:text="'Dzień ' + ${#temporals.format(calendarDate, 'yyyy-MM-dd')}"></h2> -->
-		
-<!-- 		<form id="dateForm" class=form-inline method="GET"> -->
-<!-- 			<div class="form-group"> -->
-<!-- 				<label for="chooseDate" class="mr-sm-1">Wybierz datę: </label> -->
-<!-- 				<input id="chooseDate" class="picker form-control mr-sm-2" data-provide="datepicker" name="date"> -->
-<!-- 			</div> -->
-<!-- 			<button class="btn btn-primary mb-2" type="submit">Pokaż</button> -->
-<!-- 		</form> -->
-		
-		
-<!-- 		<div th:if="${ #lists.isEmpty(eventsList) }"> -->
-<!-- 			<p>Brak wydarzeń w tym dniu.</p> -->
-<!-- 		</div> -->
-<!-- 		<div th:if="${ not #lists.isEmpty(eventsList) }"> -->
-<!-- 			<table class="table table-striped"> -->
-<!-- 				<thead class="thead-dark"> -->
-<!-- 					<tr> -->
-<!-- 						<th>Godzina</th> -->
-<!-- 						<th>Tytuł wydarzenia</th> -->
-<!-- 						<th>Nazwa problemu</th> -->
-<!-- 						<th>Opis problemu</th> -->
-<!-- 						<th th:if="${ #strings.equals(userType, 'user') }" th:text="Fachowiec"></th> -->
-<!-- 						<th th:if="${ #strings.equals(userType, 'expert') }" th:text="Zamawiający"></th> -->
-<!-- 					</tr> -->
-<!-- 				</thead> -->
-<!-- 				<tbody> -->
-<!-- 					<tr th:each="${ event : eventsList }"> -->
-<!-- 						<td th:text="${ #temporals.format(event.date, 'HH:mm') }"></td> -->
-<!-- 						<td th:text="${ event.eventName }"></td> -->
-<!-- 						<td th:text="${ event.problemTitle }"></td> -->
-<!-- 						<td th:text="${ event.problemDescription }"></td> -->
-<!-- 						<td th:if="${ #strings.equals(userType, 'user') }" th:text="${event.expert.username}"></td> -->
-<!-- 						<td th:if="${ #strings.equals(userType, 'expert') }" th:text="${event.user.username}"></td> -->
-<!-- 					</tr> -->
-<!-- 				</tbody> -->
-<!-- 			</table> -->
-<!-- 		</div> -->
 
 		<h5 id="notConfirmedCount" class="mb-4" sec:authorize="hasRole('ROLE_EXPERT')" th:text="${'Liczba niepotwierdzonych zdarzeń: ' + notConfirmedCount}" ></h5>
 		

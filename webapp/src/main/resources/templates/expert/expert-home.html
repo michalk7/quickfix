@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 	<meta charset="UTF-8">
 	<title>QuickFix - Strona dla fachowców</title>
@@ -15,9 +16,9 @@
 		<div class="jumbotron">
 		  <h1 class="display-4">Razem z nami dotrzesz do większej liczby klientów</h1>
 		  <p class="lead">Oferujemy możliwość profesjonalnej współpracy. Po założeniu konta i telefonicznej weryfikacji możesz ogłaszać się w naszym serwisie i zdobyć nowych klientów!</p>
-		  <hr class="my-4">
-		  <p>Wyszukaj i umów fachowca już teraz</p>
-		  <a class="btn btn-primary btn-lg" th:href="@{/search}" role="button">Dowiedz się więcej</a>
+		  <hr sec:authorize="!isAuthenticated()" class="my-4">
+		  <p sec:authorize="!isAuthenticated()">Załóż konto już dziś i korzystaj z pełni możliwości serwisu!</p>
+		  <a class="btn btn-primary btn-lg" sec:authorize="!isAuthenticated()" th:href="@{/expert/showRegisterPage}" role="button">Załóż konto</a>
 		</div>
 		
 		<hr>

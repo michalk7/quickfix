@@ -7,8 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.AuthenticationException;
@@ -21,8 +19,6 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 
     @Autowired
     private MessageSource messages;
-    
-    Logger logger = LoggerFactory.getLogger(CustomAuthenticationFailureHandler.class);
 	
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
@@ -36,12 +32,8 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 	 
 	        String errorMessage = "Błąd logowania";
 	        
-	        System.out.println(exception.getMessage());
-	        
 	        if (exception.getMessage().equalsIgnoreCase("User is disabled")) {
 	            errorMessage = messages.getMessage("auth.message.disabled", null, locale);
-	            //String resendMsg = messages.getMessage("auth.message.resendActivationLink", null, locale);
-	            //request.getSession().setAttribute("RESEND_ACTIVATION_LINK", resendMsg);
 	        } else if (exception.getMessage().equalsIgnoreCase("User account has expired")) {
 	            errorMessage = messages.getMessage("auth.message.expired", null, locale);
 	        } else if (exception.getMessage().equalsIgnoreCase("Bad credentials")) {

@@ -17,10 +17,6 @@ import com.kubara.michal.quickfix.adminpanel.service.AdminService;
 @Configuration
 @EnableWebSecurity
 public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
-
-//	@Autowired
-//	@Qualifier("securityDataSource")
-//	private DataSource securityDataSource;
 	
 	@Autowired
 	private AdminService adminService;

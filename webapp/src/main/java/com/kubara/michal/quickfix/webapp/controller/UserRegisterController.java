@@ -10,8 +10,6 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -60,8 +58,6 @@ public class UserRegisterController {
 	
 	@Autowired
 	private Environment env;
-	
-	Logger logger = LoggerFactory.getLogger(UserRegisterController.class);
 	
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
@@ -116,9 +112,7 @@ public class UserRegisterController {
 		SimpleMailMessage mail = constructAccountCreatedEmail(getAppUrl(request), request.getLocale(), token, registered);
 		
 		try {
-			logger.info("Przed odpaleniem listenera");
 			eventPublisher.publishEvent(new GenericMailEvent(this, mail));
-			logger.info("Po odpaleniu listenera");
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("registrationError", "Niepowodzenie wysyłania linku aktywacyjnego");
@@ -127,7 +121,6 @@ public class UserRegisterController {
 			
 			return "/expert/expert-registration-form";
 		}
-		logger.info("Teraz redirect");
 		
 		return "redirect:/showLoginPage?registrationSuccess";
 	}
@@ -171,9 +164,7 @@ public class UserRegisterController {
 		SimpleMailMessage mail = constructAccountCreatedEmail(getAppUrl(request), request.getLocale(), token, registered);
 		
 		try {
-			logger.info("Przed odpaleniem listenera");
 			eventPublisher.publishEvent(new GenericMailEvent(this, mail));
-			logger.info("Po odpaleniu listenera");
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("registrationError", "Niepowodzenie wysyłania linku aktywacyjnego");
@@ -182,8 +173,6 @@ public class UserRegisterController {
 			
 			return "/user/user-registration-form";
 		}
-
-		logger.info("Teraz redirect");
 		
 		return "redirect:/showLoginPage?registrationSuccess";
 	}

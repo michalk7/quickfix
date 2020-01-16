@@ -102,7 +102,6 @@ public class MyAccountController {
 			return "/myAccount/myAccount";
 		}
 		
-		//tu redirect z success message raczej
 		return "redirect:/myAccount?editSuccess";
 		
 	}
@@ -155,7 +154,6 @@ public class MyAccountController {
 			return "/myAccount/myAccount";
 		}
 		
-		//tu redirect z success message raczej
 		return "redirect:/myAccount?passwordChangeSuccess&passTab=1";
 		
 	}

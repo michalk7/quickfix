@@ -109,7 +109,7 @@
 	        							<span th:text="${user.enabled ? 'Tak' : 'Nie'}"></span>
 	        							<button th:classappend="${user.enabled ? 'btn-danger' : 'btn-success'}" 
 	        								class="btn btn-sm activate-button" th:data-active="${user.enabled ? '1' : '0'}" 
-	        								th:text="${user.enabled ? 'Deaktywuj' : 'Aktywuj'}"
+	        								th:text="${user.enabled ? 'Dezaktywuj' : 'Aktywuj'}"
 	        								th:data-href="@{'/users/changeAccountStatus/' + ${user.id}}"></button>
 	        						</div>
 	        					</td>

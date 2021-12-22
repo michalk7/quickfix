@@ -1,4 +1,4 @@
-# QuickFix - praca inżynierska
+# QuickFix
 
 Aplikacja budowana w ramach pracy inżynierskiej "System do zamawiania usług serwisowych dla mieszkańców osiedli".
 
